@@ -1,80 +1,24 @@
 import React from 'react';
-import { MDBDataTableV5 } from 'mdbreact';
+
 import Sidebar from '../Layouts/Sidebar';
 import Navbar from '../Layouts/Navbar';
+import { Container,Form,Table,Pagination } from 'react-bootstrap';
 
 const Listofpayment = ()=>{
-    const [datatable, setDatatable] = React.useState<any>({
-        columns: [
-          {
-            label: 'Fee Type Name',
-            field: 'FeeTypeName',
-            width: 150,
-            attributes: {
-              'aria-controls': 'DataTable',
-              'aria-label': 'Fee Type Name',
-            },
-          },
-          {
-            label: 'Payment Date',
-            field: 'PaymentDate',
-            width: 270,
-          },
-          {
-            label: 'Actual Fees',
-            field: 'ActualFees',
-            width: 200,
-          },
-          {
-            label: 'Paid Amount',
-            field: 'PaidAmount',
-            sort: 'asc',
-            width: 100,
-          },
-          {
-            label: 'Refund Amount',
-            field: 'RefundAmount',
-            sort: 'disabled',
-            width: 150,
-          },
-          {
-            label: 'Payment Mode',
-            field: 'PaymentMode',
-            sort: 'disabled',
-            width: 100,
-          },
-          {
-            label: 'Comments',
-            field: 'Comments',
-            sort: 'disabled',
-            width: 100,
-          },
-        ],
-        rows: [
-          {
-            FeeTypeName: "Admission Fees",
-            PaymentDate: '2022-01-04',
-            ActualFees: '333',
-            PaidAmount: '1.00',
-            RefundAmount: '0.00',
-            PaymentMode: 'Cash',
-            Comments: '',
-          }
-        ],
-      });
     
     return(
         <div>
-            <div className="col-md-12" style={{"padding":"20px"}}>
+          
+            <div className="col-lg-12" style={{ position: "relative", top: "40px" }}>
        <div className="card shadow">  
           <div className="card-header text-center">
             <h6 className="m-0 text-danger">List of Payment</h6>
           </div>
-          <div className="row" style={{"padding":"10px"}}>
-      <div className="col-md-5">
+          <div className="row" style={{"padding":"15px"}}>
+            <div className="col-md-6">
         <table> 
           <tr>
-            <th>Student Name</th>
+            <th style={{marginTop:"10px"}}>Student Name</th>
             <td width="1%">:</td>
             <td>asainkk</td>
           </tr>
@@ -90,7 +34,7 @@ const Listofpayment = ()=>{
           </tr>
         </table>
       </div>
-      <div className="col-md-5"  >
+      <div className="col-md-6"  >
         <table>
           <tr>
             <th>Class & Section</th>
@@ -102,22 +46,128 @@ const Listofpayment = ()=>{
             <td width="1%">:</td>
             
             <td>
-              <div className="form-group "  >  
-                  <select className="form-control" name="section" id="academic_year">
-                    <option value=""> --Select--</option>
-					
-					<option >2022-2023</option>
-                
-                  </select>
-                </div>
-          </td>
+              <Form.Select className="form-control" style={{width:"180px",marginTop:"5px"}} id="academic_year">
+              <option value=""> --Select--</option>
+				    	<option >2022-2023</option> 
+                  </Form.Select>
+            </td>
           </tr>
           
         </table>
         </div>
         </div>
-        <MDBDataTableV5 hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4} data={datatable} searchTop searchBottom={false} />
+        <Container>
+                   <div>
+                            <Form.Label style={{"marginLeft":"85%"}}>
+                                Search:
+                                <Form.Control
+                                  type="search"
+                                  className="form-control form-control-sm"
+                                />
+                              </Form.Label>
+                            
+                          </div>
+                      
         
+                          <Table
+                              striped bordered hover
+                              width="100%"
+                              style={{ width: "100%" }}
+                            >
+                              <thead>
+                                <tr role="row">
+                                  <th
+                                    className="sorting_asc"
+                                    style={{ width: "165px" }}
+                                  >
+                                  Fee Type Name
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "14px" }}
+                                  >
+                                    Payment Date
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "63px" }}
+                                  >
+                                   Actual Fees
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "63px" }}
+                                  >
+                                   Paid Amount
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "63px" }}
+                                  >
+                                    Refund Amount
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "63px" }}
+                                  >
+                                   Payment Mode
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "33px" }}
+                                  >
+                                    Comments
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                <td
+                                    style={{ width: "20%" }}
+                                    className="sorting_1">
+                                 Admission Fees
+                                  </td>
+                                <td>
+                                2022-01-04
+                                  </td>
+                                  <td>
+                                  333
+                                  </td>
+                                  <td> 
+                                  1.00
+                                  </td>
+                                  <td>
+                                  0.00
+                                  </td>
+                                  <td>
+                                  Cash
+                                  </td>
+                                  <td>
+                                    
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </Table>
+                            <div style={{marginLeft:"25%"}}>
+                            <Pagination>
+                              <Pagination.First />
+                              <Pagination.Prev />
+                              <Pagination.Item>{1}</Pagination.Item>
+                              <Pagination.Ellipsis />
+
+                              <Pagination.Item>{10}</Pagination.Item>
+                              <Pagination.Item>{11}</Pagination.Item>
+                              <Pagination.Item active>{12}</Pagination.Item>
+                              <Pagination.Item>{13}</Pagination.Item>
+                              <Pagination.Item disabled>{14}</Pagination.Item>
+
+                              <Pagination.Ellipsis />
+                              <Pagination.Item>{20}</Pagination.Item>
+                              <Pagination.Next />
+                              <Pagination.Last />
+                            </Pagination>
+                        </div>
+        </Container>
         </div>
         </div>
         </div>

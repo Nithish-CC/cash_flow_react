@@ -1,137 +1,443 @@
-import React from 'react'
-import Sidebar from '../Layouts/Sidebar'
-import Navbar from '../Layouts/Navbar'
+import { useState } from "react";
+import Sidebar from "../Layouts/Sidebar";
+import Navbar from "../Layouts/Navbar";
+import { Button, Table, Pagination, Form,Col,Row } from "react-bootstrap";
 
-const Feemaster = () =>{
+const Feemaster = () => {
+  const [statusFeeMasterEdit, setStatusFeeMasterEdit] = useState(false);
+  const [statusFeeMasterAdd, setStatusFeeMasterAdd] = useState(false);
 
-    return(
-        <div>
-        <div id="page-top">
-          <div id="wrapper">
-            <Sidebar></Sidebar>
-            <div id="content-wrapper" className="d-flex flex-column">
-              <div id="content">
-                <Navbar></Navbar>
-                <div className="container-fluid">
-                 <div>
-                 <div className="card shadow mb-4" style={{"marginLeft":"15%","width":"50%"}}>
-   <div className="card-header py-3">
-   <div className="md-4 sm-4">
-       <div className="form-group">
-           <div>
-               <label className="text-danger" style={{"fontSize":"18px"}}> Fee Master</label>
-   <button type="submit" className="btn btn-primary btn-sm" style={{"float":"right"}} data-toggle="modal" data-target="#exampleAddModal">
-                     ADD
-                 </button>
-           </div>
+  return (
+    <div>
+      <div id="page-top">
+        <div id="wrapper">
+          <Sidebar></Sidebar>
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+              <Navbar></Navbar>
+              <div className="container-fluid">
+               
+                <div className="col-xl-11 m-auto">
+                <div>
+                    <div
+                      className="col-lg-10"
+                      style={{ marginLeft: "10%", width: "90%" }}
+                    ><div className="card mb-3">
+                    <a style={{ color: "rgb(230, 39, 39)" }}>
+                      <div className="card-header mb-4 bg-transparent border-1 text-center">
+                        <h4 className="mb-0 ">
+                          <i className="far fa-clone pr-1"></i> Fee Master
+                        </h4>
+                            <div style={{ textAlign: "right" }}>
+                              {!statusFeeMasterAdd ? (
+                                <Button
+                                  type="submit"
+                                  className="btn btn-primary btn-sm btn-save"
+                                  onClick={() => setStatusFeeMasterAdd(true)}
+                                >
+                                  Add
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="btn btn-sm btn-secondary"
+                                  onClick={() => setStatusFeeMasterAdd(false)}
+                                >
+                                  Cancel
+                                </Button>
+                              )}
+                               </div>
+                          </div>
+                        </a>
+               {! statusFeeMasterAdd ? (<div className="card-body">
+                    <div className="table-responsive">
+                      <div className="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div
+                              id="dataTable_filter"
+                              className="dataTables_filter"
+                            >
+                              <Form.Label htmlFor="inputPassword5" style={{marginLeft:"75%"}}>
+                                Search:
+                                <Form.Control
+                                  type="search"
+                                  className="form-control form-control-sm"
+                                />
+                              </Form.Label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-sm-12">
+                            <Table
+                              className="table dataTable no-footer"
+                              width="100%"
+                              style={{ width: "100%" }}
+                            >
+                              <thead>
+                                <tr role="row">
+                                  <th
+                                    className="sorting_asc"
+                                    style={{ width: "73px" }}
+                                  >
+                                    Fee Type
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "114px" }}
+                                  >
+                                    Order
+                                  </th>
+                                  <th
+                                    className="sorting"
+                                    style={{ width: "63px" }}
+                                  >
+                                    Actions
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>Admission Fees</div>
+                                    ) : (
+                                      <div>
+                                        <Form.Control
+                                          style={{ width: "100%" }}
+                                          type="text"
+                                          defaultValue="Admission Fees"
+                                        />
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{ width: "30%" }}
+                                    className="sorting_1"
+                                  >
+                                   1
+                                  </td>
+                                  
+                                  <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(true)
+                                          }
+                                          className="fa fa-edit fa-1x text-success"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          className="far fa-trash-alt text-danger"
+                                        ></i>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-times fa-1x text-danger"
+                                          aria-hidden="true"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-save btn text-danger"
+                                        ></i>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
 
-       </div>
+                                <tr>
+                                <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>Book Fee</div>
+                                    ) : (
+                                      <div>
+                                        <Form.Control
+                                          style={{ width: "100%" }}
+                                          type="text"
+                                          defaultValue="Book Fee"
+                                        />
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{ width: "30%" }}
+                                    className="sorting_1"
+                                  >
+                                    2
+                                  </td>
+                                  
+                                  <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(true)
+                                          }
+                                          className="fa fa-edit fa-1x text-success"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          className="far fa-trash-alt text-danger"
+                                        ></i>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-times fa-1x text-danger"
+                                          aria-hidden="true"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-save btn text-danger"
+                                        ></i>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    {!statusFeeMasterEdit ? (
+                                      <div>I Hostel</div>
+                                    ) : (
+                                      <div>
+                                        <Form.Control
+                                          style={{ width: "100%" }}
+                                          type="text"
+                                          defaultValue="I Hostel"
+                                        />
+                                      </div>
+                                    )}{" "}
+                                  </td>
+                                  <td
+                                    style={{ width: "30%" }}
+                                    className="sorting_1"
+                                  >
+                                    3
+                                  </td>
+                                  
+                                  <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(true)
+                                          }
+                                          className="fa fa-edit fa-1x text-success"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          className="far fa-trash-alt text-danger"
+                                        ></i>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-times fa-1x text-danger"
+                                          aria-hidden="true"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-save btn text-danger"
+                                        ></i>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                                <tr >
+                                <td>
+                                    {!statusFeeMasterEdit ? (
+                                      <div>I Trasnport Fees</div>
+                                    ) : (
+                                      <div>
+                                        <Form.Control
+                                          style={{ width: "100%" }}
+                                          type="text"
+                                          defaultValue="I Trasnport Fees"
+                                        />
+                                      </div>
+                                    )}{" "}
+                                  </td>
+                                  <td
+                                    style={{ width: "30%" }}
+                                    className="sorting_1"
+                                  >
+                                    4
+                                  </td>
+                                  
+                                  <td>
+                                    {" "}
+                                    {!statusFeeMasterEdit ? (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(true)
+                                          }
+                                          className="fa fa-edit fa-1x text-success"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          className="far fa-trash-alt text-danger"
+                                        ></i>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-times fa-1x text-danger"
+                                          aria-hidden="true"
+                                        ></i>
+                                        <i
+                                          style={{
+                                            marginLeft: "10px",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            setStatusFeeMasterEdit(false)
+                                          }
+                                          className="fa fa-save btn text-danger"
+                                        ></i>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </Table>
+                          </div>
+                        </div>
+                        <div style={{marginLeft:"20%"}}>
+                         
+                            <Pagination>
+                              <Pagination.First />
+                              <Pagination.Prev />
+                              <Pagination.Item>{1}</Pagination.Item>
+                              <Pagination.Ellipsis />
 
-   </div>
-     <div style={{"textAlign": "right"}}>
-  </div>
-   </div>
-   <div className="card-body">
-    <div className="table-responsive">
-         <div className="dataTables_wrapper dt-bootstrap4 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dataTables_length"><label>Show <select name="dataTable_length" aria-controls="dataTable" className="custom-select custom-select-sm form-control form-control-sm">
-             <option value="10">10</option>
-             <option value="25">25</option>
-             <option value="50">50</option>
-             <option value="100">100</option>
-             </select> entries</label></div></div>
-             <div className="col-sm-12 col-md-6">
-        <div id="dataTable_filter" className="dataTables_filter">
-            <label>Search:<input type="search" className="form-control form-control-sm" />
-            </label>
-            </div>
-            </div>
-            </div>
-            <div className="row"><div className="col-sm-12">
-                <table className="table dataTable no-footer"  width="100%" role="grid" aria-describedby="dataTable_info" style={{"width":"100%"}}>
-			<thead>
-				<tr role="row">
-    <th className="sorting_asc" style={{"width":"134px"}}>Fee Type </th>
-    <th className="sorting"  style={{"width": "50px"}}>Order</th>
-    <th className="sorting"  style={{"width":"66px"}}>Action</th></tr></thead>
-			  <tbody>
-				<tr data-feetypemasterid="22" data-feetypemastername="Admission Fees" data-feetypeorderid="1" role="row" className="odd">
-				  <td className="fee_type_name sorting_1">Admission Fees</td>
-				  <td className="order_id">1</td>
-				  <td> <a href="/update/22" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger" data-target="# "></a></td>
+                              <Pagination.Item>{10}</Pagination.Item>
+                              <Pagination.Item>{11}</Pagination.Item>
+                              <Pagination.Item active>{12}</Pagination.Item>
+                              <Pagination.Item>{13}</Pagination.Item>
+                              <Pagination.Item disabled>{14}</Pagination.Item>
 
-				</tr><tr data-feetypemasterid="23" data-feetypemastername="Book Fee" data-feetypeorderid="2" role="row" className="even">
-				  <td className="fee_type_name sorting_1">Book Fee</td>
-				  <td className="order_id">2</td>
-				  <td> <a href="/update/23" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="30" data-feetypemastername="I Hostel" data-feetypeorderid="8" role="row">
-				  <td className="fee_type_name sorting_1">I Hostel</td>
-				  <td className="order_id">8</td>
-				  <td> <a href="/update/30" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success"  data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger" data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="28" data-feetypemastername="I Trasnport Fees" data-feetypeorderid="7" role="row">
-				  <td className="fee_type_name sorting_1">I Trasnport Fees</td>
-				  <td className="order_id">7</td>
-				  <td> <a href="/update/28" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="33" data-feetypemastername="II Food" data-feetypeorderid="11" role="row" >
-				  <td className="fee_type_name sorting_1">II Food</td>
-				  <td className="order_id">11</td>
-				  <td> <a href="/update/33" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="34" data-feetypemastername="II Hostel" data-feetypeorderid="12" role="row">
-				  <td className="fee_type_name sorting_1">II Hostel</td>
-				  <td className="order_id">12</td>
-				  <td> <a href="/update/34" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="31" data-feetypemastername="II Term Fees" data-feetypeorderid="9" role="row">
-				  <td className="fee_type_name sorting_1">II Term Fees</td>
-				  <td className="order_id">9</td>
-				  <td> <a href="/update/31" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr><tr data-feetypemasterid="32" data-feetypemastername="II Trasnport Fees" data-feetypeorderid="10" role="row">
-				  <td className="fee_type_name sorting_1">II Trasnport Fees</td>
-				  <td className="order_id">10</td>
-				  <td> <a href="/update/32" style={{"marginLeft":"10px"}} className="fa fa-edit fa-1x text-success" data-toggle="modal"></a>
-                <a style={{"marginLeft":"10px"}} className="far fa-trash-alt text-danger " data-toggle="modal" data-target="# "></a></td>
-
-				</tr></tbody>
-
-
-
-         </table></div></div><div className="row">
-             <div className="col-sm-12 col-md-5">
-                 <div className="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 14 entries</div>
-                 </div>
-                 <div className="col-sm-12 col-md-7">
-                     <div className="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-                         <ul className="pagination">
-                             <li className="paginate_button page-item previous disabled" id="dataTable_previous">
-                                 <a href="#" aria-controls="dataTable" data-dt-idx="0" >Previous</a></li>
-                                 <li className="paginate_button page-item active">
-                                     <a href="#" aria-controls="dataTable" data-dt-idx="1">1</a></li>
-                                     <li className="paginate_button page-item "><a href="#" aria-controls="dataTable">2</a></li>
-                                     <li className="paginate_button page-item next" id="dataTable_next">
-                                         <a href="#" aria-controls="dataTable" data-dt-idx="3" >Next</a></li>
-                                     </ul></div></div></div></div>
-    </div>
-  </div>
- </div>
+                              <Pagination.Ellipsis />
+                              <Pagination.Item>{20}</Pagination.Item>
+                              <Pagination.Next />
+                              <Pagination.Last />
+                            </Pagination>
+                          </div>
+                        </div>
+                     
+                    ):(
+                    <div>
+                    <Row className="mb-4">
+                 <Col sm="4" className="mb-4">
+                 <Form.Label style={{marginLeft:"40px"}}>Fee Type Name </Form.Label></Col>
+                 <Col sm="6" >
+                 <Form.Control type="text" />
+                    </Col>
+                    {' '}
+                     <Col sm="4"> 
+                 <Form.Label style={{marginLeft:"40px"}}>Order</Form.Label></Col>
+                 <Col sm="6">
+                    <Form.Control type="text" />
+                 </Col>
+                   </Row>
+                 <div className="card-footer py3">
+                           <Button
+                         type="submit"
+                       className="btn btn-danger btn-save"
+                       onClick={() => setStatusFeeMasterEdit(false)}
+                       style={{marginLeft:"90%"}}
+                     >Save</Button>
                      </div>
+                     </div>)}
+                        </div>
                       </div>
-                      </div>
-                      </div>
-                      </div>
-                      </div>
-                      </div>
-    )
-
-}
-export default Feemaster
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div>
+  );
+};
+export default Feemaster;
