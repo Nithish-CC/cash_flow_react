@@ -1,10 +1,13 @@
 import react from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import { useHistory, useParams } from "react-router-dom";
 const Feesdetails = (props: any) => {
+    let history = useHistory()
     const status = props.status;
 
+
+    
     return (
         <div>
             <div className="row">
@@ -126,7 +129,7 @@ const Feesdetails = (props: any) => {
                                         <h6>Action</h6>
                                     </div>
                                     <div>
-                                        <Button className="btn-success btn-sm">Pay / View All</Button>
+                                        <Button onClick={(e)=>{history.push('/stu_pay')}} className="btn-success btn-sm">Pay / View All</Button>
                                     </div>
                                 </div>
                           

@@ -34,14 +34,14 @@ const Feemaster = () => {
 	};
 
 	const deleteParticularDiscount = (id: any, index: any) => {
-		let newArrVal = getFeeMaster;
-		newArrVal.splice(index, 1);
 		getAccessToken();
 		axios
 			.delete(`${baseUrl}feeMaster?`, { data: { fee_master_id: id } })
 			.then((res: any) => {
 				console.log(res);
 				if(res.data.data.isDeletable === true){
+					let newArrVal = getFeeMaster;
+					newArrVal.splice(index, 1);
 					toast.success("Fee Type Name Deleted", {
 						position: "top-right",
 						autoClose: 5000,
@@ -51,6 +51,8 @@ const Feemaster = () => {
 						draggable: true,
 						progress: undefined,
 					});
+					feemastertype(newArrVal);
+					getfee();
 				}
 			else if (res.data.data.isDeletable === false){
 				toast.warning(`Data Exist in Year of Fee Master`, {
@@ -63,7 +65,6 @@ const Feemaster = () => {
 					progress: undefined,
 				});
 			}
-				feemastertype(newArrVal);
 				setdatatoDelete({});
 			})
 			.catch((e: any) => {

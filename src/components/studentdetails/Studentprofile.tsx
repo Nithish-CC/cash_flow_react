@@ -21,7 +21,6 @@ const StudentProfile = () => {
 
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
-
   const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>({});
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});

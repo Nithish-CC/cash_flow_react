@@ -22,6 +22,7 @@ const Grade = () => {
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
     const [duplication, setDuplication] = useState(false);
     let [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
+    const [allGrade, setAllGrade] = useState<any[]>([]);
 
     //Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +31,6 @@ const Grade = () => {
     const [createButtons, setCreateButtons] = useState<any[]>([]);
     const [pageToMove, setPageToMove] = useState(currentPage);
 
- 
     //Modal Popup
     const [show, setShow] = useState(false);
     const handleClose = () => {
@@ -46,7 +46,6 @@ const Grade = () => {
     };
 
     const getAllGradeSectionData = () => {
-
         axios.get(`${baseUrl}gradeSection?page=${currentPage}&per_page=${perPage}`).then((response: AxiosResponse) => {
             setSpinnerLoad(false);
             setStatusList(response.data.data);
@@ -54,8 +53,16 @@ const Grade = () => {
             setTotalButtons(response.data.total_page);
         });
     };
+
+    const getAllGrade = () => {
+        axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
+            setAllGrade(res.data.data);
+        });
+    };
+
     useEffect(() => {
         getAccessToken();
+        getAllGrade();
         getAllGradeSectionData();
         getAllAcademicYear()
             .then((res: any) => {
@@ -108,39 +115,46 @@ const Grade = () => {
             setDuplication(false);
         } else {
             clickedGrade.forEach((element: any) => {
-                let sendData = { academic_year_id: academic_year_data, grade: element, section: academic_section };
+                let sendData = { academic_year_id: academic_year_data, grade_id: Number(element), section: academic_section.toUpperCase() };
                 getAccessToken();
-                axios.post(`${baseUrl}gradeSection`, sendData).then((res: any) => {
-                    console.log(res.data.data)
-                    if(res.data.data.IsExsist === false){
-                        toast.success(`${res.data.academic_year}-${res.data.data.data.grade}-${res.data.data.data.section} Added`, {
-                            position: "top-right",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    }
-                    
-                 else if (res.data.data.IsExsist === true){
-                    toast.warning(`Data Already Added`, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
+                axios
+                    .post(`${baseUrl}gradeSection`, sendData)
+                    .then((res: any) => {
+                        console.log(res.data.data);
+                        if (res.data.data.IsExsist === false) {
+                            finalAcademicYr.forEach((element:any)=>{
+                                if(element.academic_year_id == res.data.data.data.academic_year_id && element.section == res.data.data.data.section && element.year_id == res.data.data.data.academic_year_id){
+                                    console.log(element)
+                                    toast.success(`${element.academic_year},${element.grade_master},${element.section} Added`, {
+                                        position: "top-right",
+                                        autoClose: 3000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                    });
+                                }
+                            })
+                            
+                        } else if (res.data.data.IsExsist === true) {
+                            toast.warning(`Data Already Added`, {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+                        setStatusList([]);
+                        getAllGradeSectionData();
+                        setDuplication(false);
+                    })
+                    .catch((err: any) => {
+                        setDuplication(false);
                     });
-                 }
-                     setStatusList([]);
-                    getAllGradeSectionData();
-                    setDuplication(false)
-                }).catch((err:any)=>{
-                    setDuplication(false);
-                });
             });
             setStatusGradeAdd(false);
             setClickedGrade([]);
@@ -154,7 +168,7 @@ const Grade = () => {
         axios
             .delete(`${baseUrl}gradeSection?`, { data: { grade_section_id: gradeid } })
             .then((res: any) => {
-                if(res.data.data.isDeletable === true){
+                if (res.data.data.isDeletable === true) {
                     toast.success("Grade & Section Deleted Successfully", {
                         position: "top-right",
                         autoClose: 5000,
@@ -164,8 +178,7 @@ const Grade = () => {
                         draggable: true,
                         progress: undefined,
                     });
-                }
-                else if (res.data.data.isDeletable === false){
+                } else if (res.data.data.isDeletable === false) {
                     toast.warning(`Data Exist in Year of Fee Master`, {
                         position: "top-right",
                         autoClose: 5000,
@@ -175,10 +188,10 @@ const Grade = () => {
                         draggable: true,
                         progress: undefined,
                     });
-              }
+                }
                 setStatusList([]);
                 getAllGradeSectionData();
-             })
+            })
             .catch((e) => {
                 toast.error("Grade & Section Deletion Error", {
                     position: "top-right",
@@ -191,6 +204,7 @@ const Grade = () => {
                 });
             });
     };
+
     const callTheAddGrade = (value: any) => {
         let newArr = clickedGrade;
         if (clickedGrade.includes(value)) {
@@ -204,7 +218,7 @@ const Grade = () => {
         }
         setClickedGrade(newArr);
     };
- 
+
     const timeToCreateButtons = () => {
         let items: any[] = [];
         for (let number = 1; number <= totalButtons; number++) {
@@ -224,7 +238,6 @@ const Grade = () => {
         setCreateButtons(items);
     };
 
- 
     useEffect(() => {
         timeToCreateButtons();
     }, [totalButtons]);
@@ -233,33 +246,29 @@ const Grade = () => {
         getAllGradeSectionData();
     }, [perPage, pageToMove]);
 
-   
-
     // console.log(allAcademicYear);
     // console.log(statusList);
     // console.log();
-    function YearId( gradedata:any ) {
-        var matchedyearid:any = allAcademicYear && allAcademicYear.length && allAcademicYear.filter(  
-          (data) => data.year_id === gradedata.academic_year_id
-        );
-        let combindobject = {...gradedata,...matchedyearid[0]};
-       console.log(combindobject); 
-       finalAcademicYr.push(combindobject);
-      console.log(finalAcademicYr);
-       setFinalAcademicYr(finalAcademicYr)
-      }
-    
+    function YearId(gradedata: any) {
+        var matchedyearid: any = allAcademicYear && allAcademicYear.length && allAcademicYear.filter((data) => data.year_id === gradedata.academic_year_id);
+        var matchedgradeid: any = allGrade && allGrade.length && allGrade.filter((data) => data.grade_master_id === gradedata.grade_id);
+        let combindobject = { ...gradedata, ...matchedyearid[0], ...matchedgradeid[0] };
+        console.log(combindobject);
+        finalAcademicYr.push(combindobject);
+        console.log(finalAcademicYr);
+        setFinalAcademicYr(finalAcademicYr);
+    }
+
     //setFinalAcademicYr(tempArr)
-    
-    useEffect(()=>{
-        
-        finalAcademicYr =[]
-        statusList && statusList.length && statusList.map((data:any) => {
-            YearId(data);
-        });
-    },[statusList])
-  
-    
+
+    useEffect(() => {
+        finalAcademicYr = [];
+        statusList &&
+            statusList.length &&
+            statusList.map((data: any) => {
+                YearId(data);
+            });
+    }, [statusList]);
 
     return (
         <div>
@@ -323,7 +332,6 @@ const Grade = () => {
                                                                         >
                                                                             <Spinner animation="border" variant="danger" />
                                                                         </td>
-                                                                         
                                                                     ) : finalAcademicYr && finalAcademicYr.length ? (
                                                                         finalAcademicYr.map((data: any, index: any) => {
                                                                             return (
@@ -332,7 +340,7 @@ const Grade = () => {
                                                                                         {index + 1}
                                                                                     </td>
                                                                                     <td>{data.academic_year}</td>
-                                                                                    <td>{data.grade}</td>
+                                                                                    <td>{data.grade_master}</td>
                                                                                     <td>{data.section}</td>
                                                                                     <td>
                                                                                         <Button
@@ -344,8 +352,8 @@ const Grade = () => {
                                                                                                 // );
                                                                                                 setdatatoDelete({
                                                                                                     index: index,
-                                                                                                    year: `${data.academic_year_id} - ${data.grade} - ${data.section}`,
-                                                                                                    id: data.grade_section_id,
+                                                                                                    year: `${data.academic_year} - ${data.grade_master} - ${data.section}`,
+                                                                                                    id: data.grade_master_id,
                                                                                                 });
                                                                                                 handleShow();
                                                                                             }}
@@ -378,12 +386,12 @@ const Grade = () => {
                                                         <Row>
                                                             <Col sm={4}>
                                                                 <div>
-                                                                    <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
+                                                                    {/* <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
                                                                         <option value="25">25</option>
                                                                         <option value="30">30</option>
                                                                         <option value="35">35</option>
                                                                         <option value="40">40</option>
-                                                                    </Form.Select>
+                                                                    </Form.Select> */}
                                                                 </div>
                                                             </Col>
                                                             {/* <Col sm={4}>
@@ -470,7 +478,6 @@ const Grade = () => {
                                                                             allAcademicYear.map((values: any, index: any) => {
                                                                                 return <option value={values.year_id}>{values.academic_year}</option>;
                                                                             })}
-                                                                             
                                                                     </Form.Select>
                                                                 </Col>
                                                             </Form.Group>
@@ -485,19 +492,19 @@ const Grade = () => {
                                                                 </Form.Label>
                                                             </Col>
                                                             <Col sm="6">
-                                                                {romanLetters &&
-                                                                    romanLetters.length &&
-                                                                    romanLetters.map((romanvalues: any, index: any) => {
+                                                                {allGrade &&
+                                                                    allGrade.length &&
+                                                                    allGrade.map((romanvalues: any, index: any) => {
                                                                         return (
                                                                             <Form.Check
                                                                                 inline
-                                                                                label={`${romanvalues}`}
+                                                                                label={`${romanvalues.grade_master}`}
                                                                                 name="group1"
                                                                                 type="checkbox"
                                                                                 key={index}
-                                                                                value={romanvalues}
+                                                                                value={romanvalues.grade_master_id}
                                                                                 onChange={(e: any) => {
-                                                                                    
+                                                                                    console.log(e.target.value);
                                                                                     callTheAddGrade(e.target.value);
                                                                                 }}
                                                                                 id={`inline-checkbox-${index}`}
@@ -544,7 +551,14 @@ const Grade = () => {
                                                                 Cancel
                                                             </Button>{" "}
                                                             &nbsp;
-                                                            <Button type="submit"   className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"} onClick={() => {setDuplication(true);handleSubmit();}}>
+                                                            <Button
+                                                                type="submit"
+                                                                className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
+                                                                onClick={() => {
+                                                                    setDuplication(true);
+                                                                    handleSubmit();
+                                                                }}
+                                                            >
                                                                 Save
                                                             </Button>
                                                         </div>

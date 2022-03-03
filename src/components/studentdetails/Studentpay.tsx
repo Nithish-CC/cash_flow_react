@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
@@ -7,6 +7,9 @@ import { Button, Row, Col } from "react-bootstrap";
 
 const Studentpay = () => {
 	const [RefundTableStatus, setRefundTableStatus] = useState(false);
+	useEffect(()=>{
+		alert("Under Construction")
+	},[])
 
 	return (
 		<div>
@@ -28,7 +31,7 @@ const Studentpay = () => {
 																<i className="far fa-clone pr-1"></i>Fees
 															</a>{" "}
 															<Link to="/StudentprofileSearch">
-																<a className="btn btn-success btn float-right">Back</a>
+																<a className="btn btn-success btn float-right disa bled">Back</a>
 															</Link>
 														</h4>
 													</a>
