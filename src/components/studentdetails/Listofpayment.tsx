@@ -1,10 +1,28 @@
-import React from "react";
-
+import React, { useState } from "react";
+import axios, { AxiosResponse } from "axios";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import { Container, Form, Table, Pagination } from "react-bootstrap";
+import { baseUrl } from "../../index";
 
-const Listofpayment = () => {
+const Listofpayment = (props:any) => {
+
+	const StudentDetails = props.record;
+
+	const [YearOfBalanceByYear ,setYearOfBalanceByYear] = useState<any>({});
+
+	const Prev = (url:any)=>{
+	axios.post(`${baseUrl}autoSearch`,{
+
+	})
+	.then(res => {
+	 console.log("Getting from ::::",res.data)
+	 setYearOfBalanceByYear(res.data)
+	 console.log( )
+ 	}).catch(err => console.log(err))
+  }
+
+
 	return (
 		<div>
 			<div className="col-lg-12" style={{ position: "relative", top: "40px" }}>
@@ -86,7 +104,7 @@ const Listofpayment = () => {
 										Comments
 									</th>
 								</tr>
-							</thead>
+						</thead>
 							<tbody>
 								<tr>
 									<td style={{ width: "20%" }} className="sorting_1">

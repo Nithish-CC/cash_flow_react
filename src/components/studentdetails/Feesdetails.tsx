@@ -2,12 +2,74 @@ import react from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { baseUrl } from "../../index";
+import axios, { AxiosResponse } from "axios";
+
 const Feesdetails = (props: any) => {
     let history = useHistory()
-    const status = props.status;
+    const status = props.student_id;
+    console.log(status)
 
+    const [YearOfBalanceByYear ,setYearOfBalanceByYear] = useState<any>({});
+	const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
 
+	const Year_of_fee = ()=>{
+	axios.post(`${baseUrl}autoSearch`,{
+        allbalance:status,
+	})
+	.then(res => {
+	 console.log("Getting from ::::",res.data.data)
+	 setYearOfBalanceByYear(res.data.data)
+	 console.log(YearOfBalanceByYear)
+ 	}).catch(err => console.log(err))
+}
+ useEffect(() => {
+    if (status  && status.length>0){
+        Year_of_fee();
+    }
     
+  }, [status])
+console.log(YearOfBalanceByYear);
+  useEffect(() => {
+    
+    let AllRoundData: any[] = [];
+    console.log(YearOfBalanceByYear);   
+    
+    if (YearOfBalanceByYear && YearOfBalanceByYear.length > 0) {
+        console.log(YearOfBalanceByYear);
+        YearOfBalanceByYear.forEach((allData: any) => {
+            //	console.log(allData[0]);
+            //	console.log(allData[1]);
+            let newData = allData[1];
+            let ParticularStudentData: any = [];
+            let ParticularStudentBalance: any = [];
+            newData.forEach((element: any) => {
+                //		console.log(element);
+                if (element && element.balance) {
+                    ParticularStudentBalance.push({ Allbalance: element.balance });
+                }
+                if (element && element.studentData && Object.keys(element.studentData).length > 0) {
+                    //			console.log(element.studentData);
+                    if (ParticularStudentData && ParticularStudentData.length == 0) {
+                        ParticularStudentData.push(element.studentData);
+                    }
+                }
+            });
+            let newFinalArr = [{ ...ParticularStudentBalance[0], ...ParticularStudentData[0] }];
+            AllRoundData.push(newFinalArr[0]);
+        });
+        	console.log(AllRoundData);
+        setAllGotFinalData(AllRoundData);
+        // console.log(searchResultData[0]);
+        // console.log(searchResultData[0][0]);
+        // console.log(searchResultData[0][1]);
+    } else {
+        setAllGotFinalData([]);
+    }
+}, [status]);
+
+  //stupay/mvm10006/2021-2022
     return (
         <div>
             <div className="row">
@@ -112,7 +174,9 @@ const Feesdetails = (props: any) => {
                                         <h6>Academic Year</h6>
                                     </div>
                                     <div>
-                                        <label>2022-2023</label>
+                                        <label>{YearOfBalanceByYear && YearOfBalanceByYear.length && YearOfBalanceByYear.map( (amount:any) =>{
+                                            return <option>  {amount=amount.academic_year}</option>
+                                        } )} </label>
                                     </div>
                                 </div>
 
@@ -121,7 +185,9 @@ const Feesdetails = (props: any) => {
                                         <h6>Balance ₹</h6>
                                     </div>
                                     <div>
-                                        <label>332</label>
+                                    <label>{YearOfBalanceByYear && YearOfBalanceByYear.length && YearOfBalanceByYear.map( (amount:any) =>{
+                                            return <option>  {amount=amount.balance}</option>
+                                        } )} </label>
                                     </div>
                                 </div>
                                 <div className="col-xl-4 col-md-4 mb-1">

@@ -1,7 +1,8 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-
+import "../../assets/css/sb-admin-2.css"
+// import"../../assets/js/sb-admin-2.min.js"
 function Sidenav(){
     
     return(
