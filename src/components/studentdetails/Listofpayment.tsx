@@ -7,20 +7,7 @@ import { baseUrl } from "../../index";
 
 const Listofpayment = (props:any) => {
 
-	const StudentDetails = props.record;
-
-	const [YearOfBalanceByYear ,setYearOfBalanceByYear] = useState<any>({});
-
-	const Prev = (url:any)=>{
-	axios.post(`${baseUrl}autoSearch`,{
-
-	})
-	.then(res => {
-	 console.log("Getting from ::::",res.data)
-	 setYearOfBalanceByYear(res.data)
-	 console.log( )
- 	}).catch(err => console.log(err))
-  }
+ 
 
 
 	return (

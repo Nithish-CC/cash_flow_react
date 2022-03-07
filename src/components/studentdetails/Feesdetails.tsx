@@ -32,7 +32,6 @@ const Feesdetails = (props: any) => {
   }, [status])
 console.log(YearOfBalanceByYear);
   useEffect(() => {
-    
     let AllRoundData: any[] = [];
     console.log(YearOfBalanceByYear);   
     
@@ -67,7 +66,7 @@ console.log(YearOfBalanceByYear);
     } else {
         setAllGotFinalData([]);
     }
-}, [status]);
+}, [YearOfBalanceByYear]);
 
   //stupay/mvm10006/2021-2022
     return (
@@ -174,7 +173,7 @@ console.log(YearOfBalanceByYear);
                                         <h6>Academic Year</h6>
                                     </div>
                                     <div>
-                                        <label>{YearOfBalanceByYear && YearOfBalanceByYear.length && YearOfBalanceByYear.map( (amount:any) =>{
+                                        <label>{allGotFinalData && allGotFinalData.length && allGotFinalData.map( (amount:any) =>{
                                             return <option>  {amount=amount.academic_year}</option>
                                         } )} </label>
                                     </div>
@@ -185,7 +184,7 @@ console.log(YearOfBalanceByYear);
                                         <h6>Balance ₹</h6>
                                     </div>
                                     <div>
-                                    <label>{YearOfBalanceByYear && YearOfBalanceByYear.length && YearOfBalanceByYear.map( (amount:any) =>{
+                                    <label>{allGotFinalData && allGotFinalData.length && allGotFinalData.map( (amount:any) =>{
                                             return <option>  {amount=amount.balance}</option>
                                         } )} </label>
                                     </div>

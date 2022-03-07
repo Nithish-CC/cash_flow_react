@@ -54,7 +54,7 @@ const StudentprofileSearch = () => {
 
 	const searchData = () => {
 		getAccessToken();
-		axios.post(`${baseUrl}studentProfile`, { student_admissions_id: id }).then((response: AxiosResponse) => {
+		axios.post(`${baseUrl}studentProfile`, { student_admissions_id: Number(id) }).then((response: AxiosResponse) => {
 			setStatusStudentDetails(response.data.data[0]);
 			console.log(response.data);
 		});
@@ -65,7 +65,7 @@ const StudentprofileSearch = () => {
 
 	const searchedit = () => {
 		axios
-			.put(`https://61ea85bfc9d96b0017700bb9.mockapi.io/search/1`, {
+			.put(`${baseUrl}studentProfile/${id}`, {
 				student_name: statusStudentDetails.student_name,
 				grade_id: statusStudentDetails.grade_id,
 				section: statusStudentDetails.section,
@@ -153,7 +153,7 @@ const StudentprofileSearch = () => {
 														<div className="card-body bg-transparent">
 															<Form.Group as={Row}>
 																<Form.Label column sm="4">
-																	<strong>Student Name</strong>
+																	<strong>Student Namee</strong>
 																</Form.Label>
 																<Col sm="8" style={{ display: "grid", alignItems: "center" }}>
 																	{!statusStudentEdit ? (

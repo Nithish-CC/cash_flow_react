@@ -213,7 +213,7 @@ const StudentProfile = () => {
                               </div>
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
-                                  <strong>Student Name</strong>
+                                  <strong>Student Nameew</strong>
                                 </Form.Label>
                                 <Col sm="8">
                                   {!statusStudentEdit ? (

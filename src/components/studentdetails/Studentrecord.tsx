@@ -538,7 +538,7 @@ const Studentrecord = () => {
 																	<tr key={index}>
 																		<td>
 																			{" "}
-																			<Link to={`/StudentprofileSearch/${values.student_id}`}>{values.student_name}</Link>
+																			<Link to={`/StudentprofileSearch/${values.student_admissions_id}`}>{values.student_name}</Link>
 																		</td>
 																		{/* <td>{values.studentData.student_id}</td>
                                                                     <td>{values.studentData.phone_number}</td>

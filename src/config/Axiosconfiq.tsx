@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+// 13.233.110.75:5000
 
 axios.defaults.baseURL = 'http://localhost:5001/api/v1/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
