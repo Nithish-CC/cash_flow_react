@@ -9,7 +9,6 @@ import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
-
 const Studentrecord = () => {
 	//To Make Edit
 	let history = useHistory()
@@ -133,7 +132,6 @@ const Studentrecord = () => {
 	}, [searchResultData]);
 
 
-	
 	const Searchauto = () => {
 		if (Autosearch.length > 0) {
 			getAccessToken();

@@ -1,7 +1,7 @@
 import axios from 'axios'
 // 13.233.110.75:5000
 
-axios.defaults.baseURL = 'http://localhost:5001/api/v1/';
+axios.defaults.baseURL = 'http://13.233.110.75:5000/api/v1/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept-Type'] = 'application/json';
 axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';

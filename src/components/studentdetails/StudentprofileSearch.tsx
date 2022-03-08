@@ -9,7 +9,6 @@ import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 
-
 const StudentprofileSearch = () => {
 	//To Make Edit
 	let history = useHistory();
@@ -26,10 +25,13 @@ const StudentprofileSearch = () => {
 	const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>({});
 	const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
 	const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
+	const [UpdateProfileActive, setUpdateProfileActive] = useState<any>({});
+	const [AllSection, setAllSection] = useState<any>({});
+	const [StatusStudentDetailsData, setStatusStudentDetailsData] = useState<any>([]);
+	const [FinalSectionIdData, setFinalSectionIdData] = useState<any>([]);
 
-	console.log(statusStudentDetails);
-
-	const onTextChanged = (e: any) => {
+ 	console.log(UpdateProfileActive);
+ 	const onTextChanged = (e: any) => {
 		const value = e.target.value;
 		setStatusStudentSearch(value);
 		let suggestions: any = {};
@@ -55,20 +57,60 @@ const StudentprofileSearch = () => {
 	const searchData = () => {
 		getAccessToken();
 		axios.post(`${baseUrl}studentProfile`, { student_admissions_id: Number(id) }).then((response: AxiosResponse) => {
-			setStatusStudentDetails(response.data.data[0]);
-			console.log(response.data);
+            setStatusStudentDetails(response.data.data[0]);
+            setStatusStudentDetailsData(response.data.data)
+			setStatusStudentDetailsData(response.data.data[0].grade_id);
+			console.log(StatusStudentDetailsData);
 		});
-	};
+		axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
+			setAllSection(res.data.data);
+			console.log(res.data.data);
+			console.log(statusStudentDetails);
+
+			// setGradeSectionList(res.data.data);
+			// setGradeSectionListAdd(res.data.data);
+
+			// setFrontSearchGrade(res.data.data[0].grade_id);
+			// setSearchGradeId(res.data.data[0].grade_id);
+		});
+    };
+    useEffect(() =>{
+        searchData();
+        
+    },[])
 	useEffect(() => {
-		searchData();
-	}, []);
+       
+              if(AllSection && AllSection.length >0){
+                SectionId(StatusStudentDetailsData);
+              }
+             
+    }, [ StatusStudentDetailsData,AllSection]);
+     console.log(statusStudentDetails.academic_year_id,"Year_id");
+	function SectionId(Sectiondata: any) {
+		console.log(AllSection,"sectionidata");
+        var matchedyearid: any = AllSection && AllSection.length && AllSection.filter((data: any) => data.grade_id === Sectiondata);
+        console.log(matchedyearid,"section");
+return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
+		// let combindobject = { ...Sectiondata, ...matchedyearid[0] };
+		// GetFinalYearData.push(combindobject);
+ 	}
+ function FinalSectionId (get:any,Year:any){
+     console.log(get,"OVERALL SECTIOn");
+     console.log(Year,"Particular");
+     
+    var matchedyearidfinal: any = get && get.length && get.filter((data: any) => data.academic_year_id === Year);
+
+console.log(matchedyearidfinal);
+setFinalSectionIdData(matchedyearidfinal);
+
+
+ }
 
 	const searchedit = () => {
 		axios
 			.put(`${baseUrl}studentProfile/${id}`, {
 				student_name: statusStudentDetails.student_name,
-				grade_id: statusStudentDetails.grade_id,
-				section: statusStudentDetails.section,
+				grade_section_id:Number( statusStudentDetails.grade_section_id),
 				father_name: statusStudentDetails.father_name,
 				student_id: statusStudentDetails.student_id,
 				phone_number: statusStudentDetails.phone_number,
@@ -76,6 +118,7 @@ const StudentprofileSearch = () => {
 				address: statusStudentDetails.address,
 				email: statusStudentDetails.email,
 				status: statusStudentDetails.status,
+				admission_no: statusStudentDetails.admission_no,
 			})
 			.then((response: AxiosResponse) => {
 				setStatusStudentDetails(response.data);
@@ -93,8 +136,6 @@ const StudentprofileSearch = () => {
 		const { name, value } = event.target;
 		setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
 	};
-
-	 
 
 	return (
 		<div id="page-top">
@@ -153,7 +194,7 @@ const StudentprofileSearch = () => {
 														<div className="card-body bg-transparent">
 															<Form.Group as={Row}>
 																<Form.Label column sm="4">
-																	<strong>Student Namee</strong>
+																	<strong>Student Name</strong>
 																</Form.Label>
 																<Col sm="8" style={{ display: "grid", alignItems: "center" }}>
 																	{!statusStudentEdit ? (
@@ -195,9 +236,11 @@ const StudentprofileSearch = () => {
 																			{statusStudentDetails.section}
 																		</div>
 																	) : (
-																		<Form.Select size="sm" onChange={(e: any) => handleChange(e)}>
-																			<option value="A">A</option>
-																			<option value="B">B</option>
+																		<Form.Select name="grade_section_id" size="sm" onChange={(e: any) => handleChange(e)}>
+																			{FinalSectionIdData && FinalSectionIdData.length && FinalSectionIdData.map((values:any,i:any) =>{
+                                                                                  return <option value={values.grade_section_id}> {values.section}</option>;
+                                                                            } )}
+
 																		</Form.Select>
 																	)}
 																</Col>
@@ -225,7 +268,7 @@ const StudentprofileSearch = () => {
 																		<Form.Control
 																			onChange={handleChange}
 																			type="text"
-																			name="student_id"
+																			name="admission_no"
 																			value={statusStudentDetails.admission_no}
 																			size="sm"
 																		/>
@@ -354,21 +397,27 @@ const StudentprofileSearch = () => {
 																		<div onChange={handleChange} key={`inline-radio`} className="mb-3">
 																			<Form.Check
 																				inline
-																				checked={statusStudentDetails.status === "A"}
+																				// checked={statusStudentDetails.status === "A"}
 																				label="Active"
 																				name="status"
 																				type="radio"
 																				id={`inline-radio-1`}
-																				value="a"
+																				value={statusStudentDetails.status}
+																				onChange={(e: any) => {
+																					setUpdateProfileActive(e.target.value);
+																				}}
 																			/>
 																			<Form.Check
 																				inline
-																				checked={statusStudentDetails.status === "I"}
+																				// checked={statusStudentDetails.status === "I"}
 																				label="Inactive"
 																				name="status"
 																				type="radio"
 																				id={`inline-radio-2`}
-																				value="I"
+                                                                                value={statusStudentDetails.status}
+																				onChange={(e: any) => {
+																					setUpdateProfileActive(e.target.value);
+																				}}
 																			/>
 																		</div>
 																	)}
@@ -387,8 +436,8 @@ const StudentprofileSearch = () => {
 												</div>
 											</div>
 										</Form>
-										<Feesdetails student_id={statusStudentDetails.student_id }></Feesdetails>
-										
+										<Feesdetails student_id={statusStudentDetails.student_id}></Feesdetails>
+
 										<Academicfees></Academicfees>
 									</div>
 								) : (
