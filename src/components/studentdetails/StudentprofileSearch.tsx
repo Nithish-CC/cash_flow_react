@@ -8,6 +8,7 @@ import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const StudentprofileSearch = () => {
     //To Make Edit
@@ -28,7 +29,10 @@ const StudentprofileSearch = () => {
     const [AllSection, setAllSection] = useState<any>({});
     const [StatusStudentDetailsData, setStatusStudentDetailsData] = useState<any>([]);
     const [FinalSectionIdData, setFinalSectionIdData] = useState<any>([]);
-	const [sectionFilter,setSectionFilter] = useState<any>([]);
+    const [sectionFilter,setSectionFilter] = useState<any>([]);
+    const mobileNoPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+
     console.log(UpdateProfileActive);
     const onTextChanged = (e: any) => {
         const value = e.target.value;
@@ -92,30 +96,30 @@ console.log(matchedyearidfinal);
 setFinalSectionIdData(matchedyearidfinal);
 // setFinalSectionIdData(matchedyearidfinal[0]);
  }
-    const searchedit = () => {
-        axios
-            .put(`${baseUrl}studentProfile/${id}`, {
-                student_name: statusStudentDetails.student_name,
-                grade_section_id:Number( sectionFilter),
-                father_name: statusStudentDetails.father_name,
-                student_id: statusStudentDetails.student_id,
-                phone_number: statusStudentDetails.phone_number,
-                alt_phone_number: statusStudentDetails.alt_phone_number,
-                address: statusStudentDetails.address,
-                email: statusStudentDetails.email,
-                status: UpdateProfileActive,
-                admission_no: statusStudentDetails.admission_no,
-            })
-            .then((response: AxiosResponse) => {
-                setStatusStudentDetails(response.data);
-				setStatusStudentEdit(false)
-				searchData()
-				setUpdateProfileActive("");
-            })
-            .catch((error) => {
-                alert(error);
-            });
-    };
+    // const searchedit = () => {
+    //     axios
+    //         .put(`${baseUrl}studentProfile/${id}`, {
+    //             student_name: statusStudentDetails.student_name,
+    //             grade_section_id:Number( sectionFilter),
+    //             father_name: statusStudentDetails.father_name,
+    //             student_id: statusStudentDetails.student_id,
+    //             phone_number: statusStudentDetails.phone_number,
+    //             alt_phone_number: statusStudentDetails.alt_phone_number,
+    //             address: statusStudentDetails.address,
+    //             email: statusStudentDetails.email,
+    //             status: UpdateProfileActive,
+    //             admission_no: statusStudentDetails.admission_no,
+    //         })
+    //         .then((response: AxiosResponse) => {
+    //             setStatusStudentDetails(response.data);
+	// 			setStatusStudentEdit(false)
+	// 			searchData()
+	// 			setUpdateProfileActive("");
+    //         })
+    //         .catch((error) => {
+    //             alert(error);
+    //         });
+    // };
     const onClear = () => {
         setStatusStudentSearch("");
     };
@@ -123,8 +127,61 @@ setFinalSectionIdData(matchedyearidfinal);
         const { name, value } = event.target;
         setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
     };
+   
+        const searchedit = () => {
+            if(statusStudentDetails.alt_phone_number.match(mobileNoPattern) && statusStudentDetails.phone_number.match(mobileNoPattern)){
+            axios
+                .put(`${baseUrl}studentProfile/${id}`, {
+                    student_name: statusStudentDetails.student_name,
+                    grade_section_id:Number( sectionFilter),
+                    father_name: statusStudentDetails.father_name,
+                    student_id: statusStudentDetails.student_id,
+                    phone_number: statusStudentDetails.phone_number,
+                    alt_phone_number: statusStudentDetails.alt_phone_number,
+                    address: statusStudentDetails.address,
+                    email: statusStudentDetails.email,
+                    status: UpdateProfileActive,
+                    admission_no: statusStudentDetails.admission_no,
+                })
+                .then((response: AxiosResponse) => {
+                    if(response.data.status == true){
+                        toast.success("Student Details Updated", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                 
+                    setStatusStudentDetails(response.data);
+                    setStatusStudentEdit(false)
+                    searchData()
+                    setUpdateProfileActive("");
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+            }else{
+                toast.warning("please Check Phone Number", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        };
+        
+   
     return (
+        
         <div id="page-top">
+                        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="wrapper">
                 <Sidebar></Sidebar>
                 <div id="content-wrapper" className="d-flex flex-column">
@@ -297,8 +354,9 @@ setFinalSectionIdData(matchedyearidfinal);
                                                                         <Form.Control
                                                                             onChange={handleChange}
                                                                             type="number"
+                                                                            max={10}
                                                                             name="phone_number"
-																			max={10}
+																		 
                                                                             value={statusStudentDetails.phone_number}
                                                                             size="sm"
                                                                         />
@@ -317,7 +375,7 @@ setFinalSectionIdData(matchedyearidfinal);
                                                                     ) : (
                                                                         <Form.Control
                                                                             onChange={handleChange}
-                                                                            type="text"
+                                                                            type="number"
                                                                             name="alt_phone_number"
                                                                             value={statusStudentDetails.alt_phone_number}
                                                                             size="sm"
@@ -376,7 +434,7 @@ setFinalSectionIdData(matchedyearidfinal);
                                                                         <div onChange={handleChange} key={`inline-radio`} className="mb-3">
                                                                             <Form.Check
                                                                                 inline
-                                                                                // checked={statusStudentDetails.status === "Active"?true:false}
+                                                                                checked={statusStudentDetails.status === "Active"?true:false}
                                                                                 label="Active"
                                                                                 name="status"
                                                                                 type="radio"
@@ -388,7 +446,7 @@ setFinalSectionIdData(matchedyearidfinal);
                                                                             />
                                                                             <Form.Check
                                                                                 inline
-                                                                                // checked={statusStudentDetails.status === "Inactive"?true:false}
+                                                                                checked={statusStudentDetails.status === "Inactive"?true:false}
                                                                                 label="Inactive"
                                                                                 name="status"
                                                                                 type="radio"
