@@ -24,13 +24,13 @@ const Studentpay = () => {
     const [newDate, setNewDate] = useState<any>(new Date());
     const [AllDetailsOfStudent, setAllDetailsOfStudent] = useState<any>([]);
     const [buttonDisable, setButtonDisable] = useState(false);
+    const [admissionidd,setadmissionsid] = useState<any>([]);
     console.log(AllDetailsOfStudent);
 
     const urlParams: any = useParams();
     const id = urlParams.id;
     const year = urlParams.year;
     console.log(year);
-    console.log(id);
 
     //For Refund Initiate
     const [refundSwitch, setRefundSwitch] = useState(false);
@@ -74,6 +74,7 @@ const Studentpay = () => {
                         }
                     }
                 });
+               
                 console.log(ParticularStudentBalance);
                 let newFinalArr = [{ ...ParticularStudentBalance[0], ...ParticularStudentData[0] }];
                 AllRoundData.push(newData[0]);
@@ -133,6 +134,7 @@ const Studentpay = () => {
                         })
                         .then((response: AxiosResponse) => {
                             setMainSearch(response.data.data);
+                           setadmissionsid(response.data.data[0][0]);
                         });
                 }
             }
@@ -402,7 +404,7 @@ const Studentpay = () => {
                                                             <a>
                                                                 <i className="far fa-clone pr-1"></i>Pay Fees
                                                             </a>{" "}
-                                                            <Link to={`/StudentprofileSearch/${id}`}>
+                                                            <Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
                                                                 <a className="btn btn-success btn float-right">Back</a>
                                                             </Link>
                                                         </h4>
@@ -413,7 +415,7 @@ const Studentpay = () => {
                                                             <a>
                                                                 <i className="far fa-clone pr-1"></i>Refund
                                                             </a>{" "}
-                                                            <Link to={`/StudentprofileSearch/${id}`}>
+                                                            <Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
                                                                 <a className="btn btn-success btn float-right">Back</a>
                                                             </Link>
                                                         </h4>
@@ -721,7 +723,7 @@ const Studentpay = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <Listofpayment></Listofpayment>
+                                <Listofpayment studentdetails ={AllDetailsOfStudent} studentadmission ={AllDetailsOfStudent}></Listofpayment>
                             </div>
                         </div>
                     </div>

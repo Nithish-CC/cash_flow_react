@@ -42,6 +42,7 @@ const Academicfees = (props: any) => {
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
 
+
   useEffect(() => {
     student_id = props.studentDetails.student_id;
     if (student_id && student_id.toString().length) yearacademic();
@@ -63,6 +64,7 @@ const Academicfees = (props: any) => {
       : setMerdattwpus([]);
   }, [studentdiscount]);
 
+
   useEffect(() => {
     fetchData();
   }, [Merdattwpus]);
@@ -82,13 +84,13 @@ const Academicfees = (props: any) => {
       .catch((e: any) => {});
   };
 
+
   const feemaster = () => {
     getAccessToken();
     axios.get(`${baseUrl}feeMaster`).then((res: any) => {
       setfeemasterid(res.data.data);
     });
   };
-
   const getapi = () => {
     setSpinnerLoad(true);
     getAccessToken();
@@ -105,7 +107,6 @@ const Academicfees = (props: any) => {
         console.log(e);
       });
   };
-
   function studentyear(gradedata: any) {
     var matchedyearid: any =
       feemasterid &&
@@ -163,10 +164,8 @@ const Academicfees = (props: any) => {
     discounttt.push(margedat);
     setDiscountallrecord(discounttt);
   }
-
   const fetchData = () => {
     setdiscounttt([]);
-
     Merdattwpus && Merdattwpus.length
       ? Merdattwpus.map((data: any) => {
           setdiscountt(data);
@@ -410,5 +409,4 @@ const Academicfees = (props: any) => {
     </div>
   );
 };
-
 export default Academicfees;
