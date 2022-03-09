@@ -33,8 +33,7 @@ const StudentprofileSearch = () => {
     const mobileNoPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
 
-    console.log(UpdateProfileActive);
-    const onTextChanged = (e: any) => {
+     const onTextChanged = (e: any) => {
         const value = e.target.value;
         setStatusStudentSearch(value);
         let suggestions: any = {};
@@ -59,12 +58,12 @@ const StudentprofileSearch = () => {
             setStatusStudentDetails(response.data.data[0]);
             setStatusStudentDetailsData(response.data.data)
             setStatusStudentDetailsData(response.data.data[0].grade_id);
-            console.log(StatusStudentDetailsData);
+            // console.log(StatusStudentDetailsData);
         });
         axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
             setAllSection(res.data.data);
-            console.log(res.data.data);
-            console.log(statusStudentDetails);
+            // console.log(res.data.data);
+            // console.log(statusStudentDetails);
             // setGradeSectionList(res.data.data);
             // setGradeSectionListAdd(res.data.data);
             // setFrontSearchGrade(res.data.data[0].grade_id);
@@ -79,21 +78,18 @@ const StudentprofileSearch = () => {
                 SectionId(StatusStudentDetailsData);
               }
     }, [ StatusStudentDetailsData,AllSection]);
-     console.log(statusStudentDetails.academic_year_id,"Year_id");
-    function SectionId(Sectiondata: any) {
-        console.log(AllSection,"sectionidata");
+     function SectionId(Sectiondata: any) {
+        // console.log(AllSection,"sectionidata");
         var matchedyearid: any = AllSection && AllSection.length && AllSection.filter((data: any) => data.grade_id === Sectiondata);
-        console.log(matchedyearid,"section");
+        // console.log(matchedyearid,"section");
 return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
         // let combindobject = { ...Sectiondata, ...matchedyearid[0] };
         // GetFinalYearData.push(combindobject);
     }
  function FinalSectionId (get:any,Year:any){
-     console.log(get,"OVERALL SECTIOn");
-     console.log(Year,"Particular");
+   
     var matchedyearidfinal: any = get && get.length && get.filter((data: any) => data.academic_year_id === Year);
-console.log(matchedyearidfinal);
-setFinalSectionIdData(matchedyearidfinal);
+ setFinalSectionIdData(matchedyearidfinal);
 // setFinalSectionIdData(matchedyearidfinal[0]);
  }
     // const searchedit = () => {
@@ -177,7 +173,8 @@ setFinalSectionIdData(matchedyearidfinal);
             }
         };
         
-   
+       console.log(statusStudentDetails.student_id);
+        
     return (
         
         <div id="page-top">
