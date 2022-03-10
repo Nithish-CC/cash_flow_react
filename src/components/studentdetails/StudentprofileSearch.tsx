@@ -56,10 +56,21 @@ const StudentprofileSearch = () => {
         getAccessToken();
         axios.post(`${baseUrl}studentProfile`, { student_admissions_id: Number(id) }).then((response: AxiosResponse) => {
             setStatusStudentDetails(response.data.data[0]);
-            setStatusStudentDetailsData(response.data.data)
+            // setStatusStudentDetailsData(response.data.data)
             setStatusStudentDetailsData(response.data.data[0].grade_id);
-            // console.log(StatusStudentDetailsData);
+            console.log(response.data.data[0]);
         });
+  
+    };
+
+
+    useEffect(() =>{
+        // if(statusStudentDetails && statusStudentDetails.length ){
+            searchData();
+        // }
+        
+    },[])
+    useEffect(() =>{
         axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
             setAllSection(res.data.data);
             // console.log(res.data.data);
@@ -69,9 +80,7 @@ const StudentprofileSearch = () => {
             // setFrontSearchGrade(res.data.data[0].grade_id);
             // setSearchGradeId(res.data.data[0].grade_id);
         });
-    };
-    useEffect(() =>{
-        searchData();
+        
     },[])
     useEffect(() => {
               if(AllSection && AllSection.length >0){
@@ -91,6 +100,8 @@ return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
     var matchedyearidfinal: any = get && get.length && get.filter((data: any) => data.academic_year_id === Year);
  setFinalSectionIdData(matchedyearidfinal);
 // setFinalSectionIdData(matchedyearidfinal[0]);
+// console.log(matchedyearidfinal,"Year_id");
+
  }
     // const searchedit = () => {
     //     axios
@@ -173,7 +184,7 @@ return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
             }
         };
         
-       console.log(statusStudentDetails.student_id);
+       console.log(statusStudentDetails,"studentid");
         
     return (
         
@@ -468,7 +479,7 @@ return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
                                                 </div>
                                             </div>
                                         </Form>
-                                        <Feesdetails student_id={statusStudentDetails.student_id}></Feesdetails>
+                                        <Feesdetails student_id={statusStudentDetails.student_id}year={statusStudentDetails.academic_year_id}></Feesdetails>
                                         <Academicfees></Academicfees>
                                     </div>
                                 ) : (

@@ -533,7 +533,7 @@ const Studentrecord = () => {
 															//   {console.log(values)}
 															return (
 																<>
-																	<tr key={index}>
+																	<tr key={index}>	
 																		<td>
 																			{" "}
 																			<Link to={`/StudentprofileSearch/${values.student_admissions_id}`}>{values.student_name}</Link>
