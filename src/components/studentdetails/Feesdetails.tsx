@@ -5,8 +5,6 @@ import { useHistory, useParams } from "react-router-dom";
 const Feesdetails = (props: any) => {
     let history = useHistory()
     const status = props.status;
-
-
     
     return (
         <div>

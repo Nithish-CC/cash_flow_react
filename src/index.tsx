@@ -4,7 +4,9 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Routers from './config/Routers';
 
+
 export const baseUrl= "http://3.110.131.173:5000/api/v1/"
+
 
 
 ReactDOM.render(

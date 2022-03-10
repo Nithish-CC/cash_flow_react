@@ -314,6 +314,9 @@ const Studentadd = () => {
                                                             <InputGroup hasValidation>
                                                                 <Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
 																<option value="No Grade">--Select FromGrade--</option>
+                                                                  <option value="PreKG">PreKG</option>
+                                                                   <option value="LKG">LKG</option>
+                                                                   <option value="UKG">UKG</option>
                                                                     <option value="I">I</option>
                                                                     <option value="II">II</option>
                                                                     <option value="III">III</option>
