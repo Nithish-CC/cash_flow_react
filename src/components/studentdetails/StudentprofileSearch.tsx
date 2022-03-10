@@ -468,7 +468,7 @@ return FinalSectionId(matchedyearid,statusStudentDetails.academic_year_id);
                                                 </div>
                                             </div>
                                         </Form>
-                                        <Feesdetails student_id={statusStudentDetails.student_id}></Feesdetails>
+                                        <Feesdetails student_id={statusStudentDetails.student_id}year={statusStudentDetails.academic_year_id}></Feesdetails>
                                         <Academicfees
                       studentDetails={statusStudentDetails}
                     ></Academicfees>

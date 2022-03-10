@@ -164,7 +164,10 @@ console.log(academicyear);
                                         Actual Fees
                                     </th>
                                     <th className="sorting" style={{ width: "63px" }}>
-                                        Paid Amount
+                                        Paid
+                                    </th>
+                                    <th className="sorting" style={{ width: "13px" }}>
+                                        Cum_Amt
                                     </th>
                                     <th className="sorting" style={{ width: "63px" }}>
                                         Refund Amount
@@ -188,6 +191,7 @@ console.log(academicyear);
                                     <td>{values.date_of_transcation}</td>
                                     <td>{values.actual_fees}</td>
                                     <td>{values.amount_paid}</td>
+                                    <td>{values.cum_amt}</td>
                                     <td>{values.refund}</td>
                                     <td>{values.discount}</td>
                                     <td>{values.comments}</td>
