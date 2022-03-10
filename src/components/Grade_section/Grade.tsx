@@ -35,6 +35,7 @@ const Grade = () => {
   const [duplication, setDuplication] = useState(false);
   let [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
   const [allGrade, setAllGrade] = useState<any[]>([]);
+  const [filter, setfilter] = useState<any>([]);
 
   //Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -149,9 +150,7 @@ const Grade = () => {
     getAllAcademicYear()
       .then((res: any) => {
         setAllAcademicYear(res.data.data);
-        // console.log(res.data.data);
         setAcademic_year_data(res.data.data[0].year_id);
-        // console.log(res.data);
       })
       .catch((e: any) => {
         console.log(e);
@@ -346,9 +345,6 @@ const Grade = () => {
     getAllGradeSectionData();
   }, [perPage, pageToMove]);
 
-  // console.log(allAcademicYear);
-  // console.log(statusList);
-  // console.log();
   function YearId(gradedata: any) {
     var matchedyearid: any =
       allAcademicYear &&
@@ -371,8 +367,6 @@ const Grade = () => {
     setFinalAcademicYr(finalAcademicYr);
   }
 
-  //setFinalAcademicYr(tempArr)
-
   useEffect(() => {
     finalAcademicYr = [];
     statusList &&
@@ -381,6 +375,29 @@ const Grade = () => {
         YearId(data);
       });
   }, [statusList]);
+
+  const datatoFilterNull: any =
+    finalAcademicYr &&
+    finalAcademicYr.length &&
+    finalAcademicYr.sort().map((data: any) => {
+      let keys = Object.keys(data);
+      keys.map((key: any) => {
+        data[key] = data[key] == null ? "" : data[key];
+      });
+      return data;
+    });
+
+  const dataSearchBar: any =
+    datatoFilterNull &&
+    datatoFilterNull.length &&
+    datatoFilterNull.sort().filter((data: any) => {
+      return Object.keys(data).some((key) =>
+        data[key]
+          .toString()
+          .toLowerCase()
+          .includes(filter.toString().toLowerCase())
+      );
+    });
 
   return (
     <div>
@@ -433,7 +450,8 @@ const Grade = () => {
                                   <Form.Control
                                     type="search"
                                     className="form-control form-control-sm"
-                                  />
+                                    onChange={(e) => setfilter(e.target.value)}
+                                  />                                  
                                 </Form.Label>
                               </div>
                             </div>
@@ -442,7 +460,7 @@ const Grade = () => {
                             <div className="col-sm-12">
                               <BootstrapTable
                                 keyField="index"
-                                data={finalAcademicYr}
+                                data={dataSearchBar}
                                 columns={col}
                                 hover
                                 striped

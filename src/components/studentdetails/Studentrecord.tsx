@@ -1,8 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import Feesdetails from "./Feesdetails";
-import Academicfees from "./Academicfees";
 import {
   Row,
   Col,
@@ -18,6 +16,8 @@ import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import BootstrapTable from "react-bootstrap-table-next";
 const Studentrecord = () => {
   //To Make Edit
   let history = useHistory();
@@ -59,33 +59,58 @@ const Studentrecord = () => {
   const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
   const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
   const [searchBy, setSearchBy] = useState("");
-  //manage state  Autosearch
-  //manage state  academicYear
-  //manage state  gradea
-  //manage state  section
-  //console.log(academicYear);
-  // useEffect(() => {
-  // 	if (gradeSectionList && gradeSectionList.length>0) {
-  // 		let mySet1 = new Set();
-  // 		gradeSectionList.forEach((element: any) => {
-  // 			mySet1.add(element.academic_year_id);
-  // 		});
-  // 		setAcademicYearFinal([...mySet1]);
-  // 		handleSearch(gradeSectionList, gradeSectionList[0].academic_year_id);
-  // 	}
-  // }, [gradeSectionList]);
 
-  // useEffect(() => {
-  // 	if (filterParticularYear && filterParticularYear.length) {
-  // 		let mySet1 = new Set();
-  // 		filterParticularYear.forEach((element: any) => {
-  // 			mySet1.add(element.grade);
-  // 		});
-  // 		setGradeBasedOnYearFinal([...mySet1]);
-  // 		handlesection(filterParticularYear, filterParticularYear[0].grade);
-  // 	}
-  // }, [filterParticularYear]);
-  console.log(Autosearch);
+  const paginate = [
+    { text: "5", value: 5 },
+    { text: "10", value: 10 },
+    { text: "15", value: 15 },
+    { text: "20", value: 20 },
+    { text: "25", value: 25 },
+  ];
+
+  const col: any = [
+    {
+      dataField: "student_name",
+      text: "Name",
+      formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+        return (
+          <>
+            <Link to={`/StudentprofileSearch/${row.student_admissions_id}`}>
+              {row.student_name}
+            </Link>
+          </>
+        );
+      },
+      sort: true,
+    },
+    { dataField: "admission_no", text: "Admission No", sort: true },
+    { dataField: "phone_number", text: "PhoneNumber", sort: true },
+    { dataField: "grade_master", text: "Grade", sort: true },
+    { dataField: "section", text: "Section", sort: true },
+    {
+      dataField: "discount",
+      text: "Status",
+      formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+        return (
+          <>
+            {row.balance && row.balance > 0 ? (
+              <Button
+                onClick={(e) =>
+                  history.push(`/stupay/${row.student_id}/${row.academic_year}`)
+                }
+              >
+                {"Unpaid"}
+              </Button>
+            ) : (
+              <Button disabled>{"Paid"}</Button>
+            )}
+          </>
+        );
+      },
+      sort: true,
+    },
+  ];
+
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
     console.log(value);
@@ -472,249 +497,207 @@ const Studentrecord = () => {
       selectedYearArr.push(element);
       mySet1.add(element.grade);
     });
-    const mainsearch = () => {
-        getAccessToken();
-        axios
-            .get(`${baseUrl}student_admissions_search/search_student?academic_year=${acas}&grade_id=${gradea}&section=${section}`)
-            .then((response: AxiosResponse) => {
-                setMainSearch(response.data);
-                // console.log(response.data);
-            });
-    };
-    useEffect(() => {
-        getAccessToken();
-        axios
-            .get(`${baseUrl}gradeSection`)
-            .then((res: any) => {
-                setGradeSectionList(res.data.data);
-                //console.log(res.data.data);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
-    useEffect(() => {
-        Autosearch && Autosearch.length > 0 ? Searchauto() : setSuggest("");
-    }, [Autosearch]);
-
-    const onClear = () => {
-        setStatusStudentSearch("");
-    };
-
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
-    };
-    const handleSearch = (gradeSectionList: any, searchInput: any) => {
-        setAddGrade("");
-        setAcademicYear(searchInput);
-        let mySet1 = new Set();
-        let resultData = gradeSectionList.filter((obj: any) =>
-            Object.values(obj)
-                .flat()
-                .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
-        let selectedYearArr: any = [];
-        resultData.forEach((element: any) => {
-            selectedYearArr.push(element);
-            mySet1.add(element.grade);
-        });
-        setGradeBasedOnYearFinal([...mySet1]);
-        setFilterParticularYear(selectedYearArr);
-        //	setAddGrade(resultData[0].grade);
-    };
-    //	console.log(gradeSectionList);
-    const handlesection = (sectionList: any, searchInput: any) => {
-        setAddGrade("");
-        setAcademicYear(searchInput);
-        let mySet1 = new Set();
-        let resultData = gradeSectionList.filter((obj: any) =>
-            Object.values(obj)
-                .flat()
-                .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
-        let selectedYearArr: any = [];
-        resultData.forEach((element: any) => {
-            selectedYearArr.push(element);
-            mySet1.add(element.section);
-        });
-        SetsectionBasedOnGrade([...mySet1]);
-        //		setAddSection(resultData[0].section);
-    };
-    return (
-        <div id="page-top">
-            <div id="wrapper">
-                <Sidebar data={"studentrecord"}></Sidebar>
-                <div id="content-wrapper" className="d-flex flex-column">
-                    <div className="student-profile py-2">
-                        <div id="content">
-                            <Navbar></Navbar>
-                            <div className="container" style={{ marginLeft: "3%" }}>
-                                <div className="d-sm-flex align-items-center justify-content-between mb-5">
-                                    <Container>
-                                        <Row>
-                                            <Col md={5}>
-                                                <Form.Control
-                                                    type="search"
-                                                    className="form-control bg-light border-20 small"
-                                                    placeholder="Search for Name,ID,PhoneNo..."
-                                                    value={
-                                                        Autosearch && Autosearch.text
-                                                            ? `${Autosearch.text}**${Autosearch.GradeId}**${Autosearch.PhoneNumber}**${Autosearch.studentid}`
-                                                            : Autosearch
-                                                    }
-                                                    onChange={(e: any) => {
-                                                        setAutoSearch(e.target.value.trim());
-                                                        setSearchBy(e.target.value.trim());
-                                                    }}
-                                                />
-                                                <Card
-                                                    style={{
-                                                        cursor: "pointer",
-                                                        background: "Black",
-                                                        color: "white",
-                                                    }}
-                                                >
-                                                    <ListGroup variant="flush" style={{ marginLeft: "10px" }}>
-                                                        {suggest.length > 0 && isComponentVisible && (
-                                                            <div>
-                                                                {suggest.map((item: any, i: any) => (
-                                                                    <div key={i} onClick={() => onSuggesthandler(item)}>
-                                                                        {item.student_name}***
-                                                                        {item.grade_id}***
-                                                                        {item.phone_number}***
-                                                                        {item.admission_no}
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </ListGroup>
-                                                </Card>
-                                            </Col>
-                                            {Autosearch && Autosearch.text ? (
-                                                <></>
-                                            ) : (
-                                                <>
-                                                    <Col md={2}>
-                                                        <Form.Select
-                                                            aria-label="Default select example"
-                                                            onChange={(e) => {
-                                                                setAcademicYear(e.target.options[e.target.selectedIndex].text);
-                                                                console.log(e.target.value);
-                                                                handleGradeFilter(gradeSectionList, e.target.value);
-                                                            }}
-                                                        >
-                                                            {academicYearFinal &&
-                                                                academicYearFinal.length &&
-                                                                academicYearFinal.map((academic: any) => {
-                                                                    return <option value={academic.year_id}>{academic.academic_year}</option>;
-                                                                })}
-                                                        </Form.Select>
-                                                    </Col>
-                                                    <Col md={2}>
-                                                        <Form.Select
-                                                            aria-label="Default select example"
-                                                            onChange={(e) => {
-                                                                setGradea(e.target.value);
-                                                                //handlesection(filterParticularYear, e.target.value);
-                                                            }}
-                                                        >
-                                                            <option value="none">Grade</option>
-                                                            {filterGradeByYear &&
-                                                                filterGradeByYear.length &&
-                                                                filterGradeByYear.map((value: any) => {
-                                                                    // console.log(academicYear)
-                                                                    return <option value={value.grade_master}>{value.grade_master}</option>;
-                                                                })}
-                                                        </Form.Select>
-                                                    </Col>
-                                                    <Col md={2}>
-                                                        <Form.Select aria-label="Default select example" onChange={(e) => setsection(e.target.value)}>
-                                                            <option value="none">Section</option>
-                                                            {filterSectionByYear &&
-                                                                filterSectionByYear.length &&
-                                                                filterSectionByYear.map((value: any, i: any) => {
-                                                                    return <option value={value.section}>{value.section}</option>;
-                                                                })}
-                                                        </Form.Select>
-                                                    </Col>
-                                                    <Col md={1}>
-                                                        <div className="input-group-append">
-                                                            <Button
-                                                                className="btn btn-danger"
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    callStudentData();
-                                                                }}
-                                                            >
-                                                                <i className="fas fa-search fa-sm"></i>
-                                                            </Button>
-                                                        </div>
-                                                    </Col>
-                                                </>
-                                            )}
-                                        </Row>
-                                    </Container>
-                                </div>
-                                <div className="col-xl-11 text-center">
-                                    {statusStudentSearch ? (
-                                        <div>
-                                            <Table bordered hover>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Admission No</th>
-                                                        <th>PhoneNumber</th>
-                                                        <th>Grade</th>
-                                                        <th>Section</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {allGotFinalData && allGotFinalData.length > 0 ? (
-                                                        allGotFinalData.map((values: any, index: any) => {
-                                                            //   {console.log(values)}
-                                                            return (
-                                                                <>
-                                                                    <tr key={index}>
-                                                                        <td>
-                                                                            {" "}
-                                                                            <Link to={`/StudentprofileSearch/${values.student_admissions_id}`}>{values.student_name}</Link>
-                                                                        </td>
-                                                                      {/* <td>{values.studentData.student_id}</td>
-                                                                    <td>{values.studentData.phone_number}</td>
-                                                                    <td>{values.studentData.grade}</td> */}
-                                    <td>{values.admission_no}</td>
-                                    <td>{values.phone_number}</td>
-                                    <td>{values.grade_master}</td>
-                                    <td>{values.section}</td>
-                                    <td>
-                                      {values.balance && values.balance > 0 ? (
-                                        <Button
-                                          onClick={(e) =>
-                                            history.push(
-                                              `/stupay/${values.student_id}/${values.academic_year}`
-                                            )
-                                          }
-                                        >
-                                          {"Unpaid"}
-                                        </Button>
-                                      ) : (
-                                        <Button disabled>{"Paid"}</Button>
-                                      )}
-                                    </td>
-                                  </tr>
-                                </>
-                              );
-                            })
-                          ) : (
+    setGradeBasedOnYearFinal([...mySet1]);
+    setFilterParticularYear(selectedYearArr);
+    //	setAddGrade(resultData[0].grade);
+  };
+  //	console.log(gradeSectionList);
+  const handlesection = (sectionList: any, searchInput: any) => {
+    setAddGrade("");
+    setAcademicYear(searchInput);
+    let mySet1 = new Set();
+    let resultData = gradeSectionList.filter((obj: any) =>
+      Object.values(obj)
+        .flat()
+        .some((v) =>
+          `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
+        )
+    );
+    let selectedYearArr: any = [];
+    resultData.forEach((element: any) => {
+      selectedYearArr.push(element);
+      mySet1.add(element.section);
+    });
+    SetsectionBasedOnGrade([...mySet1]);
+    //		setAddSection(resultData[0].section);
+  };
+  return (
+    <div id="page-top">
+      <div id="wrapper">
+        <Sidebar data={"studentrecord"}></Sidebar>
+        <div id="content-wrapper" className="d-flex flex-column">
+          <div className="student-profile py-2">
+            <div id="content">
+              <Navbar></Navbar>
+              <div className="container" style={{ marginLeft: "3%" }}>
+                <div className="d-sm-flex align-items-center justify-content-between mb-5">
+                  <Container>
+                    <Row>
+                      <Col md={5}>
+                        <Form.Control
+                          type="search"
+                          className="form-control bg-light border-20 small"
+                          placeholder="Search for Name,ID,PhoneNo..."
+                          value={
+                            Autosearch && Autosearch.text
+                              ? `${Autosearch.text}**${Autosearch.GradeId}**${Autosearch.PhoneNumber}**${Autosearch.studentid}`
+                              : Autosearch
+                          }
+                          onChange={(e: any) => {
+                            setAutoSearch(e.target.value.trim());
+                            setSearchBy(e.target.value.trim());
+                          }}
+                        />
+                        <Card
+                          style={{
+                            cursor: "pointer",
+                            background: "Black",
+                            color: "white",
+                          }}
+                        >
+                          <ListGroup
+                            variant="flush"
+                            style={{ marginLeft: "10px" }}
+                          >
+                            {suggest.length > 0 && isComponentVisible && (
+                              <div>
+                                {suggest.map((item: any, i: any) => (
+                                  <div
+                                    key={i}
+                                    onClick={() => onSuggesthandler(item)}
+                                  >
+                                    {item.student_name}***
+                                    {item.grade_id}***
+                                    {item.phone_number}***
+                                    {item.admission_no}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </ListGroup>
+                        </Card>
+                      </Col>
+                      {Autosearch && Autosearch.text ? (
+                        <></>
+                      ) : (
+                        <>
+                          <Col md={2}>
+                            <Form.Select
+                              aria-label="Default select example"
+                              onChange={(e) => {
+                                setAcademicYear(
+                                  e.target.options[e.target.selectedIndex].text
+                                );
+                                console.log(e.target.value);
+                                handleGradeFilter(
+                                  gradeSectionList,
+                                  e.target.value
+                                );
+                              }}
+                            >
+                              {academicYearFinal &&
+                                academicYearFinal.length &&
+                                academicYearFinal.map((academic: any) => {
+                                  return (
+                                    <option value={academic.year_id}>
+                                      {academic.academic_year}
+                                    </option>
+                                  );
+                                })}
+                            </Form.Select>
+                          </Col>
+                          <Col md={2}>
+                            <Form.Select
+                              aria-label="Default select example"
+                              onChange={(e) => {
+                                setGradea(e.target.value);
+                                //handlesection(filterParticularYear, e.target.value);
+                              }}
+                            >
+                              <option value="none">Grade</option>
+                              {filterGradeByYear &&
+                                filterGradeByYear.length &&
+                                filterGradeByYear.map((value: any) => {
+                                  // console.log(academicYear)
+                                  return (
+                                    <option value={value.grade_master}>
+                                      {value.grade_master}
+                                    </option>
+                                  );
+                                })}
+                            </Form.Select>
+                          </Col>
+                          <Col md={2}>
+                            <Form.Select
+                              aria-label="Default select example"
+                              onChange={(e) => setsection(e.target.value)}
+                            >
+                              <option value="none">Section</option>
+                              {filterSectionByYear &&
+                                filterSectionByYear.length &&
+                                filterSectionByYear.map(
+                                  (value: any, i: any) => {
+                                    return (
+                                      <option value={value.section}>
+                                        {value.section}
+                                      </option>
+                                    );
+                                  }
+                                )}
+                            </Form.Select>
+                          </Col>
+                          <Col md={1}>
+                            <div className="input-group-append">
+                              <Button
+                                className="btn btn-danger"
+                                type="button"
+                                onClick={() => {
+                                  callStudentData();
+                                }}
+                              >
+                                <i className="fas fa-search fa-sm"></i>
+                              </Button>
+                            </div>
+                          </Col>
+                        </>
+                      )}
+                    </Row>
+                  </Container>
+                </div>
+                <div className="col-xl-11 text-center">
+                  {statusStudentSearch ? (
+                    <div>
+                      {allGotFinalData && allGotFinalData.length > 0 ? (
+                        <BootstrapTable
+                          keyField="academic_year"
+                          data={allGotFinalData}
+                          columns={col}
+                          hover
+                          pagination={paginationFactory({
+                            sizePerPageList: paginate,
+                          })}
+                        />
+                      ) : (
+                        <Table bordered hover>
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Admission No</th>
+                              <th>PhoneNumber</th>
+                              <th>Grade</th>
+                              <th>Section</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
                             <tr>
                               <td colSpan={6} className="text-center">
                                 No Data Found
                               </td>
                             </tr>
-                          )}
-                        </tbody>
-                      </Table>
+                          </tbody>
+                        </Table>
+                      )}
                     </div>
                   ) : null}
                 </div>

@@ -5,8 +5,6 @@ import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory, useParams } from "react-router-dom";
 
 const Academicfees = (props: any) => {
@@ -42,30 +40,6 @@ const Academicfees = (props: any) => {
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
 
-  const paginate = [
-    {
-      text: "5",
-      value: 5,
-    },
-    {
-      text: "10",
-      value: 10,
-    },
-    {
-      text: "15",
-      value: 15,
-    },
-    {
-      text: "20",
-      value: 20,
-    },
-    {
-      text: "25",
-      value: 25,
-    },
-  ];
-
-
   useEffect(() => {
     student_id = props.studentDetails.student_id;
     if (student_id && student_id.toString().length) yearacademic();
@@ -87,7 +61,6 @@ const Academicfees = (props: any) => {
       : setMerdattwpus([]);
   }, [studentdiscount]);
 
-
   useEffect(() => {
     fetchData();
   }, [Merdattwpus]);
@@ -106,7 +79,6 @@ const Academicfees = (props: any) => {
       })
       .catch((e: any) => {});
   };
-
 
   const feemaster = () => {
     getAccessToken();

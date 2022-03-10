@@ -126,10 +126,20 @@ const Year = () => {
   const handleShow = () => {
     setShow(true);
   };
-  const dataSearch: any =
+  const datatoFilterNull: any =
     allAcademicYear &&
     allAcademicYear.length &&
-    allAcademicYear.sort().filter((data: any) => {
+    allAcademicYear.sort().map((data: any) => {
+      let keys = Object.keys(data);
+      keys.map((key: any) => {
+        data[key] = data[key] == null ? "" : data[key];
+      });
+      return data;
+    });
+  const dataSearch: any =
+    datatoFilterNull &&
+    datatoFilterNull.length &&
+    datatoFilterNull.sort().filter((data: any) => {
       return Object.keys(data).some((key) =>
         data[key]
           .toString()
@@ -167,7 +177,7 @@ const Year = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });         
+          });
           setdatatoDelete({});
           getAllAcademicYear();
         } else if (res.data.data.isDeletable === false) {

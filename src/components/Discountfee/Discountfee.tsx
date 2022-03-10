@@ -223,9 +223,11 @@ const Discountfee = () => {
     axios
       .get(`${baseUrl}discountfee`)
       .then((res: any) => {
+        console.log(res.data.data.dis_feetype_name);
         res.data.data.map((data: any, index: any) => {
-          data.index = index + 1;
+          data.index = index;
         });
+        res.data.data = res.data.data.splice(1);
         setGetDiscountFeeTypeName(res.data.data);
         setSpinnerLoad(false);
       })
@@ -243,10 +245,21 @@ const Discountfee = () => {
     getgetDiscountFeeTypeName();
   }, []);
 
-  const dataSearch: any =
+  const datatoFilterNull: any =
     getDiscountFeeTypeName &&
     getDiscountFeeTypeName.length &&
-    getDiscountFeeTypeName.sort().filter((data: any) => {
+    getDiscountFeeTypeName.sort().map((data: any) => {
+      let keys = Object.keys(data);
+      keys.map((key: any) => {
+        data[key] = data[key] == null ? "" : data[key];
+      });
+      return data;
+    });
+
+  const dataSearch: any =
+    datatoFilterNull &&
+    datatoFilterNull.length &&
+    datatoFilterNull.sort().filter((data: any) => {
       return Object.keys(data).some((key) =>
         data[key]
           .toString()

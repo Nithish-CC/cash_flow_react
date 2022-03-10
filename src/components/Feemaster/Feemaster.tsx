@@ -140,10 +140,21 @@ const Feemaster = () => {
       });
   };
 
-  const dataSearch: any =
+  const datatoFilterNull: any =
     getFeeMaster &&
     getFeeMaster.length &&
-    getFeeMaster.sort().filter((data: any) => {
+    getFeeMaster.sort().map((data: any) => {
+      let keys = Object.keys(data);
+      keys.map((key: any) => {
+        data[key] = data[key] == null ? "" : data[key];
+      });
+      return data;
+    });
+
+  const dataSearchBar: any =
+    datatoFilterNull &&
+    datatoFilterNull.length &&
+    datatoFilterNull.sort().filter((data: any) => {
       return Object.keys(data).some((key) =>
         data[key]
           .toString()
@@ -151,20 +162,17 @@ const Feemaster = () => {
           .includes(filter.toString().toLowerCase())
       );
     });
-  // console.log(getFeeMaster);
-
-  // console.log(dataSearch);
 
   const getfee = () => {
     getAccessToken();
     axios
       .get(`${baseUrl}feeMaster`)
-      .then((res: any) => {
-        console.log(res.data.data);
+      .then((res: any) => {        
         var sortedObjs = _.sortBy(res.data.data, "order_id");
         sortedObjs.map((data: any, index: any) => {
           data.index = index + 1;
         });
+
         setGetFeeMaster(sortedObjs);
         setloading(false);
         console.log(sortedObjs);
@@ -329,7 +337,7 @@ const Feemaster = () => {
                               <div className="col-sm-12">
                                 <BootstrapTable
                                   keyField="academic_year"
-                                  data={dataSearch}
+                                  data={dataSearchBar}
                                   columns={col}
                                   hover
                                   striped
