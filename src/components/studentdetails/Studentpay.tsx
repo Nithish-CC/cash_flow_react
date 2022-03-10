@@ -535,6 +535,7 @@ const Studentpay = () => {
                                                                     <th>Fees</th>
                                                                     <th>Paid</th>
                                                                     <th>Refund</th>
+                                                                    <th>Discount</th>
                                                                     <th style={{ padding: "10px" }}>Balance</th>
                                                                     <th>
                                                                         Date
@@ -562,6 +563,7 @@ const Studentpay = () => {
                                                                                 <td>{value.actual_fees}</td>
                                                                                 <td>{value.cum_amt}</td>
                                                                                 <td>{value.refund}</td>
+                                                                                <td>{value.discount_amount}</td>
                                                                                 <td>{Number(value.balance)}</td>
                                                                                 <td style={{width: '10%'}}>
                                                                                     {!refundSwitch ? (
@@ -594,7 +596,9 @@ const Studentpay = () => {
                                                                                         />
                                                                                     )}
                                                                                 </td>
-                                                                                <td>{value.amount_paid}</td>
+                                                                                {!refundSwitch ? (<td>{Number(value.balance)}</td>):(<td>{value.amount_paid}</td>)}
+                                                                                
+                                                                                
                                                                                 <td>
                                                                                     {!refundSwitch ? (
                                                                                         <input
