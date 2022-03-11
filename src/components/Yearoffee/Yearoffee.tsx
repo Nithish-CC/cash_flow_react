@@ -711,7 +711,7 @@ const Yearoffee = () => {
 														<Row>
 															<>
 																<Col sm="4" className="mb-4">
-																	<Form.Label style={{ marginLeft: "40px" }}>Academic Year</Form.Label>
+																	<Form.Label style={{ marginLeft: "40px"}}>Academic Year</Form.Label>
 																</Col>
 																<Col sm="6">
 																	<Form.Select
@@ -729,7 +729,7 @@ const Yearoffee = () => {
 																</Col>
 															</>
 															<Col sm="4" className="mb-4">
-																<Form.Label style={{ marginLeft: "40px" }}>Fee Type Name</Form.Label>
+																<Form.Label style={{ marginLeft: "40px"}}>Fee Type Name</Form.Label>
 															</Col>
 															<Col sm="6">
 																<Form.Select

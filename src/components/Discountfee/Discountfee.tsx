@@ -109,7 +109,7 @@ const Discountfee = () => {
         } else {
             delete editingDiscountFeeYear.id;
             axios
-                .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name })
+                .put(`${baseUrl}discount_type_masters/update`, {dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name})
                 .then((res: any) => {
                     console.log(res.data);
                     toast.success("Discount Fee Type Master Updated", {
@@ -312,7 +312,7 @@ const Discountfee = () => {
                                                                                             {index === editingDiscountFeeYear.id ? (
                                                                                                 <>
                                                                                                     <td>
-                                                                                                        {" "}
+                                                                                                        {""}
                                                                                                         <Form.Control
                                                                                                             type="text"
                                                                                                             value={updateDiscountData}

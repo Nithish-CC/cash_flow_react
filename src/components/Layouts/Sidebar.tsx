@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+ 
 import "../../assets/css/sb-admin-2.css";
 //import react pro sidebar components
 import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SubMenu } from "react-pro-sidebar";
@@ -11,6 +12,12 @@ import { BiBus,BiHotel,BiTachometer } from "react-icons/bi";
 import "react-pro-sidebar/dist/css/styles.css";
 import "./header.css";
 const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
+ 
+import "../../assets/css/sb-admin-2.css"
+import { Row, Col, Form, Button, NavDropdown } from "react-bootstrap";
+
+const Sidebar = (props: any) => {
+ 
     let activeValue = props.data;
     //create initial menuCollapse state using useState hook
     const [menuCollapse, setMenuCollapse] = useState(false);

@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { baseUrl } from "../../index";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
+ 
 const Feesdetails = (props: any) => {
     let history = useHistory();
     const status = props.student_id;
@@ -249,5 +250,5 @@ console.log(YearOfBalanceByYear,"yyyyyyyy");
             </div>
         </div>
     );
-};
+ 
 export default Feesdetails;
