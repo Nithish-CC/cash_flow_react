@@ -167,6 +167,7 @@ const Feemaster = () => {
     getAccessToken();
     axios
       .get(`${baseUrl}feeMaster`)
+
       .then((res: any) => {
         var sortedObjs = _.sortBy(res.data.data, "order_id");
         sortedObjs.map((data: any, index: any) => {

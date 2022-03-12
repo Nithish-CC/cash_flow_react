@@ -15,6 +15,7 @@ const Listofpayment = (props: any) => {
   const [feemasterid, setfeemasterid] = useState<any>([]);
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
   const [mergedata, setmergedata] = useState<any>([]);
+
   const [filter, setfilter] = useState<any>([]);
   const urlParams: any = useParams();
   const id = urlParams.id;
@@ -118,6 +119,7 @@ const Listofpayment = (props: any) => {
           .includes(filter.toString().toLowerCase())
       );
     });
+
   return (
     <div>
       <div className="col-lg-12" style={{ position: "relative", top: "40px" }}>

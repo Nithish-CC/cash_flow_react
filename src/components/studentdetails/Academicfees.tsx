@@ -40,7 +40,6 @@ const Academicfees = (props: any) => {
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
 
-
   useEffect(() => {
     student_id = props.studentDetails.student_id;
     if (student_id && student_id.toString().length) yearacademic();
@@ -62,7 +61,6 @@ const Academicfees = (props: any) => {
       : setMerdattwpus([]);
   }, [studentdiscount]);
 
-
   useEffect(() => {
     fetchData();
   }, [Merdattwpus]);
@@ -81,7 +79,6 @@ const Academicfees = (props: any) => {
       })
       .catch((e: any) => {});
   };
-
 
   const feemaster = () => {
     getAccessToken();

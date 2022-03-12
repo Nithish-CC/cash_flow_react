@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, useRef } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
@@ -10,8 +10,10 @@ import {
   Button,
   Container,
   Table,
+  Modal,
   Card,
   ListGroup,
+  CloseButton,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
@@ -20,6 +22,7 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
+import { AnyAaaaRecord } from "dns";
 const Studentrecord = () => {
   //To Make Edit
   let history = useHistory();
@@ -33,6 +36,8 @@ const Studentrecord = () => {
   const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>(
     {}
   );
+  const inputFile: any = useRef();
+  const [show, setShow] = useState(false);
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
   const [Autosearch, setAutoSearch] = useState<any>([]);
@@ -53,7 +58,7 @@ const Studentrecord = () => {
   const [gradea, setGradea] = useState<any>("");
   const [GotAutoSearchOut, setGotAutoSearchOut] = useState<any>([]);
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
-
+  const [uploadFile, setUploadFile] = useState<any>([]);
   const [gradeMaster, setGradeMaster] = useState<any>([]);
   const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
   const [firstAcadmicYear, setFirstAcademicYear] = useState<any>([]);
@@ -474,6 +479,10 @@ const Studentrecord = () => {
           `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
         )
     );
+    const SuddenhandleClose = () => {
+      setShow(false);
+      // setdatatoDelete({});
+    };
     let selectedYearArr: any = [];
     resultData.forEach((element: any) => {
       selectedYearArr.push(element);
@@ -482,6 +491,10 @@ const Studentrecord = () => {
     setGradeBasedOnYearFinal([...mySet1]);
     setFilterParticularYear(selectedYearArr);
     //  setAddGrade(resultData[0].grade);
+  };
+  const onButtonClick = (e: any) => {
+    inputFile.current.click();
+    console.log(inputFile);
   };
   //    console.log(gradeSectionList);
   const handlesection = (sectionList: any, searchInput: any) => {
@@ -504,6 +517,7 @@ const Studentrecord = () => {
     //      setAddSection(resultData[0].section);
   };
 
+
   console.log(allGotFinalData);
 
   return (
@@ -515,7 +529,7 @@ const Studentrecord = () => {
             <div id="content">
               <Navbar></Navbar>
               <div className="container" style={{ marginLeft: "3%" }}>
-                <div className="d-sm-flex align-items-center justify-content-between mb-5">
+                <div className="d-sm-flex align-items-center justify-content-between mb-3">
                   <Container>
                     <Row>
                       <Col md={5}>
@@ -648,6 +662,19 @@ const Studentrecord = () => {
                         </>
                       )}
                     </Row>
+                    <Row>
+                      <Col md={10}></Col>
+                      <Col md={2}>
+                        <Button
+                          className="btn btn-danger mt-3"
+                          onClick={() => {
+                            setShow(true);
+                          }}
+                        >
+                          Import
+                        </Button>
+                      </Col>
+                    </Row>
                   </Container>
                 </div>
                 <div className="col-xl-11 text-center">
@@ -686,6 +713,88 @@ const Studentrecord = () => {
                       )}
                     </div>
                   ) : null}
+                  <Modal show={show} onHide={() => setShow(false)}>
+                    <Modal.Header className="text-center" closeButton>
+                      <Modal.Title style={{ marginLeft: "25%" }}>
+                        <strong>Add Attachment</strong>
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="text-center">
+                      <Row>
+                        <Col md={6}> Sample xlsx{"  "}</Col>
+                        <Col md={6}>
+                          <a
+                            href={require("../../assets/Admission_Download_xlsx.xlsx")}
+                            download="Admission_Download_xlsx"
+                            onClick={(e: any) => console.log(e)}
+                            className="btn btn-primary"
+                            style={{ width: "100px" }}
+                          >
+                            Download
+                          </a>
+                        </Col>
+                      </Row>
+                      <br />
+                      <Row>
+                        <Col md={6}> Upload xlsx{"  "}</Col>
+                        <Col md={6}>
+                          <input
+                            style={{ display: "none" }}
+                            onChange={(e: any) => {
+                              setUploadFile(e.target.files[0]);
+                            }}
+                            ref={inputFile}
+                            type="file"
+                          />
+                          <Button
+                            style={{ width: "100px" }}
+                            className=" btn btn-success"
+                            onClick={onButtonClick}
+                          >
+                            Browse
+                          </Button>
+                        </Col>
+                      </Row>
+                      {uploadFile && uploadFile.name ? (
+                        <Row>
+                          <hr className="mt-2" />
+                          <Col md={10}>
+                            <p style={{ fontSize: "14px" }}>
+                              {uploadFile.name}
+                            </p>
+                          </Col>
+                          <Col md={2}>
+                            <CloseButton
+                              onClick={() => {
+                                setUploadFile(false);
+                              }}
+                            />
+                          </Col>
+                        </Row>
+                      ) : (
+                        <></>
+                      )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        variant="secondary"
+                        onClick={() => {
+                          setShow(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        variant="danger"
+                        onClick={() => {
+                          setShow(false);
+                        }}
+                      >
+                        Upload
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
               </div>
             </div>
