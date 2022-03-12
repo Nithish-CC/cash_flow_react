@@ -31,6 +31,7 @@
     "react-bootstrap-table-next": "^4.0.3",
     "react-bootstrap-table2-paginator": "^2.1.2",
     "react-dom": "^16.2.0",
+    "react-download-link": "^2.3.0",
     "react-icons": "^4.3.1",
     "react-pro-sidebar": "^0.7.1",
     "react-router-dom": "^5.3.0",
