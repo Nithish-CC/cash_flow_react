@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Layouts/Navbar";
 import Sidebar from "../Layouts/Sidebar";
 import "../../App.css";
-import { Form, Button, InputGroup } from "react-bootstrap";
+import { Form, Button, InputGroup, Modal, Card } from "react-bootstrap";
 import Feedback from "react-bootstrap/Feedback";
 import Axios from "axios";
 import { baseUrl } from "../../index";
@@ -10,6 +10,7 @@ import { getAccessToken } from "../../config/getAccessToken";
 import moment from "moment";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import { useHistory, useParams } from "react-router-dom";
 const Studentadd = () => {
   const history = useHistory();
@@ -48,6 +49,14 @@ const Studentadd = () => {
   const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
   const [withDuplicatesGrade, setWithDuplicatesGrade] = useState<any>([]);
   const [duplication, setDuplication] = useState(false);
+  const [modalOpen, setModalOpen] = useState<any>(false)
+  const initialValues: any = [{
+    quantity: 0,
+    item: "",
+    size: "",
+    price: 1
+  }]
+  const [uniform, setUniform] = useState<any>(initialValues)
   console.log(dateofBirth);
   const windowReload = () => {
     let interval = setInterval(() => {
@@ -191,6 +200,7 @@ const Studentadd = () => {
   //         setAlterPhoneno(e.target.value);
   //     }
   // };
+
   useEffect(() => {
     getAccessToken();
     Axios.get(`${baseUrl}gradeSection`)
@@ -276,11 +286,23 @@ const Studentadd = () => {
   };
   console.log(addGrade);
   var date = new Date();
-  var formatedDate = `${date.getDate()}-${
-    date.getMonth() + 1
-  }-${date.getFullYear()}`;
+  var formatedDate = `${date.getDate()}-${date.getMonth() + 1
+    }-${date.getFullYear()}`;
   // console.log(academicYear);
-  console.log(academicYearFinal);
+
+  const handleChange = (e: any, i: any) => {
+
+    let newFormValues = [...uniform];
+    newFormValues[i][e.target.name] = e.target.value;
+    setUniform(newFormValues);
+  };
+
+  const removeHandler = (index: any) => {
+    let row: any = [...uniform];
+    row.splice(index, 1);
+    setUniform(row);
+  }
+
   return (
     <div>
       <ToastContainer
@@ -756,6 +778,70 @@ const Studentadd = () => {
                               />
                             </div>
                           </Form.Group>
+                          <div className="row">
+                            <div className="col-md-3" />
+                            <div className="col-md-3" >
+                              <Form.Label>Uniform: </Form.Label>
+                            </div>
+                            <div className="col-md-6">
+                              <Form.Check type="switch" checked={modalOpen == "save" ? true : modalOpen} onChange={() => modalOpen == "save" ? setModalOpen(false) : setModalOpen(true)} />
+                            </div>
+                            <div className="row">
+                              <div className="col-md-2"></div>
+                              <div className="col-md-10">
+                                {modalOpen == "save" && <Card>
+                                  <Card.Body>
+                                    <div className="row">
+                                      <div className="col-md-3">
+                                        <p>Item</p>
+                                      </div>
+                                      <div className="col-md-3">
+                                        <p>Quantity</p>
+                                      </div>
+                                      <div className="col-md-2">
+                                        <p>Size</p>
+                                      </div>
+                                      <div className="col-md-3">
+                                        <p>Price</p>
+                                      </div>
+                                      <div className="col-md-1">
+                                        <i
+                                          className="fa fa-edit"
+                                          onClick={() => {
+                                            setModalOpen(true);
+                                          }}
+                                          style={{
+                                            fontSize: "15px",
+                                            color: "red",
+                                            cursor: "pointer",
+                                          }}
+                                        ></i>
+                                      </div>
+                                    </div>
+                                    {uniform.map((values: any) => {
+                                      return (
+                                        <div className="row">
+                                          <div className="col-md-3">
+                                            <p>{values.item}</p>
+                                          </div>
+                                          <div className="col-md-3">
+                                            <p>{values.quantity}</p>
+                                          </div>
+                                          <div className="col-md-2">
+                                            <p>{values.size}</p>
+                                          </div>
+                                          <div className="col-md-3">
+                                            <p>{values.price}</p>
+                                          </div>
+                                        </div>
+                                      )
+                                    })}
+                                  </Card.Body>
+                                </Card>}
+
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="card-footerss">
@@ -776,6 +862,69 @@ const Studentadd = () => {
                       </div>
                     </div>
                   </Form>
+                  <Modal show={modalOpen == "save" ? false : modalOpen} onHide={() => {setModalOpen(false);setUniform(initialValues)}}>
+                    <Modal.Header className="text-center">
+                      <Modal.Title style={{ marginLeft: "25%" }}>
+                        Uniform Requirements
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="text-center">
+                      <div className="row">
+                        <div className="col-md-3"><Form.Label>Item</Form.Label></div>
+                        <div className="col-md-3"><Form.Label>Size</Form.Label></div>
+                        <div className="col-md-2"><Form.Label>Quantity</Form.Label></div>
+                        <div className="col-md-2"><Form.Label>Price</Form.Label></div>
+                      </div>
+                      {uniform && uniform.length && uniform.map((values: any, index: any) => {
+                        return (
+                          <div className="row m-2">
+                            <div className="col-md-3">
+                              <Form.Group>
+                                <Form.Select onChange={(e: any) => handleChange(e, index)} name="item" value={values.item} placeholder="Select Things">
+                                  <option>Select Item</option>
+                                  <option value="A">A</option>
+                                  <option value="B">B</option>
+                                </Form.Select>
+                              </Form.Group>
+                            </div>
+                            <div className="col-md-3">
+                              <Form.Group >
+                                <Form.Select name="size" value={values.size} onChange={(e: any) => handleChange(e, index)} placeholder="Select Things">
+                                  <option>Select Size</option>
+                                  <option value="A">A</option>
+                                  <option value="B">B</option>
+                                </Form.Select>
+                              </Form.Group>
+                            </div>
+                            <div className="col-md-2">
+                              <Form.Group>
+                                <Form.Control type="number" placeholder="Enter Quantity" onChange={(e: any) => handleChange(e, index)} name="quantity" value={values.quantity} />
+                              </Form.Group>
+                            </div>
+                            <div className="col-md-2">
+                              <Form.Group>
+                                <Form.Control value={values.price * values.quantity} disabled></Form.Control>
+                              </Form.Group>
+                            </div>
+                            <div className="col-md-2">
+                              <Form.Group>
+                                {index == 0 ?
+                                  <Button variant="danger" onClick={() => {
+                                    setUniform([...uniform, { quantity: "", things: "", size: "", price: "" }])
+                                  }}>+</Button> : <Button variant="danger" onClick={() => {
+                                    removeHandler(index);
+                                  }}>-</Button>}
+                              </Form.Group>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button onClick={() => { setModalOpen(false); setUniform(initialValues) }}>Cancel</Button>
+                      <Button onClick={() => setModalOpen("save")}>Save</Button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
               </div>
             </div>
