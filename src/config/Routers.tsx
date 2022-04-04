@@ -26,9 +26,8 @@ import Hostalname from "../components/Hostal/Hostalname";
 import RoomNo from "../components/Hostal/RoomNo";
 import HostalFee from "../components/Hostal/HostalFee";
 import Placesspotting from "../components/Transport/Placesspotting";
-
-    
-   
+import Transportfees from "../components/Transport/Transportfees";
+import Profile from "../components/Profile/Profile";
 
 const PrivateRoute = (props: any) => {
 	let history = useHistory<any>();
@@ -42,7 +41,7 @@ const PrivateRoute = (props: any) => {
 };
 const Routers = (props: any) => {
 	if (sessionStorage.getItem("AccessToken")) {
-		
+
 	}
 
 	return (
@@ -65,7 +64,9 @@ const Routers = (props: any) => {
 							<PrivateRoute path="/studentprofile" component={StudentProfile} />
 							<PrivateRoute path="/StudentprofileSearch/:id" component={StudentprofileSearch} />
 							<PrivateRoute path="/placesprice" component={Placesprice} />
+							<PrivateRoute path="/edit/profile" component={Profile} />
 							<PrivateRoute path="/placesstoppings" component={Placesspotting} />
+							<PrivateRoute path="/transportFees" component={Transportfees} />
 							<PrivateRoute path="/Uniform_size" component={Uniform_size} />
 							<PrivateRoute path="/Uniform_things" component={Uniform_things} />
 							<PrivateRoute path="/Uniform" component={Uniform} />

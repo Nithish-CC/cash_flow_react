@@ -8,19 +8,50 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Placesspotting = () => {
+const Transportfees = () => {
 
     const initialValues = [{
-        place: "namakkal",
-        stoppings: "bus Stand",
+        academicYear: "2020-2021",
+        places: "namakkal",
+        termDetails: [
+            {
+                term: "Term 1",
+                termFees: 5000,
+            }, {
+                term: "Term 2",
+                termFees: 5000,
+            },
+            {
+                term: "Term 3",
+                termFees: 5000,
+            }
+        ],
     }, {
-        place: "madurai",
-        stoppings: "bus Stand",
+        academicYear: "2020-2021",
+        places: "Erode",
+        termDetails: [
+            {
+                term: "Term 1",
+                termFees: 1000,
+            }, {
+                term: "Term 2",
+                termFees: 1000,
+            },
+        ],
     }]
 
-    const [stoppings, setStoppings] = useState(initialValues)
+    const [stoppings, setStoppings] = useState<any>(initialValues)
     const [stoppingsAdd, setStoppingsAdd] = useState(false)
 
+    const termChange = (e: any) => {
+        let i: any;
+        let newFormValues: any = [...stoppings];
+        for (i = 0; i < e.target.value; i++) {
+            newFormValues[i][e.target.name] = e.target.value;
+            setStoppings(newFormValues);
+        }
+        console.log(stoppings);
+    }
     return (
         <div>
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -37,7 +68,7 @@ const Placesspotting = () => {
                                             <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
-                                                        <i className="far fa-clone pr-1"></i>Transport Spottings
+                                                        <i className="far fa-clone pr-1"></i>Transport Fees
                                                     </h4>
                                                     <div style={{ textAlign: "right" }}>
                                                         {!stoppingsAdd ? (
@@ -66,10 +97,16 @@ const Placesspotting = () => {
                                                                                 S.No.
                                                                             </th>
                                                                             <th className="sorting" style={{ width: "114px" }}>
-                                                                                Place
+                                                                                Academic Year
                                                                             </th>
                                                                             <th className="sorting" style={{ width: "114px" }}>
-                                                                                Stoppings
+                                                                                Places
+                                                                            </th>
+                                                                            <th className="sorting" style={{ width: "114px" }}>
+                                                                                Term
+                                                                            </th>
+                                                                            <th className="sorting" style={{ width: "114px" }}>
+                                                                                Term Fees
                                                                             </th>
                                                                             <th className="sorting" style={{ width: "63px" }}>
                                                                                 Actions
@@ -81,8 +118,22 @@ const Placesspotting = () => {
                                                                             return (
                                                                                 <tr key={index}>
                                                                                     <td>{index + 1}</td>
-                                                                                    <td>{values.place}</td>
-                                                                                    <td>{values.stoppings}</td>
+                                                                                    <td>{values.academicYear}</td>
+                                                                                    <td>{values.places}</td>
+                                                                                    <td>
+                                                                                        {values.termDetails.map((term: any) => {
+                                                                                            return (
+                                                                                                <>{term.term}<br /></>
+                                                                                            )
+                                                                                        })}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {values.termDetails.map((term: any) => {
+                                                                                            return (
+                                                                                                <>{term.termFees}<br /></>
+                                                                                            )
+                                                                                        })}
+                                                                                    </td>
                                                                                     <td>
                                                                                         <Button
                                                                                             variant="danger"
@@ -102,23 +153,32 @@ const Placesspotting = () => {
                                                     </Container>
                                                     : <div>
                                                         <Container>
+                                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                <Form.Label>Academic Year</Form.Label>
+                                                                <Form.Select>
+                                                                    <option value="2020-2021">2020-2021</option>
+                                                                    <option value="2021-2022">2021-2022</option>
+                                                                    <option value="2022-2023">2022-2023</option>
+                                                                </Form.Select>
+                                                            </Form.Group>
+                                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                <Form.Label>Places</Form.Label>
+                                                                <Form.Select>
+                                                                    <option value="namakkal">Namakkal</option>
+                                                                    <option value="erode">Erode</option>
+                                                                    <option value="karur">Karur</option>
+                                                                </Form.Select>
+                                                            </Form.Group>
+                                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                <Form.Label>Term</Form.Label>
+                                                                <Form.Select name="term" onChange={termChange}>
+                                                                    <option value={1}>Term 1</option>
+                                                                    <option value={2}>Term 2</option>
+                                                                    <option value={3}>Term 3</option>
+                                                                </Form.Select>
+                                                            </Form.Group>
                                                             <Row className="justify-content-md-center">
-                                                                <Col md="4">
-                                                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                        <Form.Label>Place</Form.Label>
-                                                                        <Form.Select>
-                                                                            <option value="namakkal">Namakkal</option>
-                                                                            <option value="erode">Erode</option>
-                                                                            <option value="karur">Karur</option>
-                                                                        </Form.Select>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col md="4">
-                                                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                        <Form.Label>Stoppings</Form.Label>
-                                                                        <Form.Control type="text" placeholder="" value="" />
-                                                                    </Form.Group>
-                                                                </Col>
+
                                                             </Row>
                                                         </Container>
                                                         <br></br>
@@ -166,4 +226,4 @@ const Placesspotting = () => {
         </div>
     );
 };
-export default Placesspotting;
+export default Transportfees;

@@ -14,9 +14,7 @@ const Placesprice = () => {
     const [FromAcdYear, setFromAcdYear] = useState<any[]>([]);
     const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
     const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
-    const [datatoDelete, setdatatoDelete] = useState<any>({});
-
-    console.log(FromAcdYear)
+    const [datatoDelete, setdatatoDelete] = useState<any>({});    
     // Transport places
     const placesList = [{year:'2021-2022',place:'namakkal',price:'4500'}, {year:'2021-2022',place:'paramathi-velur',price:'2500'}, {year:'2021-2022',place:'velur',price:'3500'}];
 

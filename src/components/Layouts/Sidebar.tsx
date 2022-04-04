@@ -78,8 +78,9 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                               <MenuItem active={window.location.pathname === "/Grade_section"}><Link to="/Grade_section" style={{color:"#3a3b45"}}> Grade and Section</Link></MenuItem>
                             </SubMenu>
                             <SubMenu title="TransPort" icon={<BiBus />}>
-                                <MenuItem active={window.location.pathname === "/placesprice"}><Link to="/placesprice"  style={{color:"#3a3b45"}}>Places</Link></MenuItem>
-                                <MenuItem active={window.location.pathname === "/placesstoppings"}><Link to="/placesstoppings" style={{color:"#3a3b45"}}>Places & Stoppings</Link></MenuItem>                                
+                                <MenuItem active={window.location.pathname === "/placesprice"}><Link to="/placesprice"  style={{color:"#3a3b45"}}>Transport</Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/placesstoppings"}><Link to="/placesstoppings" style={{color:"#3a3b45"}}>Transport Stoppings</Link></MenuItem>                                
+                                <MenuItem active={window.location.pathname === "/transportFees"}><Link to="/transportFees" style={{color:"#3a3b45"}}>Transport Fees</Link></MenuItem>                                
                             </SubMenu>                            
 
                             <SubMenu title="Uniform" icon={<FaChalkboardTeacher />}>
