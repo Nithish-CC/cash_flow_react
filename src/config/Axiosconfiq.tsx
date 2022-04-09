@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://3.110.131.173:5000/api/v1/";
+axios.defaults.baseURL = "http://13.235.9.208:5000/api/v1/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Accept-Type"] = "application/json";
 axios.defaults.headers.common["Authorization"] = "AUTH TOKEN";
