@@ -343,9 +343,10 @@ const Promotion = () => {
                                     required
                                     onChange={(e: any) => {
                                       setEventGradeByYear(e.target.value);
-                                      setEventGradeByYearValue(e.target[e.target.selectedIndex].text);
-                                      console.log(e.target.value, "grade");
+                                      setEventGradeByYearValue(e.target[e.target.selectedIndex].text);                                      
+                                      setEventGradeByYearUpdate((Number(e.target.value) + 1).toString());
                                     }}>
+                                      {console.log(eventGradeByYearUpdate,"Hiiiii")}
                                     <option> --Select Grade--</option>
                                     {filterGradeByYear &&
                                       filterGradeByYear.length &&
@@ -374,8 +375,7 @@ const Promotion = () => {
                                     onChange={(e: any) => {
                                       setEventSectionByYear(e.target.value);
                                       console.log(e.target[e.target.selectedIndex].text);
-                                      setEventSectionByYearValue(e.target[e.target.selectedIndex].text);
-                                      setEventGradeByYearUpdate(e.target.value + 1)
+                                      setEventSectionByYearValue(e.target[e.target.selectedIndex].text);                                      
                                       console.log(e.target.value, "section");
                                     }}>
                                     <option> --Select Section--</option>
@@ -470,7 +470,6 @@ const Promotion = () => {
                                             }}
                                             onChange={(e: any) => {
                                               setEventGradeByYearUpdate(e.target.value);
-                                              console.log(e.target.value);
                                             }}>
                                             {filterGradeByYearUpdate &&
                                               filterGradeByYearUpdate.length &&
@@ -479,6 +478,8 @@ const Promotion = () => {
                                                   <>
                                                     {Number(eventGradeByYear) + 1 === Number(grade.grade_master_id) ? <option
                                                       value={grade.grade_master_id}
+                                                      selected={true}
+                                                      defaultValue={Number(eventGradeByYear) + 1}
                                                       label={grade.grade_master}>
                                                       {grade.grade_master}
                                                     </option> : Number(eventGradeByYear) === Number(grade.grade_master_id) ? <option
@@ -499,7 +500,6 @@ const Promotion = () => {
                                             }}
                                             onChange={(e: any) => {
                                               setEventSectionByYearUpdate(e.target.value);
-                                              console.log(e.target.value);
                                             }}>
                                             <option value=""> --Select Section--</option>
                                             {getGradeSection &&

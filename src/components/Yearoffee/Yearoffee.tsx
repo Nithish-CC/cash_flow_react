@@ -35,26 +35,13 @@ const Yearoffee = () => {
 	const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
 	const [termsmasterValue, setTermsmasterValue] = useState<any>([]);
 	const [termFeesAdd, setTermFeesAdd] = useState(true);
-	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
-		{
-			S_No: "1",
-			fee_master_id: 1,
-			optional_fee: false,
-			fee_amount: "0",
-			term_count: 1,
-			term_fees: [{
-				"term_name": "Term1",
-				"term_amount": 0
-			}]
-		},
-	]);
+	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([]);
 	let removeFormFields = (i: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
-
-
+	console.log(termFeessaveAdd);
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -77,13 +64,8 @@ const Yearoffee = () => {
 		});
 	};
 
-	// const getAllGrade = () => {
-	// 	axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
-	// 		setAllGrade(res.data.data);
-	// 	});
-	// };
 
-	// console.log(FeeDetailsFinal);
+
 	const getAllFeeMasterData = () => {
 		getAccessToken();
 		axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
@@ -120,6 +102,7 @@ const Yearoffee = () => {
 			setSearchGradeId(res.data.data[0].grade_id);
 		});
 	};
+
 	useEffect(() => {
 		getAllFeeMasterData();
 		getAccessToken();
@@ -197,7 +180,6 @@ const Yearoffee = () => {
 		}
 	}, [gradeSectionList, feeMaster, allGrade]);
 	const handleGradeFilterAdd = (gradeSectionListAdd: any, searchInput: any) => {
-		console.log(gradeSectionListAdd, searchInput);
 		//Filtering Grade by academic year id
 		let resultData: any = [];
 		gradeSectionListAdd.forEach((element: any) => {
@@ -239,11 +221,12 @@ const Yearoffee = () => {
 		axios
 			.post(`${baseUrl}yearOffee`, {
 				grade_id: grade_id,
-				year_id: year_id,
+				year_id: year_id
 			})
 			.then((res: any) => {
 				console.log(res.data.data, "yearoffee");
-				setTableFeeAmount(res.data.data);
+				setTermFeesSaveAdd(res.data.data);
+				console.log(termFeesAdd);
 				setSpinnerLoad(false);
 			});
 	};
@@ -262,7 +245,7 @@ const Yearoffee = () => {
 		newFormValues[index]["term_fees"] = term
 		setTermFeesSaveAdd(newFormValues)
 	};
-	console.log(termFeessaveAdd);
+
 	const handleSubmit = () => {
 		let newfeeTypeName = feeTypeName.toString();
 		if (amount.length <= 0 || searchGradeId.length <= 0 || searchAcademicYear.length <= 0 || newfeeTypeName.length <= 0) {
@@ -615,7 +598,7 @@ const Yearoffee = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{termFeessaveAdd.map((elemant: any, rowindex: any) => {
+																	{termFeessaveAdd && termFeessaveAdd.length && termFeessaveAdd?.map((elemant: any, rowindex: any) => {
 																		return (
 																			<>
 																				<tr key={rowindex}>

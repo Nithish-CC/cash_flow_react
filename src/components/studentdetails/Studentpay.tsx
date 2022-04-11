@@ -14,7 +14,6 @@ import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-
 const Studentpay = () => {
     const [RefundTableStatus, setRefundTableStatus] = useState(false);
     const [searchResultData, setMainSearch] = useState<any>([]);
@@ -25,51 +24,47 @@ const Studentpay = () => {
     const [AllDetailsOfStudent, setAllDetailsOfStudent] = useState<any>([]);
     const [buttonDisable, setButtonDisable] = useState(false);
     const [admissionidd, setadmissionsid] = useState<any>([]);
-    console.log(AllDetailsOfStudent);
-
+    console.log(searchResultData[0], "Teearm");
     const urlParams: any = useParams();
     const id = urlParams.id;
     const year = urlParams.year;
     console.log(year);
-    console.log(allGotFinalData);
-
+    console.log(allGotFinalData, "All");
     //For Refund Initiate
     const [refundSwitch, setRefundSwitch] = useState(false);
-
     useEffect(() => {
         callStudentData();
     }, []);
-
     useEffect(() => {
         let AllRoundData: any[] = [];
         let resultantData: any[] = [];
         if (searchResultData && searchResultData.length > 0) {
             //console.log(searchResultData);
             searchResultData.forEach((allData: any) => {
-                //	console.log(allData[0]);
-                //	console.log(allData[1]);
+                //  console.log(allData[0]);
+                //  console.log(allData[1]);
                 let newData = allData[1];
                 console.log(newData);
                 let ParticularStudentData: any = [];
                 let ParticularStudentBalance: any = [];
                 newData.forEach((element: any) => {
                     console.log(element);
-                    if (element && element.balance >=0) {
+                    if (element && element.balance >= 0) {
                         ParticularStudentBalance.push({ Allbalance: element.balance });
                     }
-                    if (element && element.totalRefund >=0) {
+                    if (element && element.totalRefund >= 0) {
                         ParticularStudentBalance.push({ AlltotalRefund: element.totalRefund });
                     }
-                    if (element && element.totalpaid >=0) {
+                    if (element && element.totalpaid >= 0) {
                         ParticularStudentBalance.push({ Alltotalpaid: element.totalpaid });
                     }
-                    if (element && element.totalFees >=0) {
+                    if (element && element.totalFees >= 0) {
                         ParticularStudentBalance.push({ AlltotalFees: element.totalFees });
                     }
-                    if (element && element.totalcumamt >=0) {
+                    if (element && element.totalcumamt >= 0) {
                         ParticularStudentBalance.push({ Allcumamt: element.totalcumamt });
                     }
-                    if(element && element.totaldiscountamount >=0){
+                    if (element && element.totaldiscountamount >= 0) {
                         ParticularStudentBalance.push({ AllDiscount: element.totaldiscountamount });
                     }
                     if (element && element.studentData && Object.keys(element.studentData).length > 0) {
@@ -77,18 +72,17 @@ const Studentpay = () => {
                         resultantData.push(element.studentData);
                         if (ParticularStudentData && ParticularStudentData.length == 0) {
                             ParticularStudentData.push(element.studentData);
-                            //	console.log(element.studentData)
+                            //  console.log(element.studentData)
                         }
                     }
                 });
-
                 console.log(ParticularStudentBalance);
                 let newFinalArr = [{ ...ParticularStudentBalance[0], ...ParticularStudentData[0] }];
                 AllRoundData.push(newData[0]);
                 console.log(newFinalArr);
                 setAllDetailsOfStudent([...ParticularStudentBalance, ...newFinalArr]);
             });
-            //	console.log(AllRoundData);
+            //  console.log(AllRoundData);
             setAllGotFinalData(resultantData);
             handleGetAllData(resultantData);
             setPaymentDetails(resultantData);
@@ -109,7 +103,7 @@ const Studentpay = () => {
             setmodeOfPayRefundChange(modeOfPaymentStart);
             setcommentChange(commentsStart);
             setcommentRefundChange(commentsStart);
-            //	console.log(AllRoundData)
+            //  console.log(AllRoundData)
             // console.log(searchResultData[0]);
             // console.log(searchResultData[0][0]);
             // console.log(searchResultData[0][1]);
@@ -117,7 +111,6 @@ const Studentpay = () => {
             setAllGotFinalData([]);
         }
     }, [searchResultData]);
-
     const handleGetAllData = (resultantData: any) => {
         let amountStatus: any[] = [];
         resultantData.forEach((value: any, index: any) => {
@@ -125,7 +118,6 @@ const Studentpay = () => {
         });
         setPriceArr(amountStatus);
     };
-
     const callStudentData = () => {
         //setIsComponentVisible(false);
         let academicYear = urlParams.year;
@@ -148,7 +140,6 @@ const Studentpay = () => {
             alert("Please Academic Year or Student Id not present");
         }
     };
-
     //======================Handle Date Change=================================//
     const [priceDateChange, setPriceDateChange] = useState<any>([]);
     const handleDateChange = (value: any) => {
@@ -163,7 +154,6 @@ const Studentpay = () => {
         setPriceDateChange(sortedObjs);
     };
     console.log(priceDateChange);
-
     const [priceRefundDateChange, setPriceRefundDateChange] = useState<any>([]);
     const handleRefundDateChange = (value: any) => {
         let tempRefundPriceArr: any[] = [];
@@ -176,7 +166,6 @@ const Studentpay = () => {
         var sortedObjs = _.sortBy(SortByOrder, "index");
         setPriceRefundDateChange(sortedObjs);
     };
-
     //======================Handle Mode Of Payment Change=================================//
     const [modeOFPaymnetChange, setmodeOFPaymnetChange] = useState<any>([]);
     const handleModeOFPaymnetChange = (value: any) => {
@@ -191,7 +180,6 @@ const Studentpay = () => {
         setmodeOFPaymnetChange(sortedObjs);
     };
     console.log(modeOFPaymnetChange);
-
     const [modeOfPayRefundChange, setmodeOfPayRefundChange] = useState<any>([]);
     const handlemodeOfPayRefundChange = (value: any) => {
         let tempRefundPriceArr: any[] = [];
@@ -205,7 +193,6 @@ const Studentpay = () => {
         setmodeOfPayRefundChange(sortedObjs);
     };
     console.log(modeOfPayRefundChange);
-
     //======================Handle Mode Of Comment Change=================================//
     const [commentChange, setcommentChange] = useState<any>([]);
     const handleCommentChange = (value: any) => {
@@ -220,7 +207,6 @@ const Studentpay = () => {
         setcommentChange(sortedObjs);
     };
     console.log(commentChange);
-
     const [commentRefundChange, setcommentRefundChange] = useState<any>([]);
     const handleRefundCommentChange = (value: any) => {
         let tempRefundPriceArr: any[] = [];
@@ -247,7 +233,6 @@ const Studentpay = () => {
         var sortedObjs = _.sortBy(SortByOrder, "index");
         setPriceArr(sortedObjs);
     };
-
     //==============================Handle Redund====================================//
     const [priceRefundArr, setPriceRefundArr] = useState<any>([]);
     const handleRefundPriceChange = (value: any) => {
@@ -266,17 +251,13 @@ const Studentpay = () => {
         }
     };
     console.log(priceRefundArr);
-
     //============================================Sending to API============================//
-
     const windowReload = () => {
         let interval = setInterval(() => {
             window.location.reload();
         }, 3000);
-
         return () => clearInterval(interval);
     };
-
     //Handle Balance
     const handleBalance = () => {
         setButtonDisable(true);
@@ -332,7 +313,6 @@ const Studentpay = () => {
         }
         console.log(FeetempArr);
     };
-
     //Handle Refund
     const handleRefund = () => {
         setButtonDisable(true);
@@ -388,7 +368,6 @@ const Studentpay = () => {
         }
         console.log(FeetempArr);
     };
-
     //============================End of Api===================================//
     return (
         <div>
@@ -428,11 +407,10 @@ const Studentpay = () => {
                                                                 onClick={(e: any) => {
                                                                     handleBalance();
                                                                 }}
-                                                                style={{float: "right",marginRight:"10px"}}
+                                                                style={{ float: "right", marginRight: "10px" }}
                                                             >
                                                                 Submit
                                                             </Button>
-                                                          
                                                         </h4>
                                                     </a>
                                                 ) : (
@@ -449,11 +427,10 @@ const Studentpay = () => {
                                                                 onClick={(e: any) => {
                                                                     handleRefund();
                                                                 }}
-                                                                style={{float: "right",marginRight:"10px"}}
+                                                                style={{ float: "right", marginRight: "10px" }}
                                                             >
                                                                 Initiate Refund
                                                             </Button>
-                                                            
                                                         </h4>
                                                     </a>
                                                 )}
@@ -490,7 +467,6 @@ const Studentpay = () => {
                                                         <thead>
                                                             <tr>
                                                                 <th>Refund/Pay Balance</th>
-                                                             
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -522,7 +498,6 @@ const Studentpay = () => {
                                                                         Note: Click here to Switch to Pay Balance
                                                                     </td>
                                                                 )}
-                                                              
                                                             </tr>
                                                         </tbody>
                                                     </Table>
@@ -536,22 +511,16 @@ const Studentpay = () => {
                                                                 <tr style={{ backgroundColor: "red" }}>
                                                                     <th>Fee Name</th>
                                                                     <th>Fees</th>
+                                                                    <th>Terms</th>
+                                                                    <th>Terms Fees</th>
                                                                     <th>Paid</th>
                                                                     <th>Refund</th>
                                                                     <th>Discount</th>
                                                                     {/* <th style={{ padding: "10px" }}>Balance</th> */}
-                                                                    <th>
-                                                                        Date
-                                                                    </th>
-                                                                    <th style={{ padding: "10px",width:"70px" }}>Pay</th>
-                                                                    <th style={{width:"40%"}}>
-                                                                        Amount
-                                                                       
-                                                                    </th>
-                                                                    <th>
-                                                                        Mode of Payment
-                                                                        
-                                                                    </th>
+                                                                    <th>Date</th>
+                                                                    <th style={{ padding: "10px", width: "70px" }}>Pay</th>
+                                                                    <th style={{ width: "40%" }}>Amount</th>
+                                                                    <th>Mode of Payment</th>
                                                                     <th>Comments</th>
                                                                 </tr>
                                                             </thead>
@@ -563,15 +532,17 @@ const Studentpay = () => {
                                                                             <tr key={index}>
                                                                                 <td>{value.fee_type_name}</td>
                                                                                 <td>{value.actual_fees}</td>
+                                                                                {(value.term_name == null) ? <td>Yearly Fees</td> : <td>{value.term_name}</td>}
+                                                                                {(value.term_amount > 0) ? <td>{value.term_amount}</td> : <td>Yearly Fees</td>}
                                                                                 <td>{value.cum_amt}</td>
                                                                                 <td>{value.refund}</td>
                                                                                 <td>{value.discount_amount}</td>
                                                                                 {/* <td>{Number(value.balance)}</td> */}
-                                                                                <td style={{width: '10%'}}>
+                                                                                <td style={{ width: "10%" }}>
                                                                                     {!refundSwitch ? (
                                                                                         <Form.Control
                                                                                             type="date"
-                                                                                            style={{ width:"82%" }}
+                                                                                            style={{ width: "82%" }}
                                                                                             value={
                                                                                                 index == priceDateChange[index].index
                                                                                                     ? moment(priceDateChange[index].date).format("YYYY-MM-DD")
@@ -584,12 +555,12 @@ const Studentpay = () => {
                                                                                     ) : (
                                                                                         <Form.Control
                                                                                             type="date"
-                                                                                            style={{ width:"82%" }}
+                                                                                            style={{ width: "82%" }}
                                                                                             value={
                                                                                                 index == priceRefundDateChange[index].index
                                                                                                     ? moment(priceRefundDateChange[index].date).format(
-                                                                                                          "YYYY-MM-DD"
-                                                                                                      )
+                                                                                                        "YYYY-MM-DD"
+                                                                                                    )
                                                                                                     : moment(new Date()).format("YYYY-MM-DD")
                                                                                             }
                                                                                             onChange={(e: any) => {
@@ -598,9 +569,11 @@ const Studentpay = () => {
                                                                                         />
                                                                                     )}
                                                                                 </td>
-                                                                                {!refundSwitch ? (<td>{Number(value.balance)}</td>):(<td>{value.amount_paid}</td>)}
-                                                                                
-                                                                                
+                                                                                {!refundSwitch ? (
+                                                                                    <td>{Number(value.balance)}</td>
+                                                                                ) : (
+                                                                                    <td>{value.amount_paid}</td>
+                                                                                )}
                                                                                 <td>
                                                                                     {!refundSwitch ? (
                                                                                         <input
@@ -619,20 +592,21 @@ const Studentpay = () => {
                                                                                                 Number(e.target.value) > Number(value.balance)
                                                                                                     ? alert("Amount Greater the Actual Fees")
                                                                                                     : handlePriceChange({
-                                                                                                          index: index,
-                                                                                                          amoundTyped: Number(e.target.value),
-                                                                                                          amount_paid:
-                                                                                                              Number(e.target.value) +
-                                                                                                              Number(value.amount_paid),
-                                                                                                          student_payment_info_id:
-                                                                                                              value.student_payment_info_id,
-                                                                                                          grade_id: value.grade_id,
-                                                                                                          student_id: value.student_id,
-                                                                                                          refund: Number(value.refund),
-                                                                                                          balance:
-                                                                                                              Number(value.balance) - Number(e.target.value),
-                                                                                                        cum_amt: Number(e.target.value) + Number(value.cum_amt),
-                                                                                                      });
+                                                                                                        index: index,
+                                                                                                        amoundTyped: Number(Math.round(e.target.value)),
+                                                                                                        amount_paid:
+                                                                                                            Number(e.target.value) +
+                                                                                                            Number(value.amount_paid),
+                                                                                                        student_payment_info_id:
+                                                                                                            value.student_payment_info_id,
+                                                                                                        grade_id: value.grade_id,
+                                                                                                        student_id: value.student_id,
+                                                                                                        refund: Number(value.refund),
+                                                                                                        balance:
+                                                                                                            Number(value.balance) - Number(e.target.value),
+                                                                                                        cum_amt:
+                                                                                                            Number(e.target.value) + Number(value.cum_amt),
+                                                                                                    });
                                                                                             }}
                                                                                         />
                                                                                     ) : (
@@ -652,21 +626,21 @@ const Studentpay = () => {
                                                                                                 Number(e.target.value) > Number(value.amount_paid)
                                                                                                     ? alert("Amount Greater the Actual Fees")
                                                                                                     : handleRefundPriceChange({
-                                                                                                          index: index,
-                                                                                                          amoundTyped: Number(e.target.value),
-                                                                                                          amount_paid:
-                                                                                                              Number(value.amount_paid) -
-                                                                                                              Number(e.target.value),
-                                                                                                          student_payment_info_id:
-                                                                                                              value.student_payment_info_id,
-                                                                                                          grade_id: value.grade_id,
-                                                                                                          student_id: value.student_id,
-                                                                                                          refund: Number(e.target.value) + Number(value.refund),
-                                                                                                          refundtyped:Number(e.target.value),
-                                                                                                          balance:
-                                                                                                              Number(value.balance) + Number(e.target.value),
-                                                                                                              cum_amt:value.cum_amt,
-                                                                                                      });
+                                                                                                        index: index,
+                                                                                                        amoundTyped: Number(Math.round(e.target.value)),
+                                                                                                        amount_paid:
+                                                                                                            Number(value.amount_paid) -
+                                                                                                            Number(e.target.value),
+                                                                                                        student_payment_info_id:
+                                                                                                            value.student_payment_info_id,
+                                                                                                        grade_id: value.grade_id,
+                                                                                                        student_id: value.student_id,
+                                                                                                        refund: Number(e.target.value) + Number(value.refund),
+                                                                                                        refundtyped: Number(e.target.value),
+                                                                                                        balance:
+                                                                                                            Number(value.balance) + Number(e.target.value),
+                                                                                                        cum_amt: value.cum_amt,
+                                                                                                    });
                                                                                             }}
                                                                                         />
                                                                                     )}
@@ -739,16 +713,43 @@ const Studentpay = () => {
                                                             <tfoot>
                                                                 <tr>
                                                                     <th>Total</th>
-                                                                    <th id="totalfeeamt">{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[3].AlltotalFees}</th>
-                                                                    <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[4].Allcumamt}</th>
-                                                                    <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[1].AlltotalRefund}</th>
-                                                                    <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[5].AllDiscount}</th>
+                                                                    <th id="totalfeeamt">
+                                                                        {AllDetailsOfStudent &&
+                                                                            AllDetailsOfStudent.length &&
+                                                                            AllDetailsOfStudent[3].AlltotalFees}
+                                                                    </th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>
+                                                                        {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[4].Allcumamt}
+                                                                    </th>
+                                                                    <th>
+                                                                        {AllDetailsOfStudent &&
+                                                                            AllDetailsOfStudent.length &&
+                                                                            AllDetailsOfStudent[1].AlltotalRefund}
+                                                                    </th>
+                                                                    <th>
+                                                                        {AllDetailsOfStudent &&
+                                                                            AllDetailsOfStudent.length &&
+                                                                            AllDetailsOfStudent[5].AllDiscount}
+                                                                    </th>
                                                                     <th style={{ padding: "13px" }} id="totalbalamt">
                                                                         {/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
                                                                     </th>
-                                                                   {!refundSwitch ? ( <th style={{ padding: "13px" }} id="totalbalamt">
-                                                                        {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
-                                                                    </th>) : (<th id="totalpaidamt"> {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}</th>)}
+                                                                    {!refundSwitch ? (
+                                                                        <th style={{ padding: "13px" }} id="totalbalamt">
+                                                                            {AllDetailsOfStudent &&
+                                                                                AllDetailsOfStudent.length &&
+                                                                                AllDetailsOfStudent[0].Allbalance}
+                                                                        </th>
+                                                                    ) : (
+                                                                        <th id="totalpaidamt">
+                                                                            {" "}
+                                                                            {AllDetailsOfStudent &&
+                                                                                AllDetailsOfStudent.length &&
+                                                                                AllDetailsOfStudent[2].Alltotalpaid}
+                                                                        </th>
+                                                                    )}
                                                                 </tr>
                                                             </tfoot>
                                                         </Table>
