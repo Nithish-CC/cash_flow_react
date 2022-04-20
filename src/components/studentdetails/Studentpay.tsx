@@ -512,7 +512,6 @@ const Studentpay = () => {
                                                                     <th>Fee Name</th>
                                                                     <th>Fees</th>
                                                                     <th>Terms</th>
-                                                                    <th>Terms Fees</th>
                                                                     <th>Paid</th>
                                                                     <th>Refund</th>
                                                                     <th>Discount</th>
@@ -530,19 +529,18 @@ const Studentpay = () => {
                                                                     allGotFinalData.map((value: any, index: any) => {
                                                                         return (
                                                                             <tr key={index}>
-                                                                                <td>{value.fee_type_name}</td>
+                                                                                <td style={{ fontSize: "14px" }}>{value.fee_type_name}</td>
                                                                                 <td>{value.actual_fees}</td>
                                                                                 {(value.term_name == null) ? <td>Yearly Fees</td> : <td>{value.term_name}</td>}
-                                                                                {(value.term_amount > 0) ? <td>{value.term_amount}</td> : <td>Yearly Fees</td>}
                                                                                 <td>{value.cum_amt}</td>
                                                                                 <td>{value.refund}</td>
                                                                                 <td>{value.discount_amount}</td>
                                                                                 {/* <td>{Number(value.balance)}</td> */}
-                                                                                <td style={{ width: "10%" }}>
+                                                                                <td>
                                                                                     {!refundSwitch ? (
                                                                                         <Form.Control
                                                                                             type="date"
-                                                                                            style={{ width: "82%" }}
+                                                                                            style={{ width: "50%" }}
                                                                                             value={
                                                                                                 index == priceDateChange[index].index
                                                                                                     ? moment(priceDateChange[index].date).format("YYYY-MM-DD")
