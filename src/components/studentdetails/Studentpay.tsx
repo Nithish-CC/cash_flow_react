@@ -337,6 +337,13 @@ const Studentpay = () => {
 				element.payment_mode = paymentMode;
 				element.comments = command;
 				FeetempArr.push(element);
+				delete element.amount_paid;
+				delete element.balance
+				delete element.cum_amt
+				delete element.grade_id
+				delete element.index
+				delete element.refund
+
 			}
 		});
 		if (FeetempArr && FeetempArr.length == 0) {
