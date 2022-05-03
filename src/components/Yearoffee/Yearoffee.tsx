@@ -37,6 +37,7 @@ const Yearoffee = () => {
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
+	console.log(termFeessaveAdd, "uthaya");
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -209,7 +210,6 @@ const Yearoffee = () => {
 				}
 				else {
 					setTermFeesSaveAdd(res.data.data);
-					console.log(termFeessaveAdd);
 				}
 				setSpinnerLoad(false);
 			});
@@ -409,11 +409,13 @@ const Yearoffee = () => {
 	}
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
+		console.log(termFeessaveAdd[rowindex].term_fees, "utay1");
+
 		let term: any = termFeessaveAdd[rowindex].term_count === "12" ? 2 : 12 / termFeessaveAdd[rowindex].term_count
 		for (let i: any = 0; i < 12; i++) {
 			if (editORShow === "show") {
-				im.push(termFeessaveAdd[rowindex].term_fees && termFeessaveAdd[rowindex].term_fees.length > 0 && termFeessaveAdd[rowindex].term_fees !== null
-					? i <= termFeessaveAdd[rowindex].term_fees.length - 1 ? <td className="text-center">{"Term" + (i + 1)}<br />{termFeessaveAdd[rowindex].term_fees[i].term_amount}</td> : <></>
+				im.push(termFeessaveAdd[rowindex]?.term_fees && termFeessaveAdd[rowindex]?.term_fees.length > 0
+					? i <= termFeessaveAdd[rowindex]?.term_fees.length - 1 ? <td className="text-center">{"Term" + (i + 1)}<br />{termFeessaveAdd[rowindex]?.term_fees[i]?.term_amount}</td> : <></>
 					: <></>)
 			}
 			else {
@@ -426,7 +428,7 @@ const Yearoffee = () => {
 								value={termFeessaveAdd[rowindex].term_fees[i] ? termFeessaveAdd[rowindex].term_fees[i].term_amount : ""}
 								onChange={(e) => {
 									handleTermAmount({
-										rowindex: rowindex, termindex: i, amount: e.target.value
+										rowindex: rowindex, termindex: i, amount: Number(e.target.value)
 									})
 								}}
 							/>
@@ -439,9 +441,7 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
-
 		values.grade_id = frontSearchGrade
-		values.fee_master_id = feeTypeName
 		values.year_id = frontSearchYear
 		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values)
 	}
@@ -590,10 +590,10 @@ const Yearoffee = () => {
 																								<td>{elemant.optional_fee}</td>
 																								<td> {elemant.fee_amount}</td>
 																								<td>
-																									{/* {elemant.term_count} */}
+																									{elemant?.term_fees?.length}
 																								</td>
 																								<td>
-																									{/* {handleTerm(rowindex, "show")} */}
+																									{handleTerm(rowindex, "show")}
 																								</td>
 																							</>
 																								: <td colSpan={5} className="text-center">No data Found</td>}
@@ -613,10 +613,11 @@ const Yearoffee = () => {
 																						<>
 																							<td>
 																								<Form.Select
-																									value={feeTypeName}
+																									value={termFeessaveAdd[rowindex].fee_master_id}
 																									onChange={(e: any) => {
-																										setFeeTypeName(e.target.value);
-																										setTermsmasterValue(e.target[e.target.selectedIndex].text);
+																										let newFormValues = [...termFeessaveAdd];
+																										newFormValues[rowindex]["fee_master_id"] = e.target.value
+																										setTermFeesSaveAdd(newFormValues)
 																									}}>
 																									{FeeDetailsFinal &&
 																										FeeDetailsFinal.length &&
@@ -632,8 +633,6 @@ const Yearoffee = () => {
 																							<td>
 																								<Form.Check type="switch" value={termFeessaveAdd[rowindex].optional_fee} onChange={(e: any) => {
 																									let newFormValues = [...termFeessaveAdd];
-																									console.log();
-
 																									newFormValues[rowindex]["optional_fee"] = e.target.checked
 																									setTermFeesSaveAdd(newFormValues)
 																								}} id="custom-switch" style={{ position: "relative" }} />
@@ -644,7 +643,7 @@ const Yearoffee = () => {
 																									value={termFeessaveAdd[rowindex].fee_amount}
 																									onChange={(e: any) => {
 																										let newFormValues = [...termFeessaveAdd];
-																										newFormValues[rowindex]["fee_amount"] = e.target.value
+																										newFormValues[rowindex]["fee_amount"] = Number(e.target.value)
 																										setTermFeesSaveAdd(newFormValues)
 																									}}
 																								/>
@@ -656,7 +655,7 @@ const Yearoffee = () => {
 																									{termFeessaveAdd[rowindex].optional_fee ?
 																										<Form.Select
 																											name="term_count"
-																											value={termFeessaveAdd[rowindex].term_count}
+																											value={termFeessaveAdd[rowindex]?.term_fees?.length}
 																											onChange={(e: any) => {
 																												ShowingTextBox(e.target.value, rowindex);
 																											}}>
@@ -667,7 +666,7 @@ const Yearoffee = () => {
 																											<option value="6">6</option>
 																											<option value="12">12</option>
 																										</Form.Select>
-																										: <Form.Control value={termFeessaveAdd[rowindex].term_count} disabled></Form.Control>}
+																										: <Form.Control value={termFeessaveAdd[rowindex]?.term_fees?.length} disabled></Form.Control>}
 																								</td>
 																							)}
 																							<td style={{ minWidth: "400px", maxWidth: "500px" }}><Row>{handleTerm(rowindex, "edit")}</Row></td>
@@ -677,7 +676,6 @@ const Yearoffee = () => {
 																										className="fas fa-save fa-1x"
 																										style={{ color: "blue", cursor: "pointer" }}
 																										onClick={(e: any) => {
-
 																											handleSave(termFeessaveAdd[rowindex]);
 																										}}></i>{" "}
 																									{rowindex ? (
