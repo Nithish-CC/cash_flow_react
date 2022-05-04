@@ -37,7 +37,6 @@ const Yearoffee = () => {
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
-	console.log(termFeessaveAdd, "uthaya");
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -209,7 +208,11 @@ const Yearoffee = () => {
 					console.log(termFeessaveAdd);
 				}
 				else {
+					res.data.data.map((map: any) => {
+						map.optional_fee = map.optional_fee === 1 ? true : false
+					})
 					setTermFeesSaveAdd(res.data.data);
+					console.log(res.data.data, "444");
 				}
 				setSpinnerLoad(false);
 			});
@@ -409,7 +412,6 @@ const Yearoffee = () => {
 	}
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
-		console.log(termFeessaveAdd[rowindex].term_fees, "utay1");
 
 		let term: any = termFeessaveAdd[rowindex].term_count === "12" ? 2 : 12 / termFeessaveAdd[rowindex].term_count
 		for (let i: any = 0; i < 12; i++) {
@@ -586,8 +588,8 @@ const Yearoffee = () => {
 																					{termFeesAdd ? (
 																						<>
 																							{elemant.year_of_fees_id ? <>
-																								<td>{elemant.Fee_Type_name}</td>
-																								<td>{elemant.optional_fee}</td>
+																								<td>{elemant.fee_type_name}</td>
+																								<td>{String(elemant.optional_fee)}</td>
 																								<td> {elemant.fee_amount}</td>
 																								<td>
 																									{elemant?.term_fees?.length}
@@ -616,7 +618,7 @@ const Yearoffee = () => {
 																									value={termFeessaveAdd[rowindex].fee_master_id}
 																									onChange={(e: any) => {
 																										let newFormValues = [...termFeessaveAdd];
-																										newFormValues[rowindex]["fee_master_id"] = e.target.value
+																										newFormValues[rowindex]["fee_master_id"] = Number(e.target.value)
 																										setTermFeesSaveAdd(newFormValues)
 																									}}>
 																									{FeeDetailsFinal &&
@@ -635,7 +637,7 @@ const Yearoffee = () => {
 																									let newFormValues = [...termFeessaveAdd];
 																									newFormValues[rowindex]["optional_fee"] = e.target.checked
 																									setTermFeesSaveAdd(newFormValues)
-																								}} id="custom-switch" style={{ position: "relative" }} />
+																								}} id="custom-switch" checked={termFeessaveAdd[rowindex].optional_fee} style={{ position: "relative" }} />
 																							</td>
 																							<td>
 																								<Form.Control
@@ -691,10 +693,9 @@ const Yearoffee = () => {
 																												setTermFeesSaveAdd([
 																													...termFeessaveAdd,
 																													{
-																														S_No: "",
-																														Fee_Type_name: "",
 																														fee_amount: "",
 																														term_count: 1,
+																														optional_fee: false,
 																														term_fees: [{
 																															"term_name": "Term1",
 																															"term_amount": 0
