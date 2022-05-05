@@ -7,6 +7,7 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { json } from "stream/consumers";
 const Yearoffee = () => {
 	const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
 	const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -32,23 +33,25 @@ const Yearoffee = () => {
 	const [termsmasterValue, setTermsmasterValue] = useState<any>([]);
 	const [termFeesAdd, setTermFeesAdd] = useState(true);
 	const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
+	const school: any = (sessionStorage.getItem("School"))
 	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
 		{
 			fee_amount: null,
 			fee_master_id: 0,
 			grade_id: 0,
 			optional_fee: false,
-			term_count: 0,
+			term_count: JSON.parse(school).term_count,
 			term_fees: [],
 			year_id: 0,
 		}
 	]);
-	
+
 	let removeFormFields = (i: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
+	console.log(school);
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -414,16 +417,21 @@ const Yearoffee = () => {
 		deleteParticularDiscount(datatoDelete.yearoffeesid);
 	};
 
-	const [termRowAmountData, settermRowAmount] = useState<any>([])
 	const handleTermAmount = (data: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		termFeessaveAdd[data.rowindex].term_fees[data.termindex].term_amount = data.amount
 		setTermFeesSaveAdd(newFormValues);
 	}
+	useEffect(() => {
+		axios.get(`${baseUrl}school`)
+			.then((res: any) => {
+				sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+			})
+	}, [])
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
-
-		let term: any = termFeessaveAdd[rowindex]?.term_count === "12" ? 2 : 12 / termFeessaveAdd[rowindex]?.term_count
+		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school)?.term_count
+		let term: any = terms === "12" ? 2 : 12 / terms
 		for (let i: any = 0; i < 12; i++) {
 			if (editORShow === "show") {
 				im.push(termFeessaveList[rowindex]?.terms && termFeessaveList[rowindex]?.terms.length > 0
@@ -432,7 +440,7 @@ const Yearoffee = () => {
 			}
 			else {
 				im.push(termFeessaveAdd[rowindex].term_fees && termFeessaveAdd[rowindex].term_fees.length > 0 ? <>
-					{i < termFeessaveAdd[rowindex].term_fees.length &&
+					{i < Number(terms) &&
 						<Col md={term}>
 							<Form.Control
 								type="number"
@@ -455,6 +463,7 @@ const Yearoffee = () => {
 	const handleSave = (values: any) => {
 		values.grade_id = frontSearchGrade
 		values.year_id = frontSearchYear
+		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
 		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values)
 	}
 
@@ -496,8 +505,6 @@ const Yearoffee = () => {
 																			className="btn btn-primary btn-sm btn-save"
 																			onClick={() => {
 																				setStatusFeeDetailsAdd(true);
-																				setFrontSearchGrade("");
-																				setFrontSearchYear("");
 																				//   getAllGrade();
 																				setTermsmasterValue("");
 																				getAllFeeMasterData();
@@ -609,12 +616,6 @@ const Yearoffee = () => {
 																								<i
 																									className="fas fa-trash"
 																									style={{ color: "red", cursor: "pointer" }}></i>{" "}
-																								<i
-																									className="fas fa-plus fa-1x"
-																									style={{ color: "green", cursor: "pointer" }}
-																									onClick={(e: any) => {
-																										setTermFeesAdd(false);
-																									}}></i>
 																							</td>
 																						</>
 																					) : (
@@ -656,7 +657,7 @@ const Yearoffee = () => {
 													</div>
 												) : (
 													<div>
-														<Table>
+														<Table bordered responsive>
 															<thead>
 																<tr role="row"  >
 																	<th className="sorting_asc">Fee Type Name</th>
@@ -696,6 +697,7 @@ const Yearoffee = () => {
 																						let newFormValues = [...termFeessaveAdd];
 																						newFormValues[rowindex]["optional_fee"] = e.target.checked
 																						setTermFeesSaveAdd(newFormValues)
+																						handleTerm(rowindex, "edit")
 																					}} id="custom-switch" checked={termFeessaveAdd[rowindex].optional_fee} style={{ position: "relative" }} />
 																				</td>
 																				<td>
@@ -725,7 +727,7 @@ const Yearoffee = () => {
 																								<option value="6">6</option>
 																								<option value="12">12</option>
 																							</Form.Select>
-																							: <Form.Control value={termFeessaveAdd[rowindex]?.term_fees?.length} disabled></Form.Control>}
+																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}
 																					</td>
 																				}
 																				<td style={{ minWidth: "400px", maxWidth: "500px" }}><Row>{handleTerm(rowindex, "edit")}</Row></td>
