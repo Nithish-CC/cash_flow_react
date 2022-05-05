@@ -41,7 +41,10 @@ const Yearoffee = () => {
 			grade_id: 0,
 			optional_fee: false,
 			term_count: JSON.parse(school).term_count,
-			term_fees: [],
+			term_fees: [{
+				"term_name": "Term1",
+				"term_amount": ""
+			}],
 			year_id: 0,
 		}
 	]);
@@ -51,7 +54,9 @@ const Yearoffee = () => {
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
-	console.log(school);
+	useEffect(() => {
+		ShowingTextBox(JSON.parse(school).term_count, 0);
+	}, [])
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -66,6 +71,7 @@ const Yearoffee = () => {
 	const handleShow = () => {
 		setShow(true);
 	};
+
 	const getAllGradeSectionData = () => {
 		getAccessToken();
 		axios.get(`${baseUrl}feeMaster`).then((res: any) => {
@@ -422,6 +428,7 @@ const Yearoffee = () => {
 		termFeessaveAdd[data.rowindex].term_fees[data.termindex].term_amount = data.amount
 		setTermFeesSaveAdd(newFormValues);
 	}
+
 	useEffect(() => {
 		axios.get(`${baseUrl}school`)
 			.then((res: any) => {
@@ -430,8 +437,8 @@ const Yearoffee = () => {
 	}, [])
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
-		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school)?.term_count
-		let term: any = terms === "12" ? 2 : 12 / terms
+		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
+		let term: any = terms === "12" ? 2 : 12 / Number(terms)
 		for (let i: any = 0; i < 12; i++) {
 			if (editORShow === "show") {
 				im.push(termFeessaveList[rowindex]?.terms && termFeessaveList[rowindex]?.terms.length > 0
@@ -448,7 +455,7 @@ const Yearoffee = () => {
 								value={termFeessaveAdd[rowindex].term_fees[i] ? termFeessaveAdd[rowindex].term_fees[i].term_amount : ""}
 								onChange={(e) => {
 									handleTermAmount({
-										rowindex: rowindex, termindex: i, amount: Number(e.target.value)
+										rowindex: rowindex, termindex: i, amount: e.target.value
 									})
 								}}
 							/>
@@ -697,7 +704,7 @@ const Yearoffee = () => {
 																						let newFormValues = [...termFeessaveAdd];
 																						newFormValues[rowindex]["optional_fee"] = e.target.checked
 																						setTermFeesSaveAdd(newFormValues)
-																						handleTerm(rowindex, "edit")
+																						ShowingTextBox(termFeessaveAdd[rowindex]?.optional_fee ? "1" : JSON.parse(school).term_count, rowindex);
 																					}} id="custom-switch" checked={termFeessaveAdd[rowindex].optional_fee} style={{ position: "relative" }} />
 																				</td>
 																				<td>
@@ -757,7 +764,7 @@ const Yearoffee = () => {
 																											optional_fee: false,
 																											term_fees: [{
 																												"term_name": "Term1",
-																												"term_amount": 0
+																												"term_amount": ""
 																											}]
 																										},
 																									]);
