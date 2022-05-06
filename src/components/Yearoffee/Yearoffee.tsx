@@ -20,6 +20,8 @@ const Yearoffee = () => {
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
 	const [duplication, setDuplication] = useState(false);
 	const [searchGradeId, setSearchGradeId] = useState("");
+	const [addSearchGrade, setAddSearchGrade] = useState(0);
+	const [addSearchYear, setAddSearchYear] = useState(0);
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
 	const [gradeSectionList, setGradeSectionList] = useState<any>([]);
@@ -37,7 +39,7 @@ const Yearoffee = () => {
 	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
 		{
 			fee_amount: null,
-			fee_master_id: 0,
+			fee_master_id: null,
 			grade_id: 0,
 			optional_fee: false,
 			term_count: JSON.parse(school)?.term_count,
@@ -207,6 +209,7 @@ const Yearoffee = () => {
 		getAllFeeMasterData();
 		getAllGrade();
 	}, []);
+
 	//Calling Fees Data
 	useEffect(() => {
 		if (frontSearchGrade && frontSearchGrade != null && frontSearchYear && frontSearchYear != null) {
@@ -462,8 +465,8 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
-		values.grade_id = frontSearchGrade
-		values.year_id = frontSearchYear
+		values.year_id = addSearchYear
+		values.grade_id = addSearchGrade
 		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
 		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values)
 	}
@@ -553,7 +556,6 @@ const Yearoffee = () => {
 																						onChange={(e: any) => {
 																							setFrontSearchYear(Number(e.target.value));
 																							handleGradeFilter(gradeSectionList, e.target.value);
-																							setTermFeesSaveAdd([])
 																						}}>
 																						{feeMaster &&
 																							feeMaster.length &&
@@ -569,7 +571,6 @@ const Yearoffee = () => {
 																						value={frontSearchGrade}
 																						onChange={(e: any) => {
 																							setFrontSearchGrade(Number(e.target.value));
-																							setTermFeesSaveAdd([])
 																						}}>
 																						{filterGradeByYear &&
 																							filterGradeByYear.length &&
@@ -658,6 +659,43 @@ const Yearoffee = () => {
 													</div>
 												) : (
 													<div>
+														<Row>
+															<Col md={3} />
+															<Col md={3} className="form-group" style={{ width: "28%" }}>
+																<Form.Select
+																	//view
+																	value={addSearchYear}
+																	onChange={(e: any) => {
+																		setAddSearchYear(Number(e.target.value));
+																		handleGradeFilter(gradeSectionList, e.target.value);
+																	}}>
+																	{feeMaster &&
+																		feeMaster.length &&
+																		feeMaster.map((values: any, index: any) => {
+																			return (<><option>Select Year</option><option value={values.year_id}>{values.academic_year}</option></>);
+																		})}
+																</Form.Select>
+															</Col>
+															<Col md={3} className="form-group" style={{ width: "28%" }}>
+																<Form.Select
+																	value={addSearchGrade}
+																	onChange={(e: any) => {
+																		setAddSearchGrade(Number(e.target.value));
+																	}}>
+																	{filterGradeByYear &&
+																		filterGradeByYear.length &&
+																		filterGradeByYear.map((values: any, index: any) => {
+																			return (
+																				<>
+																					<option>Select Year</option>
+																					<option value={values.grade_master_id}>{values.grade_master}</option>
+																				</>
+																			);
+																		})}
+																</Form.Select>
+															</Col>
+															<Col md={3} />
+														</Row>
 														<Table bordered responsive>
 															<thead>
 																<tr role="row"  >
@@ -686,9 +724,12 @@ const Yearoffee = () => {
 																							FeeDetailsFinal.length &&
 																							FeeDetailsFinal.map((values: any, index: any) => {
 																								return (
-																									<option value={values.fee_master_id} label={values.fee_type_name} >
-																										{values.fee_type_name}
-																									</option>
+																									<>
+																										<option>Select Optional fee</option>
+																										<option value={values.fee_master_id} label={values.fee_type_name} >
+																											{values.fee_type_name}
+																										</option>
+																									</>
 																								);
 																							})}
 																					</Form.Select>
@@ -781,7 +822,7 @@ const Yearoffee = () => {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 		</div >
 	);
 };
