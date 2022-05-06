@@ -40,7 +40,7 @@ const Yearoffee = () => {
 			fee_master_id: 0,
 			grade_id: 0,
 			optional_fee: false,
-			term_count: JSON.parse(school).term_count,
+			term_count: JSON.parse(school)?.term_count,
 			term_fees: [{
 				"term_name": "Term1",
 				"term_amount": ""
@@ -429,12 +429,6 @@ const Yearoffee = () => {
 		setTermFeesSaveAdd(newFormValues);
 	}
 
-	useEffect(() => {
-		axios.get(`${baseUrl}school`)
-			.then((res: any) => {
-				sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
-			})
-	}, [])
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
 		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
@@ -731,7 +725,7 @@ const Yearoffee = () => {
 																								<option value="2">2</option>
 																								<option value="3">3</option>
 																								<option value="4">4</option>
-																								<option value="6">6</option>
+																								<option value="8">6</option>
 																								<option value="12">12</option>
 																							</Form.Select>
 																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}

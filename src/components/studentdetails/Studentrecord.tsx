@@ -119,6 +119,13 @@ const Studentrecord = () => {
     },
   ];
 
+  useEffect(() => {
+    axios.get(`${baseUrl}school`)
+      .then((res: any) => {
+        sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+      })
+  }, [])
+
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
     console.log(value);
