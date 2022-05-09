@@ -119,13 +119,6 @@ const Studentrecord = () => {
     },
   ];
 
-  useEffect(() => {
-    axios.get(`${baseUrl}school`)
-      .then((res: any) => {
-        sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
-      })
-  }, [])
-
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
     console.log(value);
@@ -367,6 +360,10 @@ const Studentrecord = () => {
         setGradeMasterParticular(res.data.data[0]);
       })
       .catch((error) => console.log(error));
+    axios.get(`${baseUrl}school`)
+      .then((res: any) => {
+        sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+      })
   }, []);
   useEffect(() => {
     // console.log(gradeSectionList,filterParticularYear,gradeMaster)

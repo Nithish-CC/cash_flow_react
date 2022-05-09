@@ -29,7 +29,7 @@ const Studentpay = () => {
 
 	const [Payment, setPayment] = useState<any>([]);
 	const [termsTextBox, setTermsTextBox] = useState<any>([]);
-	const [termsmaster, setTermsmaster] = useState<any>([]);
+	const [termsmaster, setTermsmaster] = useState<any>(1);
 
 	console.log(termsmaster);
 	const urlParams: any = useParams();
@@ -57,9 +57,7 @@ const Studentpay = () => {
 	useEffect(() => {
 		callStudentData();
 	}, []);
-	useEffect(() => {
-		setTermsmaster("");
-	}, []);
+
 	useEffect(() => {
 		let AllRoundData: any[] = [];
 		let resultantData: any[] = [];
@@ -600,7 +598,6 @@ const Studentpay = () => {
 													</Table>
 												</div>
 											</div>
-
 											<Form>
 												<div className="table-responsive">
 													<div className="card-body bg-transparent tableFixHead">
@@ -633,9 +630,9 @@ const Studentpay = () => {
 																				<td>{value?.cum_amt}</td>
 																				<td>{value?.refund}</td>
 																				<td>{value?.discount_amount}</td>
-																				<td>{value?.fee_master_id && value?.optional_fees === "1" && <Form.Select name="" id="" style={{ width: "120px", marginLeft: "10px", float: "right" }}>
+																				<td>{value?.optional_fees === "1" ? <Form.Select name="" id="" style={{ width: "120px", marginLeft: "10px", float: "right" }}>
 																					<option>{value.term_name}</option>
-																				</Form.Select>}</td>
+																				</Form.Select> : <Form.Label style={{ width: "120px", marginLeft: "10px", float: "right" }}>Terms {termsmaster} </Form.Label>}</td>
 																				{/* <td>{Number(value.balance)}</td> */}
 																				<td style={{ width: "10%" }}>
 																					{!refundSwitch ? (

@@ -225,17 +225,11 @@ const Yearoffee = () => {
 				year_id: year_id
 			})
 			.then((res: any) => {
-				console.log(res.data.data.length, "yearoffee");
-				if (res.data.data.length === 0) {
-					termFeessaveAdd.push({})
-					console.log(termFeessaveAdd);
-				}
-				else {
-					res.data.data.map((map: any) => {
-						map.optional_fee = map.optional_fee === 1 ? true : false
-					})
-					setTermFeesSaveList(res.data.data);
-				}
+				res.data.data.map((map: any) => {
+					map.optional_fee = map?.optional_fee === 1 ? true : false
+				})
+				setTermFeesSaveList(res.data.data);
+
 				setSpinnerLoad(false);
 			});
 	};
@@ -423,7 +417,9 @@ const Yearoffee = () => {
 	};
 	const handleClose = () => {
 		setShow(false);
-		deleteParticularDiscount(datatoDelete.yearoffeesid);
+		console.log(datatoDelete.year_of_fee_id);
+
+		deleteParticularDiscount(datatoDelete.year_of_fee_id);
 	};
 
 	const handleTermAmount = (data: any) => {
@@ -431,6 +427,7 @@ const Yearoffee = () => {
 		termFeessaveAdd[data.rowindex].term_fees[data.termindex].term_amount = data.amount
 		setTermFeesSaveAdd(newFormValues);
 	}
+
 
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
@@ -468,7 +465,43 @@ const Yearoffee = () => {
 		values.year_id = addSearchYear
 		values.grade_id = addSearchGrade
 		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
-		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values)
+		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
+			console.log(res.data.message);
+			if (res.data.message.includes("Year of Fee already present")) {
+				toast.warning(res.data.message, {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
+			else if (res.data.message.includes("Year of Fee inserted")) {
+				toast.success("Saved successfully", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
+
+		}
+		).catch((res: any) => {
+			toast.warning("Enter Correct data", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		})
 	}
 
 	return (
@@ -522,7 +555,7 @@ const Yearoffee = () => {
 																			Add
 																		</Button>
 																	) : (
-																		<></>
+																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(addSearchYear, addSearchGrade); }}>Back</Button>
 																	)}
 																</div>
 															</>
@@ -598,37 +631,46 @@ const Yearoffee = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{termFeessaveList?.map((elemant: any, rowindex: any) => {
-																		return (
-																			<>
-																				<tr key={rowindex}>
-																					{termFeesAdd ? (
-																						<>
-																							<td>{elemant.fee_master_name}</td>
-																							<td>{elemant.terms[0].optional_fee}</td>
-																							<td> {elemant.terms[0].fee_amount}</td>
-																							<td>
-																								{elemant?.terms.length}
-																							</td>
-																							<td>
-																								{handleTerm(rowindex, "show")}
-																							</td>
+																	{termFeessaveList && termFeessaveList.length ?
+																		(termFeessaveList?.map((elemant: any, rowindex: any) => {
+																			return (
+																				<>
+																					<tr key={rowindex}>
+																						{termFeesAdd ? (
+																							<>
+																								<td>{elemant.fee_master_name}</td>
+																								<td>{elemant.terms[0].optional_fee}</td>
+																								<td> {elemant.terms[0].fee_amount}</td>
+																								<td>
+																									{elemant?.terms.length}
+																								</td>
+																								<td>
+																									{handleTerm(rowindex, "show")}
+																								</td>
 
-																							<td>
-																								<i
-																									className="fas fa-trash"
-																									style={{ color: "red", cursor: "pointer" }}></i>{" "}
-																							</td>
-																						</>
-																					) : (
-																						<>
-																							<td>No Data Found</td>
-																						</>
-																					)}
-																				</tr>
-																			</>
-																		);
-																	})}
+																								<td>
+																									<i
+																										className="fas fa-trash"
+																										style={{ color: "red", cursor: "pointer" }} onClick={() => {
+																											setShow(true)
+																											setdatatoDelete(elemant.terms[0])
+																										}}></i>{" "}
+
+																								</td>
+																							</>
+																						) : (
+																							<>
+																								<td>No Data Found</td>
+																							</>
+																						)}
+																					</tr>
+																				</>
+																			);
+																		})) : <tr>
+																			<td colSpan={6} className="text-center">
+																				No Data Found
+																			</td>
+																		</tr>}
 																</tbody>
 															</Table>
 															<div style={{ marginLeft: "20%" }}>
@@ -641,7 +683,7 @@ const Yearoffee = () => {
 																	<Modal.Body>
 																		Are You Sure You What To Delete{" "}
 																		<b>
-																			{datatoDelete.feeTypeName} - {datatoDelete.amt}
+																			{datatoDelete.fee_type_name}
 																		</b>{" "}
 																		?
 																	</Modal.Body>
@@ -669,10 +711,11 @@ const Yearoffee = () => {
 																		setAddSearchYear(Number(e.target.value));
 																		handleGradeFilter(gradeSectionList, e.target.value);
 																	}}>
+																	<option>Select Year</option>
 																	{feeMaster &&
 																		feeMaster.length &&
 																		feeMaster.map((values: any, index: any) => {
-																			return (<><option>Select Year</option><option value={values.year_id}>{values.academic_year}</option></>);
+																			return (<option value={values.year_id}>{values.academic_year}</option>);
 																		})}
 																</Form.Select>
 															</Col>
@@ -682,12 +725,13 @@ const Yearoffee = () => {
 																	onChange={(e: any) => {
 																		setAddSearchGrade(Number(e.target.value));
 																	}}>
+																	<option>Select Year</option>
 																	{filterGradeByYear &&
 																		filterGradeByYear.length &&
 																		filterGradeByYear.map((values: any, index: any) => {
 																			return (
 																				<>
-																					<option>Select Year</option>
+
 																					<option value={values.grade_master_id}>{values.grade_master}</option>
 																				</>
 																			);
@@ -720,12 +764,12 @@ const Yearoffee = () => {
 																							newFormValues[rowindex]["fee_master_id"] = Number(e.target.value)
 																							setTermFeesSaveAdd(newFormValues)
 																						}}>
+																						<option>Select Optional fee</option>
 																						{FeeDetailsFinal &&
 																							FeeDetailsFinal.length &&
 																							FeeDetailsFinal.map((values: any, index: any) => {
 																								return (
 																									<>
-																										<option>Select Optional fee</option>
 																										<option value={values.fee_master_id} label={values.fee_type_name} >
 																											{values.fee_type_name}
 																										</option>
