@@ -50,7 +50,7 @@ const Yearoffee = () => {
 			year_id: 0,
 		}
 	]);
-
+	const [finalTerms, setFinalterms] = useState<any>([]);
 	let removeFormFields = (i: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		newFormValues.splice(i, 1);
@@ -248,6 +248,20 @@ const Yearoffee = () => {
 		newFormValues[index]["term_fees"] = term
 		setTermFeesSaveAdd(newFormValues)
 	};
+
+	useEffect(() => {
+		ShowingTermsValue(JSON.parse(school)?.optional_term_count);
+	}, [])
+	const ShowingTermsValue = (termsss: any) => {
+		console.log(termsss, "uthay");
+
+		let termscount = []
+		for (var i = 1; i <= Number(termsss); i++) {
+			console.log("Terms" + i, "----");
+			termscount.push(String(i))
+		}
+		setFinalterms(termscount);
+	}
 
 	const handleSubmit = () => {
 		let newfeeTypeName = feeTypeName.toString();
@@ -468,7 +482,7 @@ const Yearoffee = () => {
 		values.term_fees.map((value: any, index: any) => {
 			sumoftermFees = sumoftermFees + Number(value.term_amount)
 		})
-		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });		
+		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });
 
 		if (sumoftermFees === values.fee_amount) {
 			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
@@ -832,12 +846,12 @@ const Yearoffee = () => {
 																								onChange={(e: any) => {
 																									ShowingTextBox(e.target.value, rowindex);
 																								}}>
-																								<option value="1">Yearly</option>
-																								<option value="2">2</option>
-																								<option value="3">3</option>
-																								<option value="4">4</option>
-																								<option value="8">6</option>
-																								<option value="12">12</option>
+																								{finalTerms?.map((option: any) => {
+																									return <>
+																										<option value={option}>Term {option}</option>
+																									</>
+																								})}
+																								
 																							</Form.Select>
 																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}
 																					</td>
