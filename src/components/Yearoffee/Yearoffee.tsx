@@ -8,6 +8,7 @@ import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { json } from "stream/consumers";
+import _ from "lodash";
 const Yearoffee = () => {
 	const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
 	const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -34,6 +35,7 @@ const Yearoffee = () => {
 	const [termFeesAdd, setTermFeesAdd] = useState(true);
 	const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
 	const school: any = (sessionStorage.getItem("School"))
+	const [total, setTotal] = useState<any>(0);
 	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
 		{
 			fee_amount: null,
@@ -426,7 +428,6 @@ const Yearoffee = () => {
 		setTermFeesSaveAdd(newFormValues);
 	}
 
-
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
 		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
@@ -460,36 +461,53 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
+		let sumoftermFees = 0
 		values.year_id = frontSearchYear
 		values.grade_id = frontSearchGrade
 		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
-		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
-			if (res.data.message.includes("Year of Fee already present")) {
-				toast.warning(res.data.message, {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-			}
-			else if (res.data.message.includes("Year of Fee inserted")) {
-				toast.success("Saved successfully", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-			}
+		values.term_fees.map((value: any, index: any) => {
+			sumoftermFees = sumoftermFees + Number(value.term_amount)
+		})
+		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });		
 
+		if (sumoftermFees === values.fee_amount) {
+			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
+				if (res.data.message.includes("Year of Fee already present")) {
+					toast.warning(res.data.message, {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+				else if (res.data.message.includes("Year of Fee inserted")) {
+					toast.success("Saved successfully", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+			}).catch((res: any) => {
+				toast.warning("Enter Correct data", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			})
 		}
-		).catch((res: any) => {
-			toast.warning("Enter Correct data", {
+		else if (sumoftermFees < values.fee_amount) {
+			toast.warning("Fee amount is less than sum of term amount", {
 				position: "top-right",
 				autoClose: 5000,
 				hideProgressBar: false,
@@ -497,8 +515,19 @@ const Yearoffee = () => {
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
-			});
-		})
+			})
+		}
+		else if (sumoftermFees > values.fee_amount) {
+			toast.warning("Fee amount is Greater than sum of term amount", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			})
+		}
 	}
 
 	return (
