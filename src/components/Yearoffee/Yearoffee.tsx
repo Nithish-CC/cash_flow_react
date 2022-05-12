@@ -20,8 +20,6 @@ const Yearoffee = () => {
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
 	const [duplication, setDuplication] = useState(false);
 	const [searchGradeId, setSearchGradeId] = useState("");
-	const [addSearchGrade, setAddSearchGrade] = useState(0);
-	const [addSearchYear, setAddSearchYear] = useState(0);
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
 	const [gradeSectionList, setGradeSectionList] = useState<any>([]);
@@ -45,7 +43,7 @@ const Yearoffee = () => {
 			term_count: JSON.parse(school)?.term_count,
 			term_fees: [{
 				"term_name": "Term1",
-				"term_amount": ""
+				"term_amount": "0"
 			}],
 			year_id: 0,
 		}
@@ -57,8 +55,8 @@ const Yearoffee = () => {
 		setTermFeesSaveAdd(newFormValues);
 	};
 	useEffect(() => {
-		ShowingTextBox(JSON.parse(school).term_count, 0);
-	}, [])
+		ShowingTextBox(JSON.parse(school).term_count, termFeessaveAdd.length - 1);
+	}, [termFeessaveAdd.length])
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -462,11 +460,10 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
-		values.year_id = addSearchYear
-		values.grade_id = addSearchGrade
+		values.year_id = frontSearchYear
+		values.grade_id = frontSearchGrade
 		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
 		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
-			console.log(res.data.message);
 			if (res.data.message.includes("Year of Fee already present")) {
 				toast.warning(res.data.message, {
 					position: "top-right",
@@ -555,7 +552,7 @@ const Yearoffee = () => {
 																			Add
 																		</Button>
 																	) : (
-																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(addSearchYear, addSearchGrade); }}>Back</Button>
+																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(frontSearchYear, frontSearchGrade); }}>Back</Button>
 																	)}
 																</div>
 															</>
@@ -706,9 +703,9 @@ const Yearoffee = () => {
 															<Col md={3} className="form-group" style={{ width: "28%" }}>
 																<Form.Select
 																	//view
-																	value={addSearchYear}
+																	value={frontSearchYear}
 																	onChange={(e: any) => {
-																		setAddSearchYear(Number(e.target.value));
+																		setFrontSearchYear(Number(e.target.value));
 																		handleGradeFilter(gradeSectionList, e.target.value);
 																	}}>
 																	<option>Select Year</option>
@@ -721,9 +718,9 @@ const Yearoffee = () => {
 															</Col>
 															<Col md={3} className="form-group" style={{ width: "28%" }}>
 																<Form.Select
-																	value={addSearchGrade}
+																	value={frontSearchGrade}
 																	onChange={(e: any) => {
-																		setAddSearchGrade(Number(e.target.value));
+																		setFrontSearchGrade(Number(e.target.value));
 																	}}>
 																	<option>Select Year</option>
 																	{filterGradeByYear &&
@@ -825,7 +822,7 @@ const Yearoffee = () => {
 																							onClick={(e: any) => {
 																								handleSave(termFeessaveAdd[rowindex]);
 																							}}></i>{" "}
-																						{rowindex ? (
+																						{rowindex !== 0 ? (
 																							<i
 																								className="fa fa-minus fa-1x"
 																								style={{ color: "red", cursor: "pointer" }}
