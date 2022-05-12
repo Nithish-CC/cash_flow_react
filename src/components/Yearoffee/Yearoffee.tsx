@@ -521,7 +521,7 @@ const Yearoffee = () => {
 			})
 		}
 		else if (sumoftermFees < values.fee_amount) {
-			toast.warning("Fee amount is less than sum of term amount", {
+			toast.warning("Fee amount is Greater than sum of term amount", {
 				position: "top-right",
 				autoClose: 5000,
 				hideProgressBar: false,
@@ -532,7 +532,7 @@ const Yearoffee = () => {
 			})
 		}
 		else if (sumoftermFees > values.fee_amount) {
-			toast.warning("Fee amount is Greater than sum of term amount", {
+			toast.warning("Fee amount is less than sum of term amount", {
 				position: "top-right",
 				autoClose: 5000,
 				hideProgressBar: false,
@@ -851,7 +851,7 @@ const Yearoffee = () => {
 																										<option value={option}>Term {option}</option>
 																									</>
 																								})}
-																								
+
 																							</Form.Select>
 																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}
 																					</td>
