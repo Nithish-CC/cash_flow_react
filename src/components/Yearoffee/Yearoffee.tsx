@@ -42,10 +42,11 @@ const Yearoffee = () => {
 			fee_master_id: null,
 			grade_id: 0,
 			optional_fee: false,
+			optional_fees: false,
 			term_count: JSON.parse(school)?.term_count,
 			term_fees: [{
 				"term_name": "Term1",
-				"term_amount": "0"
+				"term_amount": ""
 			}],
 			year_id: 0,
 		}
@@ -444,7 +445,7 @@ const Yearoffee = () => {
 
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
-		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
+		const terms = termFeessaveAdd[rowindex]?.optional_fees ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
 		let term: any = terms === "12" ? 2 : 12 / Number(terms)
 		for (let i: any = 0; i < 12; i++) {
 			if (editORShow === "show") {
@@ -478,13 +479,19 @@ const Yearoffee = () => {
 		let sumoftermFees = 0
 		values.year_id = frontSearchYear
 		values.grade_id = frontSearchGrade
-		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
+		FeeDetailsFinal?.map((value: any) => {
+			if (values.fee_master_id === value.fee_master_id) {
+				values.optional_fee = value.optional_fee
+			}
+		})
+		values.term_count = values.optional_fees ? values.term_count : JSON.parse(school).term_count
 		values.term_fees.map((value: any, index: any) => {
 			sumoftermFees = sumoftermFees + Number(value.term_amount)
 		})
 		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });
 
 		if (sumoftermFees === values.fee_amount) {
+			delete values.optional_fees
 			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
 				if (res.data.message.includes("Year of Fee already present")) {
 					toast.warning(res.data.message, {
@@ -595,7 +602,7 @@ const Yearoffee = () => {
 																			Add
 																		</Button>
 																	) : (
-																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(frontSearchYear, frontSearchGrade); }}>Back</Button>
+																		<Button onClick={() => { window.location.reload() }}>Back</Button>
 																	)}
 																</div>
 															</>
@@ -819,12 +826,12 @@ const Yearoffee = () => {
 																					</Form.Select>
 																				</td>
 																				<td>
-																					<Form.Check type="switch" value={termFeessaveAdd[rowindex].optional_fee} onChange={(e: any) => {
+																					<Form.Check type="switch" value={termFeessaveAdd[rowindex].optional_fees} onChange={(e: any) => {
 																						let newFormValues = [...termFeessaveAdd];
-																						newFormValues[rowindex]["optional_fee"] = e.target.checked
+																						newFormValues[rowindex]["optional_fees"] = e.target.checked
 																						setTermFeesSaveAdd(newFormValues)
-																						ShowingTextBox(termFeessaveAdd[rowindex]?.optional_fee ? "1" : JSON.parse(school).term_count, rowindex);
-																					}} id="custom-switch" checked={termFeessaveAdd[rowindex].optional_fee} style={{ position: "relative" }} />
+																						ShowingTextBox(termFeessaveAdd[rowindex]?.optional_fees ? "1" : JSON.parse(school).term_count, rowindex);
+																					}} id="custom-switch" style={{ position: "relative" }} />
 																				</td>
 																				<td>
 																					<Form.Control
@@ -839,7 +846,7 @@ const Yearoffee = () => {
 																				</td>
 																				{
 																					< td className="form-group">
-																						{termFeessaveAdd[rowindex].optional_fee ?
+																						{termFeessaveAdd[rowindex].optional_fees ?
 																							<Form.Select
 																								name="term_count"
 																								value={termFeessaveAdd[rowindex]?.term_fees?.length}
