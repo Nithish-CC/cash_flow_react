@@ -545,7 +545,7 @@ const Yearoffee = () => {
 		values.term_fees.map((value: any, index: any) => {
 			sumoftermFees = sumoftermFees + Number(value.term_amount)
 		})
-		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });
+		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 || n.term_amount === "" });
 
 		if (sumoftermFees === values.fee_amount) {
 			delete values.optional_fees
