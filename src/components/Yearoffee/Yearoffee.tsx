@@ -538,7 +538,7 @@ const Yearoffee = () => {
 		values.grade_id = frontSearchGrade
 		FeeDetailsFinal?.map((value: any) => {
 			if (values.fee_master_id === value.fee_master_id) {
-				values.optional_fee = value.optional_fee
+				values.optional_fee = Boolean(value.optional_fee)
 			}
 		})
 		values.term_count = values.optional_fees ? values.term_count : JSON.parse(school).term_count
