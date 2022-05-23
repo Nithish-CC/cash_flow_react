@@ -241,7 +241,7 @@ const Yearoffee = () => {
 		if (terms > 0) {
 			for (var i = 0; i < terms; i++) {
 				termTitle = "term" + (i + 1)
-				term.push({ "term_name": termTitle, "term_amount": 0 })
+				term.push({ "term_name": termTitle, "term_amount": "" })
 			}
 		}
 
@@ -505,8 +505,7 @@ const Yearoffee = () => {
 			text: "Fee Type Name",
 			sort: true,
 		},
-		{ dataField: "terms[0].optional_fee", text: "Optional Split Fees", sort: true },
-		{ dataField: "terms[0].fee_amount", text: "Fee amount", sort: true },
+		{ dataField: "terms[0].fee_amount", text: "Actual Fee amount", sort: true },
 		{ dataField: "terms.length", text: "Term", sort: true },
 		{
 			dataField: "terms[0].fee_amount", text: "Pay By Terms", formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
@@ -536,17 +535,17 @@ const Yearoffee = () => {
 		let sumoftermFees = 0
 		values.year_id = frontSearchYear
 		values.grade_id = frontSearchGrade
+		values.fee_amount = Number(values.fee_amount)
 		FeeDetailsFinal?.map((value: any) => {
 			if (values.fee_master_id === value.fee_master_id) {
-				values.optional_fee = Boolean(value.optional_fee)
+				values.optional_fee = value.optional_fee === "true" ? true : false
 			}
 		})
-		values.term_count = values.optional_fees ? values.term_count : JSON.parse(school).term_count
 		values.term_fees.map((value: any, index: any) => {
 			sumoftermFees = sumoftermFees + Number(value.term_amount)
 		})
 		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 || n.term_amount === "" });
-
+		values.term_count = values.optional_fees ? values.term_count : values.term_fees.length
 		if (sumoftermFees === values.fee_amount) {
 			delete values.optional_fees
 			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
@@ -803,9 +802,9 @@ const Yearoffee = () => {
 															<thead>
 																<tr role="row"  >
 																	<th className="sorting_asc">Fee Type Name</th>
-																	<th className="sorting_asc">Optional</th>
-																	<th className="sorting">Fee amount</th>
-																	<th className="sorting">Term</th>
+																	<th className="sorting_asc">Split Term Fees</th>
+																	<th className="sorting">Actual Fee amount</th>
+																	<th className="sorting">No of Terms</th>
 																	<th className="text-center">Pay By Terms</th>
 																	<th className="sorting">Action</th>
 																</tr>
@@ -851,7 +850,7 @@ const Yearoffee = () => {
 																						value={termFeessaveAdd[rowindex].fee_amount}
 																						onChange={(e: any) => {
 																							let newFormValues = [...termFeessaveAdd];
-																							newFormValues[rowindex]["fee_amount"] = Number(e.target.value)
+																							newFormValues[rowindex]["fee_amount"] = e.target.value
 																							setTermFeesSaveAdd(newFormValues)
 																						}}
 																					/>
