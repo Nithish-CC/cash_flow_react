@@ -58,6 +58,15 @@ const Navbar = () => {
                                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </NavDropdown.Item>
+                            <NavDropdown.Item
+                                href="#"
+                                className="btn"
+                                onClick={() => {
+                                    history.push("/edit/profile");
+                                }}
+                            >
+                                Edit Profile
+                            </NavDropdown.Item>
                         </NavDropdown>
                     </li>
                 </ul>

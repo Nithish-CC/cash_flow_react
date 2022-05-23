@@ -7,17 +7,12 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 
 
-
-
 const StudentProfile = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
     text: "",
     suggestions: [],
   });
-
-
-  
 
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);

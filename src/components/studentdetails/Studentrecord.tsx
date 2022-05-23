@@ -37,6 +37,8 @@ const Studentrecord = () => {
     {}
   );
   const inputFile: any = useRef();
+  const formData = new FormData();
+  const [FormDatas, setFormData] = useState<any>([]);
   const [show, setShow] = useState(false);
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
@@ -358,6 +360,10 @@ const Studentrecord = () => {
         setGradeMasterParticular(res.data.data[0]);
       })
       .catch((error) => console.log(error));
+    axios.get(`${baseUrl}school`)
+      .then((res: any) => {
+        sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+      })
   }, []);
   useEffect(() => {
     // console.log(gradeSectionList,filterParticularYear,gradeMaster)
@@ -495,7 +501,11 @@ const Studentrecord = () => {
   const onButtonClick = (e: any) => {
     inputFile.current.click();
     console.log(inputFile);
+    formData.append("myFile", uploadFile.selectedFile);
+    setFormData(formData);
   };
+  console.log(FormDatas);
+
   //    console.log(gradeSectionList);
   const handlesection = (sectionList: any, searchInput: any) => {
     setAddGrade("");
@@ -676,7 +686,6 @@ const Studentrecord = () => {
                     </Row>
                   </Container>
                 </div>
-
                 <div className="col-xl-11 text-center">
                   {statusStudentSearch ? (
                     <div>
@@ -726,7 +735,6 @@ const Studentrecord = () => {
                           <a
                             href={require("../../assets/Admission_Download_xlsx.xlsx")}
                             download="Admission_Download_xlsx"
-                            onClick={(e: any) => console.log(e)}
                             className="btn btn-primary"
                             style={{ width: "100px" }}
                           >
@@ -743,12 +751,13 @@ const Studentrecord = () => {
                             onChange={(e: any) => {
                               setUploadFile(e.target.files[0]);
                             }}
+                            accept=".xlsx"
                             ref={inputFile}
                             type="file"
                           />
                           <Button
                             style={{ width: "100px" }}
-                            className=" btn btn-success"
+                            className="btn btn-success"
                             onClick={onButtonClick}
                           >
                             Browse

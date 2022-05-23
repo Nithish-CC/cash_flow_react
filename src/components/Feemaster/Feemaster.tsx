@@ -167,7 +167,8 @@ const Feemaster = () => {
     getAccessToken();
     axios
       .get(`${baseUrl}feeMaster`)
-      .then((res: any) => {        
+
+      .then((res: any) => {
         var sortedObjs = _.sortBy(res.data.data, "order_id");
         sortedObjs.map((data: any, index: any) => {
           data.index = index + 1;
@@ -408,7 +409,7 @@ const Feemaster = () => {
                               <Row>
                                 <Col>
                                   <Button
-                                    style={{ marginLeft: "80%" }}
+                                    style={{ marginLeft: "75%" }}
                                     className="btn btn-secondary"
                                     onClick={() => setStatusFeeMasterAdd(false)}
                                   >
