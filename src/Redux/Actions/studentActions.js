@@ -17,7 +17,6 @@ export const studentDetailsGet = () => async (dispatch) => {
 };
 
 export const studentDetailsPost = (id) => async (dispatch) => {
-  console.log("gaaaan");
   try {
     getAccessToken();
     const response = await axios.post(`${baseUrl}studentProfile`, {
