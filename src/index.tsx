@@ -1,5 +1,7 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
+import store from './redux/store';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Routers from './config/Routers';
@@ -8,7 +10,9 @@ export const baseUrl= "http://3.110.131.173:4000/api/v1/"
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store={store}>
     <Routers/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

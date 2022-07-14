@@ -22,6 +22,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useDispatch, useSelector } from "react-redux";
+import { gettinggradesection } from "../../redux/actions/Gradeactions";
+import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
+
 
 const Grade = () => {
   const [statusGradeAdd, setStatusGradeAdd] = useState(false);
@@ -36,6 +40,10 @@ const Grade = () => {
   let [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
   const [allGrade, setAllGrade] = useState<any[]>([]);
   const [filter, setfilter] = useState<any>([]);
+  const dispatch=useDispatch<any>()
+  const grade=useSelector((state: any)=>state.allgradesections.grades)
+  const master=useSelector((state:any)=>state.setgrademastersections.gradetypes)
+
 
   //Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,13 +51,14 @@ const Grade = () => {
   const [totalButtons, setTotalButtons] = useState(0);
   const [createButtons, setCreateButtons] = useState<any[]>([]);
   const [pageToMove, setPageToMove] = useState(currentPage);
-
+  console.log(getAllAcademicYear)
   //Modal Popup
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
     deleteSection(datatoDelete.id, datatoDelete.index);
   };
+
   const SuddenhandleClose = () => {
     setShow(false);
     setdatatoDelete({});
@@ -124,29 +133,34 @@ const Grade = () => {
       sort: true,
     },
   ];
-  const getAllGradeSectionData = () => {
-    axios
-      .get(`${baseUrl}gradeSection?page=${currentPage}&per_page=${perPage}`)
-      .then((response: AxiosResponse) => {
-        response.data.data.map((data: any, index: any) => {
-          data.index = index + 1;
-        });
-        setStatusList(response.data.data);
-        setCurrentPage(response.data.page);
-        setTotalButtons(response.data.total_page);
-      });
-  };
+  // const getAllGradeSectionData = () => {
+  //   axios
+  //     .get(`${baseUrl}gradeSection?page=${currentPage}&per_page=${perPage}`)
+  //     .then((response: AxiosResponse) => {
+  //       response.data.data.map((data: any, index: any) => {
+  //         data.index = index + 1;
+  //       });
+  //       setStatusList(response.data.data);
+  //       setCurrentPage(response.data.page);
+  //       setTotalButtons(response.data.total_page);
+  //     });
+  // };
 
-  const getAllGrade = () => {
-    axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
-      setAllGrade(res.data.data);
-    });
-  };
+  // const getAllGrade = () => {
+  //   axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
+  //     setAllGrade(res.data.data);
+  //   });
+  // };
+  console.log(allGrade,"udhay")
+  console.log(master,"śaran")
 
   useEffect(() => {
     getAccessToken();
-    getAllGrade();
-    getAllGradeSectionData();
+    // getAllGrade();
+    dispatch(gettinggradesection());
+    dispatch(settinggradesection())
+    // getAllGradeSectionData();
+   
     getAllAcademicYear()
       .then((res: any) => {
         setAllAcademicYear(res.data.data);
@@ -256,7 +270,7 @@ const Grade = () => {
               });
             }
              
-            getAllGradeSectionData();
+            gettinggradesection();
             setDuplication(false);
             setStatusList([])
           })
@@ -289,7 +303,7 @@ const Grade = () => {
             draggable: true,
             progress: undefined,
           });
-          getAllGradeSectionData();
+          gettinggradesection();
         } else if (res.data.data.isDeletable === false) {
           toast.warning(`Data Exist in Year of Fee Master`, {
             position: "top-right",
@@ -302,7 +316,7 @@ const Grade = () => {
           });
         }
         setStatusList([]);
-        getAllGradeSectionData();
+        gettinggradesection();
       })
       .catch((e) => {
         toast.error("Grade & Section Deletion Error", {
@@ -355,7 +369,7 @@ const Grade = () => {
   }, [totalButtons]);
 
   useEffect(() => {
-    getAllGradeSectionData();
+    gettinggradesection();
   }, [perPage, pageToMove]);
 
   function YearId(gradedata: any) {
@@ -366,9 +380,9 @@ const Grade = () => {
         (data) => data.year_id === gradedata.academic_year_id
       );
     var matchedgradeid: any =
-      allGrade &&
-      allGrade.length &&
-      allGrade.filter((data) => data.grade_master_id === gradedata.grade_id);
+    master &&
+    master.length &&
+    master.filter((data:any) => data.grade_master_id === gradedata.grade_id);
     let combindobject = {
       ...gradedata,
       ...matchedyearid[0],
@@ -382,12 +396,12 @@ const Grade = () => {
 
   useEffect(() => {
     finalAcademicYr = [];
-    statusList &&
-      statusList.length &&
-      statusList.map((data: any) => {
+    grade &&
+    grade.length &&
+    grade.map((data: any) => {
         YearId(data);
       });
-  }, [statusList]);
+  }, [grade]);
 
   const datatoFilterNull: any =
     finalAcademicYr &&
@@ -609,9 +623,9 @@ const Grade = () => {
                                 </Form.Label>
                               </Col>
                               <Col sm="6">
-                                {allGrade &&
-                                  allGrade.length &&
-                                  allGrade.map(
+                                {master &&
+                                  master.length &&
+                                  master.map(
                                     (romanvalues: any, index: any) => {
                                       return (
                                         <Form.Check
