@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "../../index";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import { Button, Table, Form, Container, Row, Col, Modal, Spinner } from "react-bootstrap";
@@ -92,23 +91,6 @@ const Year = () => {
         },
     ];
 
-    // const getAllAcademicYear = () => {
-    //     getAccessToken();
-    //     axios
-    //         .get(`${baseUrl}year`)
-    //         .then((res: any) => {
-    //             res.data.data.map((data: any, index: any) => {
-    //                 data.index = index + 1;
-    //             });
-    //             setAllAcademicYear(res.data.data);
-    //             setSpinnerLoad(false);
-    //         })
-    //         .catch((e: any) => {
-    //             console.log(e);
-    //             setSpinnerLoad(false);
-    //         });
-    // };
-
     //Modal Popup
     const [show, setShow] = useState(false);
     const handleClose = () => {
@@ -152,44 +134,6 @@ const Year = () => {
         });
     };
 
-    // const deleteAnAcademicYear = (year: any, index: any) => {
-    //     setSpinnerLoad(true);
-
-    //     getAccessToken();
-    //     axios
-    //         .delete(`${baseUrl}year`, { data: { year_id: year } })
-    //         .then((res: any) => {
-    //             if (res.data.data.isDeletable) {
-    //                 toast.success("Year Deleted Successfully", {
-    //                     position: "top-right",
-    //                     autoClose: 5000,
-    //                     hideProgressBar: false,
-    //                     closeOnClick: true,
-    //                     pauseOnHover: true,
-    //                     draggable: true,
-    //                     progress: undefined,
-    //                 });
-    //                 setdatatoDelete({});
-    //                 // fecthYears();
-    //             } else if (res.data.data.isDeletable === false) {
-    //                 toast.warning("Year Existing in Grade&Section", {
-    //                     position: "top-right",
-    //                     autoClose: 5000,
-    //                     hideProgressBar: false,
-    //                     closeOnClick: true,
-    //                     pauseOnHover: true,
-    //                     draggable: true,
-    //                     progress: undefined,
-    //                 });
-    //                 setSpinnerLoad(false);
-    //                 setdatatoDelete({});
-    //             }
-    //         })
-    //         .catch((e: any) => {
-    //             console.log(e);
-    //         });
-    // };
-
     useEffect(() => {
         dispatch(fecthYears());
         callTheYearUpdater();
@@ -201,44 +145,9 @@ const Year = () => {
 
     const handleSubmit = async (e: any) => {
         if (acdYear.fromYear && acdYear.fromYear.toString().length > 3) {
-            try {
-                dispatch(addYear());
-                // getAccessToken();
-                // const res: any = await axios
-                //     .post(`${baseUrl}year`, {
-                //         academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
-                //     })
-                //     .then((res: any) => {
-                //         console.log(res.data);
-                //         if (res.data.data.insertId) {
-                //             toast.success("Year Added Successfully", {
-                //                 position: "top-right",
-                //                 autoClose: 5000,
-                //                 hideProgressBar: false,
-                //                 closeOnClick: true,
-                //                 pauseOnHover: true,
-                //                 draggable: true,
-                //                 progress: undefined,
-                //             });
-                //         } else {
-                //             toast.warning("Year Already Added", {
-                //                 position: "top-right",
-                //                 autoClose: 5000,
-                //                 hideProgressBar: false,
-                //                 closeOnClick: true,
-                //                 pauseOnHover: true,
-                //                 draggable: true,
-                //                 progress: undefined,
-                //             });
-                //         }
-                //         // fecthYears();
-                //         setStatusAcademicYearAdd(false);
-                //         setDuplication(false);
-                // //     });
-            } catch (err) {
-                setDuplication(false);
-                alert("Error");
-            }
+            getAccessToken();
+            dispatch(addYear(acdYear));
+            setStatusAcademicYearAdd(false);
         } else {
             toast.warning("From Year Not Found", {
                 position: "top-right",
@@ -415,7 +324,6 @@ const Year = () => {
                                                                 }
                                                                 onClick={(e: any) => {
                                                                     setDuplication(true);
-                                                                    dispatch(addYear());
                                                                     handleSubmit(e);
                                                                 }}
                                                             >

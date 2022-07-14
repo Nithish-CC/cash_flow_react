@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "../..";
+import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { ActionTypes } from "../constants/action-types";
 
@@ -8,23 +8,22 @@ export const fecthYears = () => {
     return async function (dispatch, getState) {
         getAccessToken();
         const response = await axios.get(`${baseUrl}year`);
-        console.log(response);
         response.data.data.map((data, index) => {
             data.index = index + 1;
         });
         dispatch({ type: ActionTypes.FETCH_YEARS, payload: response.data });
     };
 };
-export const addYear = (acdYear) => {
-    return async function (dispatch, getState) {
-        getAccessToken();
-        const response = await axios
+
+export const addYear = (acdYear) => async (dispatch) => {
+    try {
+        const res = await axios
             .post(`${baseUrl}year`, {
                 academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
             })
-            .then((response) => {
-                console.log(response.data);
-                if (response.data.data.insertId) {
+            .then((res) => {
+                console.log(res, "lklk");
+                if (res.data.data.insertId) {
                     toast.success("Year Added Successfully", {
                         position: "top-right",
                         autoClose: 5000,
@@ -34,7 +33,6 @@ export const addYear = (acdYear) => {
                         draggable: true,
                         progress: undefined,
                     });
-                    dispatch({ type: ActionTypes.ADD_YEAR, payload: response });
                 } else {
                     toast.warning("Year Already Added", {
                         position: "top-right",
@@ -47,7 +45,12 @@ export const addYear = (acdYear) => {
                     });
                 }
             });
-    };
+        dispatch({
+            type: ActionTypes.ADD_YEAR,
+        });
+    } catch (err) {
+        alert("Error");
+    }
 };
 
 export const deleteYear = (year, index) => {
@@ -66,7 +69,6 @@ export const deleteYear = (year, index) => {
                         draggable: true,
                         progress: undefined,
                     });
-
                     dispatch(fecthYears());
                 } else if (res.data.data.isDeletable === false) {
                     toast.warning("Year Existing in Grade&Section", {
@@ -81,20 +83,7 @@ export const deleteYear = (year, index) => {
                 }
             })
             .catch((e) => {
-                console.log(e);
+                alert("Error");
             });
-        console.log(response);
-    };
-};
-
-export const selectedProduct = (product) => {
-    return {
-        type: ActionTypes.SELECTED_PRODUCT,
-        payload: product,
-    };
-};
-export const removeSelectedProduct = () => {
-    return {
-        type: ActionTypes.REMOVE_SELECTED_PRODUCT,
     };
 };
