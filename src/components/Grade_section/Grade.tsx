@@ -42,7 +42,6 @@ const Grade = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
-    //deleteSection(datatoDelete.id, datatoDelete.index);
     dispatch(deletinggradesection(datatoDelete.id));
   };
 
@@ -131,10 +130,9 @@ const Grade = () => {
         setAcademic_year_data(res.data.data[0].year_id);
       })
       .catch((e: any) => {
-        console.log(e);
+        alert(e);
       });
   }, []);
-
   const handleSubmit = () => {
     if (
       academic_year_data.length <= 0 ||
@@ -195,7 +193,7 @@ const Grade = () => {
                   element.section == res.data.data.data.section &&
                   element.year_id == res.data.data.data.academic_year_id
                 ) {
-                  console.log(element); 
+                   
                   toast.success(
                     `${element.academic_year},${element.grade_master},${element.section} Added`,
                     {

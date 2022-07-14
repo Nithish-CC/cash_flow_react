@@ -5,11 +5,15 @@ import { baseUrl } from "../..";
 import { toast } from "react-toastify";
 
 export const gettinggradesection = () => async (dispatch) => {
-  getAccessToken();
-  const response = await axios.get(`${baseUrl}gradeSection`);
-  response.data.data.map((data, index) => {
-    data.index = index + 1;
-  }, dispatch({ type: Actiontypes.SET_GRADE, payload: response.data.data }));
+  try {
+    getAccessToken();
+    const response = await axios.get(`${baseUrl}gradeSection`);
+    response.data.data.map((data, index) => {
+      data.index = index + 1;
+    }, dispatch({ type: Actiontypes.SET_GRADE, payload: response.data.data }));
+  } catch (err) {
+    alert(err);
+  }
 };
 export const deletinggradesection = (gradeid) => async (dispatch) => {
   getAccessToken();
