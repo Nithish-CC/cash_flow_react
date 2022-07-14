@@ -148,6 +148,7 @@ const Year = () => {
             getAccessToken();
             dispatch(addYear(acdYear));
             setStatusAcademicYearAdd(false);
+            setDuplication(false);
         } else {
             toast.warning("From Year Not Found", {
                 position: "top-right",
