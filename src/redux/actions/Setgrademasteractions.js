@@ -12,5 +12,4 @@ export const settinggradesection = () => async (dispatch) => {
     type: Grademastertypes.SET_GRADE_TYPES,
     payload: grades.data.data,
   });
-  console.log(grades);
 };

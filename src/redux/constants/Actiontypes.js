@@ -1,6 +1,6 @@
 export const Actiontypes = {
   SET_GRADE: "SET_GRADE",
-  REMOVE_SELECTED_PRODUCT: "REMOVE_SELECTED_PRODUCT",
+  DELETE_GRADE: "DELETE_GRADE",
   CREATE_GRADE_SECTION: "CREATE_GRADE_SECTION",
 };
 export const Grademastertypes = {
