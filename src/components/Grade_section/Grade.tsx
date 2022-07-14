@@ -3,53 +3,48 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import {
   Button,
-  Table,
   Pagination,
   Form,
   Col,
   Row,
   Container,
   Modal,
-  Spinner,
 } from "react-bootstrap";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
-import { romanLetters } from "../../utils/romanLetters";
 import { getAllAcademicYear } from "../../Api/year_api";
-// import { getAllGradeSectionAdd } from "../../Api/grade_section";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useDispatch, useSelector } from "react-redux";
+import { deletinggradesection, gettinggradesection } from "../../redux/actions/Gradeactions";
+import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 
 const Grade = () => {
   const [statusGradeAdd, setStatusGradeAdd] = useState(false);
-  const [statusList, setStatusList] = useState<any>([]);
+  
   const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
   const [clickedGrade, setClickedGrade] = useState<any[]>([]);
   const [academic_year_data, setAcademic_year_data] = useState("");
   const [academic_section, setAcademic_section] = useState("");
   const [datatoDelete, setdatatoDelete] = useState<any>({});
-  const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
+  
   const [duplication, setDuplication] = useState(false);
   let [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
-  const [allGrade, setAllGrade] = useState<any[]>([]);
+ 
   const [filter, setfilter] = useState<any>([]);
-
-  //Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(100);
-  const [totalButtons, setTotalButtons] = useState(0);
-  const [createButtons, setCreateButtons] = useState<any[]>([]);
-  const [pageToMove, setPageToMove] = useState(currentPage);
-
+  const dispatch=useDispatch<any>()
+  const grade=useSelector((state: any)=>state.allgradesections.grades)
+  const master=useSelector((state:any)=>state.setgrademastersections.gradetypes)  
   //Modal Popup
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
-    deleteSection(datatoDelete.id, datatoDelete.index);
+    dispatch(deletinggradesection(datatoDelete.id));
   };
+
   const SuddenhandleClose = () => {
     setShow(false);
     setdatatoDelete({});
@@ -124,39 +119,20 @@ const Grade = () => {
       sort: true,
     },
   ];
-  const getAllGradeSectionData = () => {
-    axios
-      .get(`${baseUrl}gradeSection?page=${currentPage}&per_page=${perPage}`)
-      .then((response: AxiosResponse) => {
-        response.data.data.map((data: any, index: any) => {
-          data.index = index + 1;
-        });
-        setStatusList(response.data.data);
-        setCurrentPage(response.data.page);
-        setTotalButtons(response.data.total_page);
-      });
-  };
-
-  const getAllGrade = () => {
-    axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
-      setAllGrade(res.data.data);
-    });
-  };
 
   useEffect(() => {
-    getAccessToken();
-    getAllGrade();
-    getAllGradeSectionData();
+    getAccessToken();    
+    dispatch(gettinggradesection());
+    dispatch(settinggradesection())       
     getAllAcademicYear()
       .then((res: any) => {
         setAllAcademicYear(res.data.data);
         setAcademic_year_data(res.data.data[0].year_id);
       })
       .catch((e: any) => {
-        console.log(e);
+        alert(e);
       });
   }, []);
-
   const handleSubmit = () => {
     if (
       academic_year_data.length <= 0 ||
@@ -217,7 +193,7 @@ const Grade = () => {
                   element.section == res.data.data.data.section &&
                   element.year_id == res.data.data.data.academic_year_id
                 ) {
-                  console.log(element); 
+                   
                   toast.success(
                     `${element.academic_year},${element.grade_master},${element.section} Added`,
                     {
@@ -256,9 +232,9 @@ const Grade = () => {
               });
             }
              
-            getAllGradeSectionData();
+            gettinggradesection();
             setDuplication(false);
-            setStatusList([])
+           
           })
           .catch((err: any) => {
             setDuplication(false);
@@ -271,52 +247,7 @@ const Grade = () => {
      
     }
   };
-  const deleteSection = (gradeid: any, index: any) => {
-    setSpinnerLoad(true);
-    getAccessToken();
-    axios
-      .delete(`${baseUrl}gradeSection?`, {
-        data: { grade_section_id: gradeid },
-      })
-      .then((res: any) => {
-        if (res.data.data.isDeletable === true) {
-          toast.success("Grade & Section Deleted Successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          getAllGradeSectionData();
-        } else if (res.data.data.isDeletable === false) {
-          toast.warning(`Data Exist in Year of Fee Master`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-        setStatusList([]);
-        getAllGradeSectionData();
-      })
-      .catch((e) => {
-        toast.error("Grade & Section Deletion Error", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  };
-
+  
   const callTheAddGrade = (value: any) => {
     let newArr = clickedGrade;
     if (clickedGrade.includes(value)) {
@@ -331,32 +262,6 @@ const Grade = () => {
     setClickedGrade(newArr);
   };
 
-  const timeToCreateButtons = () => {
-    let items: any[] = [];
-    for (let number = 1; number <= totalButtons; number++) {
-      items.push(
-        <Pagination.Item
-          onClick={(e: any) => {
-            setPageToMove(e.target.value);
-          }}
-          value={number}
-          key={number}
-          active={number === currentPage}
-        >
-          {number}
-        </Pagination.Item>
-      );
-    }
-    setCreateButtons(items);
-  };
-
-  useEffect(() => {
-    timeToCreateButtons();
-  }, [totalButtons]);
-
-  useEffect(() => {
-    getAllGradeSectionData();
-  }, [perPage, pageToMove]);
 
   function YearId(gradedata: any) {
     var matchedyearid: any =
@@ -366,28 +271,26 @@ const Grade = () => {
         (data) => data.year_id === gradedata.academic_year_id
       );
     var matchedgradeid: any =
-      allGrade &&
-      allGrade.length &&
-      allGrade.filter((data) => data.grade_master_id === gradedata.grade_id);
+    master &&
+    master.length &&
+    master.filter((data:any) => data.grade_master_id === gradedata.grade_id);
     let combindobject = {
       ...gradedata,
       ...matchedyearid[0],
       ...matchedgradeid[0],
     };
-    // console.log(combindobject);
     finalAcademicYr.push(combindobject);
-    // console.log(finalAcademicYr);
     setFinalAcademicYr(finalAcademicYr);
   }
 
   useEffect(() => {
     finalAcademicYr = [];
-    statusList &&
-      statusList.length &&
-      statusList.map((data: any) => {
+    grade &&
+    grade.length &&
+    grade.map((data: any) => {
         YearId(data);
       });
-  }, [statusList]);
+  }, [grade]);
 
   const datatoFilterNull: any =
     finalAcademicYr &&
@@ -482,38 +385,7 @@ const Grade = () => {
                                 })}
                               />
                             </div>
-                          </div>
-                          <div>
-                            <Row>
-                              <Col sm={4}>
-                                <div>
-                                  {/* <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
-                                                                        <option value="25">25</option>
-                                                                        <option value="30">30</option>
-                                                                        <option value="35">35</option>
-                                                                        <option value="40">40</option>
-                                                                    </Form.Select> */}
-                                </div>
-                              </Col>
-                              {/* <Col sm={4}>
-                                                                <div>
-                                                                    <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
-                                                                        <option value="2">2</option>
-                                                                        <option value="5">5</option>
-                                                                        <option value="10">10</option>
-                                                                        <option value="15">15</option>
-                                                                        <option value="20">20</option>
-                                                                        <option value="25">25</option>
-                                                                    </Form.Select>
-                                                                </div>
-                                                            </Col>
-                                                            <Col sm={8}>
-                                                                <div style={{ display: "flex", marginLeft: "40%", width: "200%" }}>
-                                                                    <Pagination>{createButtons}</Pagination>
-                                                                </div>
-                                                            </Col> */}
-                            </Row>
-                          </div>
+                          </div>                        
                           <Modal show={show} onHide={SuddenhandleClose}>
                             <Modal.Header closeButton>
                               <Modal.Title>
@@ -609,9 +481,9 @@ const Grade = () => {
                                 </Form.Label>
                               </Col>
                               <Col sm="6">
-                                {allGrade &&
-                                  allGrade.length &&
-                                  allGrade.map(
+                                {master &&
+                                  master.length &&
+                                  master.map(
                                     (romanvalues: any, index: any) => {
                                       return (
                                         <Form.Check
