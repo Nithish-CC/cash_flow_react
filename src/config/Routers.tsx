@@ -27,9 +27,9 @@ import RoomNo from "../components/Hostal/RoomNo";
 import HostalFee from "../components/Hostal/HostalFee";
 import Placesspotting from "../components/Transport/Placesspotting";
 import Profile from "../components/setting_page/Profile";
-
 import Optional from "../components/Optional Fees/Optional";
 import Transport from "../components/Transport Fees/Transport";
+
 const PrivateRoute = (props: any) => {
     let history = useHistory<any>();
     const token = sessionStorage.getItem("AccessToken");
