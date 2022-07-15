@@ -1,6 +1,10 @@
 import { combineReducers } from "redux";
-import { yearsReducer, selectedYearsReducer } from "./yearsReducer";
+import { gradeReducer } from "./gradereducers";
+import { setgradeReducer } from "./setgrademasterreducer";
+
 const reducers = combineReducers({
-    allYears: yearsReducer,
+  allgradesections: gradeReducer,
+  setgrademastersections: setgradeReducer,
+  // allYears: yearsReducer,
 });
 export default reducers;

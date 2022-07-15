@@ -57,7 +57,7 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                     </SidebarHeader>
                     <SidebarContent>
                         <Menu iconShape="square">
-                            {console.log(window.location.pathname)}
+                            {/* {console.log(window.location.pathname)} */}
                             <MenuItem icon={<BiTachometer />}>
                                 <Link to="/Dashboard" rel="dashboard">
                                     Dashboard
