@@ -1,9 +1,12 @@
 import axios from "axios";
-import { modeOfTransportTypes } from "../Constants/action-types";
-import { ToastContainer, toast } from "react-toastify";
+import {
+  hostelFeeValues,
+  hostelModeOfTransport,
+  modeOfTransportTypes,
+} from "../Constants/action-types";
+import { toast } from "react-toastify";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../..";
-import { useState } from "react";
 
 export const modeOfTransports = (props, setShow) => async (dispatch) => {
   try {
@@ -38,6 +41,40 @@ export const modeOfTransports = (props, setShow) => async (dispatch) => {
       });
     dispatch({
       type: modeOfTransportTypes.MODE_OF_TRANSPORT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const hostalFeeValueData = (setHostalFeeValue) => async (dispatch) => {
+  try {
+    getAccessToken();
+    const { data } = axios
+      .get(`${baseUrl}modeoftransport/hostal`, {})
+      .then((res) => {
+        setHostalFeeValue(res.data.data);
+        console.log(res.data.data, "hostalvalue");
+      });
+    dispatch({
+      type: hostelFeeValues.HOSTAL_FEE_VALUES,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const hostalModeOfTransportData = (setBusValue) => async (dispatch) => {
+  try {
+    getAccessToken();
+    const { data } = axios.get(`${baseUrl}modeoftransport`, {}).then((res) => {
+      setBusValue(res.data.data);
+      console.log(res.data.data, "Hostelmodeoftran");
+    });
+    dispatch({
+      type: hostelModeOfTransport.HOSTAL_MODE_OF_TRANSPORT,
+      payload: data,
     });
   } catch (error) {
     console.log(error);

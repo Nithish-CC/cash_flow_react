@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button, Row, Col, Spinner, Form } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Table, Button, Col, Spinner, Form } from "react-bootstrap";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { academicFeesStudentDiscountData } from "../../Redux/Actions/academicYearActions";
 
 const Academicfees = (props: any) => {
-  //table status edit
   const urlParams: any = useParams();
   const id = urlParams.id;
 
-  console.log(props.studentDetails.status, "++iss");
-
-  const [updateTableStatus, setUpdateTableStatus] = useState(false);
   const [academicYear, setAcademicYear] = useState<any>([]);
   const [academic, setAcademic] = useState<any>();
   const [total, setTotal] = useState<any>({
@@ -27,27 +25,21 @@ const Academicfees = (props: any) => {
   const [studentdiscount, setstudentdiscount] = useState<any>([]);
   const [spinnerLoad, setSpinnerLoad] = useState<any>(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
-  const [studentdis, setStudentDis] = useState<any>([]);
   const [mergedata, setmergedata] = useState<any[]>([]);
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
-  const [studentdisco, setStudentDisc] = useState<any>([]);
-  const [Yearidd, setYearidd] = useState<any>([]);
   const [editingdiscount, setEditingYearOfFee] = useState<any>({});
   const [discounttype, setDiscounttype] = useState<any>({});
-  const [discou, setdiscou] = useState<any>([]);
   const [discounttt, setdiscounttt] = useState<any>([]);
   const [discountallrecord, setDiscountallrecord] = useState<any>([]);
   const [updateYearOfFee, setUpdateYearOfFee] = useState<any>([]);
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
-  // console.log(admission_id);
   const [termsmaster, setTermsmaster] = useState<any>("Term1");
   const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
   const [finalterms, setFinalterms] = useState<any>([]);
 
-  const mobileNoPattern = /[`@,~,.<>;':"\/\[\]\|{}()-=_+]/;
+  const dispatch = useDispatch<any>();
 
   const handlespechar = (values: any, char: any) => {
-    let text = "123456789!@#$%fgfgdgdfgdfg";
     let pattern = /[^0-9]/g;
     let result = char.toString().match(pattern);
     console.log(result);
@@ -63,28 +55,15 @@ const Academicfees = (props: any) => {
         progress: undefined,
       });
     } else {
-      getAccessToken();
-      axios
-        .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
-          discount_amount: updateYearOfFee,
-          dis_feetype_id: updateDiscountFeeType,
-        })
-        .then((res: any) => {
-          toast.success("Discount amount is saved successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setEditingYearOfFee({});
-          getapi();
-        })
-        .catch((e: any) => {
-          console.log(e);
-        });
+      dispatch(
+        academicFeesStudentDiscountData(
+          updateYearOfFee,
+          updateDiscountFeeType,
+          values,
+          setEditingYearOfFee,
+          getapi
+        )
+      );
     }
   };
   useEffect(() => {

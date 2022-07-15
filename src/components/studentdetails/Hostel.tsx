@@ -1,18 +1,16 @@
-import react from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { baseUrl } from "../../index";
-import axios, { AxiosResponse } from "axios";
-import { getAccessToken } from "../../config/getAccessToken";
-import { Card, Row, Col } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { modeOfTransports } from "../../Redux/Actions/modeOfTransport";
+import { Row, Col } from "react-bootstrap";
+import { ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import {
+  hostalFeeValueData,
+  hostalModeOfTransportData,
+  modeOfTransports,
+} from "../../Redux/Actions/modeOfTransport";
 
 const Hostel = (props: any) => {
-  let history = useHistory();
   const status = props.student_id;
   const year = props.year;
   const grade_id = props.grade;
@@ -20,58 +18,33 @@ const Hostel = (props: any) => {
   const Student_admission_id = props.admissions_id;
   const Transportation = props.transport;
 
-  console.log(props, "Transportation");
-
   const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
   const [lastFourRecord, setLastFourRecord] = useState<any>([]);
   const [FeeMasterId, setFeeMasterId] = useState<any>([]);
-  const [GetFinalMasterData, setGetFinalMasterData] = useState<any>([]);
   const [DisplayFinalData, setDisplayFinalData] = useState<any>([]);
   const [feemaster, setFeemaster] = useState<any>([]);
   const [allAcademicBalance, setAllAcademicBalance] = useState<any>([]);
-  const [hostel, setHostel] = useState<any>(false);
   const [van, setVan] = useState<any>(false);
   const [currentRadioValue, setCurrentValue] = React.useState("");
   const [busValue, setBusValue] = useState<any>([]);
   const [hostalFeeValue, setHostalFeeValue] = useState<any>([]);
-  const [transport, settransport] = useState<any>([]);
-  const [datatoDelete, setdatatoDelete] = useState<any>({});
   const [show, setShow] = useState(false);
-  console.log(currentRadioValue);
-
-  console.log(van);
-
-  const [profileHostel, setProfileHostel] = useState<any>({
-    Hostal: true,
-    mode_of_transport_touched: true,
-    student_admissions_id: 100451,
-    student_id: "2022dddf3d4",
-    section_id: 71,
-    year_id: 32,
-    grade_id: 11,
-  });
 
   const dispatch = useDispatch<any>();
 
-  console.log(hostalFeeValue);
   useEffect(() => {
     setCurrentValue(Transportation);
   }, [Transportation]);
   const checkhostelvalue = () => {
     if (hostalFeeValue && hostalFeeValue.length > 0) {
       let hostelnameId = hostalFeeValue[0].fee_master_id;
-      console.log(hostelnameId);
       return hostelnameId;
     }
   };
 
   const handleShow = () => {
     setShow(true);
-  };
-
-  const SuddenhandleClose = () => {
-    setShow(false);
   };
 
   const handleTrans = (e: any) => {
@@ -114,31 +87,16 @@ const Hostel = (props: any) => {
     dispatch(modeOfTransports(transportRadio, setShow));
   };
   useEffect(() => {}, []);
-  console.log(
-    currentRadioValue,
-    Transportation,
-    Transportation === "Self" ? Transportation : true
-  );
-  console.log(currentRadioValue, "currentRadioValue");
 
   useEffect(() => {
-    getAccessToken();
-    axios.get(`${baseUrl}modeoftransport/hostal`, {}).then((res: any) => {
-      setHostalFeeValue(res.data.data);
-      console.log(res.data.data, "Hostel");
-    });
+    dispatch(hostalFeeValueData(setHostalFeeValue));
   }, []);
 
   useEffect(() => {
-    getAccessToken();
-    axios.get(`${baseUrl}modeoftransport`, {}).then((res: any) => {
-      setBusValue(res.data.data);
-      console.log(res.data.data, "Hostel");
-    });
+    dispatch(hostalModeOfTransportData(setBusValue));
   }, []);
 
   useEffect(() => {
-    console.log(FeeMasterId);
     lastFourRecord &&
       lastFourRecord.length &&
       lastFourRecord.map((data: any) => {
@@ -165,13 +123,9 @@ const Hostel = (props: any) => {
 
   useEffect(() => {
     let AllRoundData: any[] = [];
-    console.log(YearOfBalanceByYear);
 
     if (YearOfBalanceByYear && YearOfBalanceByYear.length > 0) {
-      console.log(YearOfBalanceByYear);
       YearOfBalanceByYear.forEach((allData: any) => {
-        console.log(allData[0]);
-        console.log(allData);
         let newData = allData;
         let ParticularStudentData: any = [];
         let ParticularStudentBalance: any = [];
@@ -190,11 +144,9 @@ const Hostel = (props: any) => {
               if (data && data.hasOwnProperty("balance")) {
                 tempObj.balance = data.balance;
               }
-              console.log(data);
             });
             tempArr.push(tempObj);
           }
-          console.log(tempArr);
           setAllGotFinalData(tempArr);
 
           if (
@@ -211,12 +163,10 @@ const Hostel = (props: any) => {
         ];
         AllRoundData.push(newFinalArr);
       });
-      console.log(AllRoundData);
     } else {
       setAllGotFinalData([]);
     }
   }, [YearOfBalanceByYear]);
-  console.log(allAcademicBalance, "yyyyyyyy");
 
   return (
     <div>
