@@ -6,7 +6,7 @@ import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SubMenu } fr
 //import icons from react icons
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
-import { BiBus,BiHotel,BiTachometer } from "react-icons/bi";
+import { BiBus, BiHotel, BiTachometer } from "react-icons/bi";
 //import sidebar css from react-pro-sidebar module and our custom css
 import "react-pro-sidebar/dist/css/styles.css";
 import "./header.css";
@@ -56,30 +56,76 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                         </div>
                     </SidebarHeader>
                     <SidebarContent>
-                    
                         <Menu iconShape="square">
                             {console.log(window.location.pathname)}
                             <MenuItem icon={<BiTachometer />}>
-                            <Link to="/Dashboard" rel="dashboard">
-                                Dashboard
+                                <Link to="/Dashboard" rel="dashboard">
+                                    Dashboard
                                 </Link>
-                            </MenuItem>                                                        
+                            </MenuItem>
                         </Menu>
-                    
+
                         <Menu iconShape="circle">
-                            <SubMenu  title="Student" icon={<FaChalkboardTeacher />}>
-                              <MenuItem active={window.location.pathname === "/studentrecord"}><Link to="/studentrecord" style={{color:"#3a3b45"}}>Student</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Stu_add"}><Link to="/Stu_add" style={{color:"#3a3b45"}}>New Admission</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Stupro"}><Link to="/Stupro" style={{color:"#3a3b45"}}> Promotion</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Stu_fees"}><Link to="/Stu_fees" style={{color:"#3a3b45"}}>  Year of Fee</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Fee_master"}><Link to="/Fee_master" style={{color:"#3a3b45"}}> Fee Master</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Discounttype"}><Link to="/Discounttype" style={{color:"#3a3b45"}}> Discount Fee Type Master</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Academicyear"}><Link to="/Academicyear" style={{color:"#3a3b45"}}>Year</Link></MenuItem>
-                              <MenuItem active={window.location.pathname === "/Grade_section"}><Link to="/Grade_section" style={{color:"#3a3b45"}}> Grade and Section</Link></MenuItem>
+                            <SubMenu title="Student" icon={<FaChalkboardTeacher />}>
+                                <MenuItem active={window.location.pathname === "/studentrecord"}>
+                                    <Link to="/studentrecord" style={{ color: "#3a3b45" }}>
+                                        Student
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Stu_add"}>
+                                    <Link to="/Stu_add" style={{ color: "#3a3b45" }}>
+                                        New Admission
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Stupro"}>
+                                    <Link to="/Stupro" style={{ color: "#3a3b45" }}>
+                                        {" "}
+                                        Promotion
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Stu_fees"}>
+                                    <Link to="/Stu_fees" style={{ color: "#3a3b45" }}>
+                                        {" "}
+                                        Year of Fee
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Fee_master"}>
+                                    <Link to="/Fee_master" style={{ color: "#3a3b45" }}>
+                                        {" "}
+                                        Fee Master
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Discounttype"}>
+                                    <Link to="/Discounttype" style={{ color: "#3a3b45" }}>
+                                        {" "}
+                                        Discount Fee Type Master
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Academicyear"}>
+                                    <Link to="/Academicyear" style={{ color: "#3a3b45" }}>
+                                        Year
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem active={window.location.pathname === "/Grade_section"}>
+                                    <Link to="/Grade_section" style={{ color: "#3a3b45" }}>
+                                        {" "}
+                                        Grade and Section
+                                    </Link>
+                                </MenuItem>
                             </SubMenu>
                             <SubMenu title="Optional Fees" icon={<FaChalkboardTeacher />}>
-                                <MenuItem active={window.location.pathname === "/Optional_Fees"}><Link to="/optionalfees" style={{color:"#3a3b45"}}>Optional_Fees</Link></MenuItem>
- 
+                                <MenuItem active={window.location.pathname === "/Optional_Fees"}>
+                                    <Link to="/optionalfees" style={{ color: "#3a3b45" }}>
+                                        Optional_Fees
+                                    </Link>
+                                </MenuItem>
+                            </SubMenu>
+                            <SubMenu title="Transport Fees" icon={<FaChalkboardTeacher />}>
+                                <MenuItem active={window.location.pathname === "/Transport_Fees"}>
+                                    <Link to="/Transportfees" style={{ color: "#3a3b45" }}>
+                                        Transport_Fees
+                                    </Link>
+                                </MenuItem>
                             </SubMenu>
                             {/* <SubMenu title="Transport" icon={<BiBus />}>
                                 <MenuItem active={window.location.pathname === "/placesprice"}><Link to="/placesprice"  style={{color:"#3a3b45"}}>Places</Link></MenuItem>
@@ -95,7 +141,7 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                                 <MenuItem active={window.location.pathname === "/hostal_fees"}><Link to="/hostal_fees" style={{color:"#3a3b45"}}> Hostel Fees </Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/room_no"}><Link to="/room_no" style={{color:"#3a3b45"}}>Room No & Capacity </Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/hostal_name"}><Link to="/hostal_name" style={{color:"#3a3b45"}}>Hostal Name</Link></MenuItem> */}
-                                {/* <SubMenu title={`'submenu' 3`}>
+                            {/* <SubMenu title={`'submenu' 3`}>
                                     <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.1 </MenuItem>
                                     <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.2 </MenuItem>
                                     <SubMenu title={`'submenu' 3.3`}>
@@ -106,7 +152,7 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                                 </SubMenu> */}
                             {/* </SubMenu> */}
                         </Menu>
-                    </SidebarContent>                   
+                    </SidebarContent>
                 </ProSidebar>
             </div>
         </>
