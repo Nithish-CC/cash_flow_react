@@ -19,10 +19,6 @@ export const feesDetailsAutosearch = {
   FEES_AUTOSEARCH: "FEES_AUTOSEARCH",
 };
 
-export const feesDetailsFeeMasterId = {
-  FEES_DETAILS_FEE_MASTER_ID: "FEES_DETAILS_FEE_MASTER_ID",
-};
-
 export const feesDetailsLastFourRecord = {
   FEES_DETAILS_LAST_FOUR_RECORDS: "FEES_DETAILS_LAST_FOUR_RECORDS",
 };
@@ -33,4 +29,20 @@ export const academicFeesStudentDiscount = {
 
 export const academicFeesStudentYearPost = {
   ACADEMIC_YEAR_STUDENT_YEAR_POST: "ACADEMIC_YEAR_STUDENT_YEAR_POST",
+};
+
+export const academicFeesSetAcademicYear = {
+  ACADEMIC_FEES_SET_ACADEMIC_YEAR: "ACADEMIC_FES_SET_ACADEMIC_YEAR",
+};
+
+export const academicFeesSetFeeMasterId = {
+  ACADEMIC_FEES_SET_FEE_MASTER_ID: "ACADEMIC_FEES_SET_FEE_MASTER_ID",
+};
+
+export const academicFeesStudentDiscount2 = {
+  ACADEMIC_FEES_STUDENT_DISCOUNT_2: "ACADEMIC_FEES_STUDENT_DISCOUNT_2",
+};
+
+export const academicFeesDiscountType = {
+  ACADEMIC_FEES_DISCOUNT_TYPE: "ACADEMIC_FEES_DISCOUNT_TYPE",
 };

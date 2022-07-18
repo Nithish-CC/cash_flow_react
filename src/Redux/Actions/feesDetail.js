@@ -3,7 +3,6 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../..";
 import {
   feesDetailsAutosearch,
-  feesDetailsFeeMasterId,
   feesDetailsLastFourRecord,
 } from "../Constants/action-types";
 
@@ -21,21 +20,6 @@ export const feesDetailsAutosearchData =
         .dispatch({
           type: feesDetailsAutosearch.FEES_AUTOSEARCH,
         });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-export const feesDetailsFeeMasterIdData =
-  (setFeeMasterId) => async (dispatch) => {
-    try {
-      getAccessToken();
-      axios.get(`${baseUrl}feeMaster`).then((res) => {
-        setFeeMasterId(res.data.data);
-      });
-      dispatch({
-        type: feesDetailsFeeMasterId.FEES_DETAILS_FEE_MASTER_ID,
-      });
     } catch (error) {
       console.log(error);
     }

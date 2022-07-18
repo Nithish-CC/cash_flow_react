@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   feesDetailsAutosearchData,
-  feesDetailsFeeMasterIdData,
   feesDetailsLastFourRecordData,
 } from "../../Redux/Actions/feesDetail";
+import { academicFeesSetFeeMasterId } from "../../Redux/Constants/action-types";
+import { academicFeesSetFeeMasterIdData } from "../../Redux/Actions/academicYearActions";
 const Feesdetails = (props: any) => {
   let history = useHistory();
   const status = props.student_id;
@@ -27,7 +28,7 @@ const Feesdetails = (props: any) => {
   useEffect(() => {
     if (status && status.toString().length > 0) {
       dispatch(feesDetailsAutosearchData(status, setYearOfBalanceByYearOnly));
-      dispatch(feesDetailsFeeMasterIdData(setFeeMasterId));
+      dispatch(academicFeesSetFeeMasterIdData(setFeeMasterId));
     }
     if (
       status &&

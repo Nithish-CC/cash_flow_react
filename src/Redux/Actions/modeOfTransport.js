@@ -49,12 +49,10 @@ export const modeOfTransports = (props, setShow) => async (dispatch) => {
 export const hostalFeeValueData = (setHostalFeeValue) => async (dispatch) => {
   try {
     getAccessToken();
-    const { data } = axios
-      .get(`${baseUrl}modeoftransport/hostal`, {})
-      .then((res) => {
-        setHostalFeeValue(res.data.data);
-        console.log(res.data.data, "hostalvalue");
-      });
+    const {
+      data: { data },
+    } = await axios.get(`${baseUrl}modeoftransport/hostal`, {});
+    console.log(data, "hostalvalue");
     dispatch({
       type: hostelFeeValues.HOSTAL_FEE_VALUES,
       payload: data,
@@ -67,10 +65,10 @@ export const hostalFeeValueData = (setHostalFeeValue) => async (dispatch) => {
 export const hostalModeOfTransportData = (setBusValue) => async (dispatch) => {
   try {
     getAccessToken();
-    const { data } = axios.get(`${baseUrl}modeoftransport`, {}).then((res) => {
-      setBusValue(res.data.data);
-      console.log(res.data.data, "Hostelmodeoftran");
-    });
+    const {
+      data: { data },
+    } = await axios.get(`${baseUrl}modeoftransport`, {});
+    console.log(data, "Hostelmodeoftran");
     dispatch({
       type: hostelModeOfTransport.HOSTAL_MODE_OF_TRANSPORT,
       payload: data,

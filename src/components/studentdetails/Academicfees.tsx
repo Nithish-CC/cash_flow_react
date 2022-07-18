@@ -6,9 +6,13 @@ import axios from "axios";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  academicFeesDiscountTypeData,
+  academicFeesSetAcademicYearData,
+  academicFeesSetFeeMasterIdData,
   academicFeesStudentDiscountData,
+  academicfeesStudentDiscountData2,
   academicYearStudentYearData,
 } from "../../Redux/Actions/academicYearActions";
 
@@ -41,11 +45,17 @@ const Academicfees = (props: any) => {
   const [finalterms, setFinalterms] = useState<any>([]);
 
   const dispatch = useDispatch<any>();
+  const discountType = useSelector(
+    (state: any) => state.studentDetailsGet.academicFeesDiscountTypeRed
+  );
+
+  const feeId = useSelector(
+    (state: any) => state.studentDetailsGet.feesDetails_SetFeeMasterId
+  );
 
   const handlespechar = (values: any, char: any) => {
     let pattern = /[^0-9]/g;
     let result = char.toString().match(pattern);
-    console.log(result);
 
     if (result && result.length >= 1) {
       toast.warning("Enter only Number", {
@@ -61,7 +71,7 @@ const Academicfees = (props: any) => {
       dispatch(
         academicFeesStudentDiscountData(
           updateYearOfFee,
-          updateDiscountFeeType,
+          discountType,
           values,
           setEditingYearOfFee,
           getapi
@@ -102,42 +112,30 @@ const Academicfees = (props: any) => {
     dispatch(
       academicYearStudentYearData(id, setAcademic, setAcademicYear, student_id)
     );
-    getAccessToken();
-    console.log(student_id);
-    axios
-      .post(`${baseUrl}studentyear`, {
-        student_admissions_id: Number(id),
-        student_id: student_id,
-      })
-      .then((res: any) => {
-        setAcademic(res.data.data);
-        setAcademicYear(res.data.data[0].year_id);
-      })
-      .catch((e: any) => {});
+    dispatch(
+      academicFeesSetAcademicYearData(
+        id,
+        student_id,
+        setAcademic,
+        setAcademicYear
+      )
+    );
   };
 
   const feemaster = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}feeMaster`).then((res: any) => {
-      setfeemasterid(res.data.data);
-    });
+    dispatch(academicFeesSetFeeMasterIdData(setfeemasterid));
   };
   const getapi = () => {
     setSpinnerLoad(true);
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentdiscount`, {
-        student_admissions_id: Number(id),
-        year_id: Number(academicYear),
-        term_name: termsmaster,
-      })
-      .then((res: any) => {
-        setstudentdiscount(res.data.data);
-        setSpinnerLoad(false);
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
+    dispatch(
+      academicfeesStudentDiscountData2(
+        id,
+        academicYear,
+        termsmaster,
+        setstudentdiscount,
+        setSpinnerLoad
+      )
+    );
   };
   function studentyear(gradedata: any) {
     var matchedyearid: any =
@@ -153,20 +151,22 @@ const Academicfees = (props: any) => {
   }
 
   const discountname = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}discountfee`).then((res: any) => {
-      setDiscounttype(res.data.data);
-      setUpdateDiscountFeeType(res.data.data[1].dis_feetype_id);
-    });
+    dispatch(academicFeesDiscountTypeData());
   };
+
+  useEffect(() => {
+    if (discountType && discountType.length && discountType[1]) {
+      setUpdateDiscountFeeType(discountType[1].dis_feetype_id);
+    }
+  }, [discountname]);
 
   const updateDiscount = (values: any) => {};
 
   function setdiscountt(gdata: any) {
     var matcheddiscou: any =
-      discounttype &&
-      discounttype.length &&
-      discounttype.filter(
+      discountType &&
+      discountType.length &&
+      discountType.filter(
         (data: any) => data.dis_feetype_id === gdata.dis_feetype_id
       );
     let margedat = { ...matcheddiscou[0], ...gdata };
@@ -187,8 +187,6 @@ const Academicfees = (props: any) => {
     let Total_discount = 0;
     let Total_balance = 0;
     discountallrecord.map((value: any) => {
-      console.log(value, "rewrfewrfwe");
-
       Total_initial_fees = Number(value.term_amount) + Total_initial_fees;
       Total_balance = Number(value.balance) + Total_balance;
       Total_discount = value.discount_amount + Total_discount;
@@ -203,14 +201,13 @@ const Academicfees = (props: any) => {
   useEffect(() => {
     Total();
   }, [discountallrecord]);
+
   useEffect(() => {
     getAccessToken();
     axios
       .get(`${baseUrl}school`)
       .then((res: any) => {
-        console.log(res.data.data);
         setGotSchoolDetails(res.data.data);
-        console.log(res.data.data);
       })
       .catch((e: any) => {
         console.log(e);
@@ -219,8 +216,6 @@ const Academicfees = (props: any) => {
 
   useEffect(() => {
     ShowingTermsValue(gotSchoolDetails);
-
-    console.log(gotSchoolDetails.max_count, "--08098098");
   }, [gotSchoolDetails]);
 
   const ShowingTermsValue = (termsss: any) => {
@@ -228,19 +223,26 @@ const Academicfees = (props: any) => {
       termsss &&
         termsss.length &&
         termsss.map((terms: any) => {
-          console.log(terms);
-
           let termscount = [];
           for (var i = 1; i <= terms.max_count; i++) {
-            console.log("Terms" + i, "----");
-
             termscount.push("Term" + i);
           }
-
           setFinalterms(termscount);
         });
     }
   };
+
+  feeId &&
+    feeId.length &&
+    feeId.map((value: any) => {
+      discountallrecord &&
+        discountallrecord.length &&
+        discountallrecord.map((feeTypeName: any) => {
+          if (feeTypeName.fee_master_id === value.fee_master_id)
+            feeTypeName.fee_type_name = value.fee_type_name;
+        });
+    });
+
   return (
     <div>
       <ToastContainer
@@ -356,14 +358,14 @@ const Academicfees = (props: any) => {
                               ) : (
                                 <td>
                                   <Form.Select
-                                    value={updateDiscountFeeType}
+                                    value={discountType}
                                     onChange={(e) =>
                                       setUpdateDiscountFeeType(e.target.value)
                                     }
                                   >
-                                    {discounttype &&
-                                      discounttype.length &&
-                                      discounttype.map((value: any, i: any) => {
+                                    {discountType &&
+                                      discountType.length &&
+                                      discountType.map((value: any, i: any) => {
                                         return (
                                           <>
                                             {value.dis_feetype_name !==
