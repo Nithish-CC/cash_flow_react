@@ -26,7 +26,6 @@ export const modeOfTransports = (props, setShow) => async (dispatch) => {
             progress: undefined,
           });
           setShow(false);
-          console.log(response);
         } else if (res.data.data.IsExsist === "year") {
           toast.warning(res.data.message, {
             position: "top-right",

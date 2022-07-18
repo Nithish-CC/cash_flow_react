@@ -30,3 +30,7 @@ export const feesDetailsLastFourRecord = {
 export const academicFeesStudentDiscount = {
   ACADEMIC_FEES_STUD_DISCOUNT: "ACADEMIC_FEES_STUD_DISCOUNT",
 };
+
+export const academicFeesStudentYearPost = {
+  ACADEMIC_YEAR_STUDENT_YEAR_POST: "ACADEMIC_YEAR_STUDENT_YEAR_POST",
+};

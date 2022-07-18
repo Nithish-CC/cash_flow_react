@@ -1,6 +1,11 @@
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../..";
+import {
+  feesDetailsAutosearch,
+  feesDetailsFeeMasterId,
+  feesDetailsLastFourRecord,
+} from "../Constants/action-types";
 
 export const feesDetailsAutosearchData =
   (status, setYearOfBalanceByYearOnly) => async (dispatch) => {
@@ -13,21 +18,27 @@ export const feesDetailsAutosearchData =
         .then((res) => {
           setYearOfBalanceByYearOnly(res.data);
         })
-        .catch((err) => console.log(err));
-    } catch (error) {}
+        .dispatch({
+          type: feesDetailsAutosearch.FEES_AUTOSEARCH,
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 export const feesDetailsFeeMasterIdData =
   (setFeeMasterId) => async (dispatch) => {
     try {
       getAccessToken();
-      axios
-        .get(`${baseUrl}feeMaster`)
-        .then((res) => {
-          setFeeMasterId(res.data.data);
-        })
-        .catch((err) => console.log(err));
-    } catch (error) {}
+      axios.get(`${baseUrl}feeMaster`).then((res) => {
+        setFeeMasterId(res.data.data);
+      });
+      dispatch({
+        type: feesDetailsFeeMasterId.FEES_DETAILS_FEE_MASTER_ID,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 export const feesDetailsLastFourRecordData =
@@ -40,7 +51,11 @@ export const feesDetailsLastFourRecordData =
         })
         .then((res) => {
           setLastFourRecord(res.data.data);
-        })
-        .catch((err) => console.log(err));
-    } catch (error) {}
+        });
+      dispatch({
+        type: feesDetailsLastFourRecord.FEES_DETAILS_LAST_FOUR_RECORDS,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
