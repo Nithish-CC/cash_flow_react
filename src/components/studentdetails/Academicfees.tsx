@@ -7,7 +7,10 @@ import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { academicFeesStudentDiscountData } from "../../Redux/Actions/academicYearActions";
+import {
+  academicFeesStudentDiscountData,
+  academicYearStudentYearData,
+} from "../../Redux/Actions/academicYearActions";
 
 const Academicfees = (props: any) => {
   const urlParams: any = useParams();
@@ -96,6 +99,9 @@ const Academicfees = (props: any) => {
   useEffect(() => {}, []);
 
   const yearacademic = () => {
+    dispatch(
+      academicYearStudentYearData(id, setAcademic, setAcademicYear, student_id)
+    );
     getAccessToken();
     console.log(student_id);
     axios
