@@ -43,9 +43,10 @@ const Transport = () => {
         {
             fee_amount: null,
             fee_master_id: null,
-            grade_id: 0,
+            grade_id: [0],
             optional_fee: false,
             optional_fees: false,
+            year_id: 0,
             term_count: JSON.parse(school)?.term_count,
             term_fees: [
                 {
@@ -53,7 +54,6 @@ const Transport = () => {
                     term_amount: "",
                 },
             ],
-            year_id: 0,
         },
     ]);
     const [finalTerms, setFinalterms] = useState<any>([]);
@@ -76,9 +76,7 @@ const Transport = () => {
         setShow(false);
         setdatatoDelete({});
     };
-    const handleShow = () => {
-        setShow(true);
-    };
+
     const callTheAddGrade = (value: any) => {
         let newArr = clickedGrade;
         if (clickedGrade.includes(value)) {
@@ -136,20 +134,7 @@ const Transport = () => {
             })
             .catch((error) => console.log(error));
     }, []);
-    useEffect(() => {
-        getAccessToken();
-        axios
-            .post(`${baseUrl}yearOffee/create_transport`, {
-                grade_id: Number(searchGradeId),
-                fee_amount: amount,
-                year_id: Number(searchAcademicYear),
-                fee_master_id: Number(feeTypeName),
-            })
-            .then((res: any) => {
-                console.log(res.data.data);
-            })
-            .catch((error) => console.log(error));
-    }, []);
+
     useEffect(() => {
         if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
             setAcademicYear(feeMaster[0].academic_year);
@@ -231,7 +216,7 @@ const Transport = () => {
         getAccessToken();
         axios
             .post(`${baseUrl}transportval`, {
-                grade_id: grade_id,
+                grade_id: [grade_id],
                 year_id: year_id,
             })
             .then((res: any) => {
@@ -270,135 +255,6 @@ const Transport = () => {
         setFinalterms(termscount);
     };
 
-    const handleSubmit = () => {
-        let newfeeTypeName = feeTypeName.toString();
-        if (amount.length <= 0 || searchGradeId.length <= 0 || searchAcademicYear.length <= 0 || newfeeTypeName.length <= 0) {
-            if (amount.length <= 0) {
-                toast.warning("Enter Amount", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                setDuplication(false);
-            } else if (searchGradeId.length <= 0) {
-                toast.warning("Enter Grade", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                setDuplication(false);
-            } else if (newfeeTypeName.length <= 0) {
-                toast.warning("Enter Fee Type Name", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                setDuplication(false);
-            } else if (searchAcademicYear.length <= 0) {
-                toast.warning("Enter Academic Year", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                setDuplication(false);
-            }
-        } else {
-            getAccessToken();
-            axios
-                .post(`${baseUrl}yearOffee/create_new_yearfee`, {
-                    grade_id: Number(searchGradeId),
-                    fee_amount: amount,
-                    year_id: Number(searchAcademicYear),
-                    fee_master_id: Number(feeTypeName),
-                })
-                .then((res: any) => {
-                    if (res.data.data.IsExsist == true) {
-                        toast.warning("Year of Fee Already Added", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    } else {
-                        toast.success("Year Of Fee Added", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    }
-                    setStatusFeeDetailsAdd(false);
-                    setFinalAmount("");
-                    getAllGrade();
-                    getAllFeeMasterData();
-                    list_fee_details(frontSearchYear, frontSearchGrade);
-                    setDuplication(false);
-                })
-                .catch((error: any) => {
-                    setDuplication(false);
-                    setFinalAmount("");
-                    getAllGrade();
-                    getAllFeeMasterData();
-                });
-        }
-    };
-    const updatingYearOfFee = () => {
-        if (updateYearOfFee.length <= 0) {
-            toast.warning("Enter Amount", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        } else {
-            getAccessToken();
-            axios
-                .put(`${baseUrl}yearOffee/${editingYearOfFee.yearoffeesid}`, {
-                    fee_amount: updateYearOfFee,
-                })
-                .then((res: any) => {
-                    if (res.data.data === "Updated Succesfully") {
-                        toast.success("Year oF Fee Updated Successsfully", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                        setEditingYearOfFee({});
-                        setUpdateYearOfFee("");
-                        list_fee_details(frontSearchYear, frontSearchGrade);
-                    }
-                });
-        }
-    };
     const deleteParticularDiscount = (fee_master_id: any) => {
         getAccessToken();
         axios
@@ -561,7 +417,7 @@ const Transport = () => {
     const handleSave = (values: any) => {
         let sumoftermFees = 0;
         values.year_id = frontSearchYear;
-        values.grade_id = frontSearchGrade;
+        values.grade_id = [frontSearchGrade];
         FeeDetailsFinal?.map((value: any) => {
             if (values.fee_master_id === value.fee_master_id) {
                 values.optional_fee = value.optional_fee === "true" ? true : false;
@@ -577,7 +433,7 @@ const Transport = () => {
         if (sumoftermFees === values.fee_amount) {
             delete values.optional_fees;
             axios
-                .post(`${baseUrl}yearOffee/create_new_yearfee`, values)
+                .post(`${baseUrl}transportval/create_transport`, values)
                 .then((res: any) => {
                     if (res.data.message.includes("Year of Fee already present")) {
                         toast.warning(res.data.message, {

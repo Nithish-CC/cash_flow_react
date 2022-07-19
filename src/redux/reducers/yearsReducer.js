@@ -1,14 +1,14 @@
 import { ActionTypes } from "../constants/action-types";
 const intialState = {
-    products: [],
+    years: [],
 };
 
 export const yearsReducer = (state = intialState, { type, payload }) => {
     switch (type) {
         case ActionTypes.FETCH_YEARS:
-            return { ...state, products: payload };
+            return { ...state, years: payload };
         case ActionTypes.DELETE_YEAR:
-            return { ...state, products: payload };
+            return { ...state, years: payload };
         default:
             return state;
     }

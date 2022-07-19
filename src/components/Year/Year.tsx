@@ -25,7 +25,7 @@ const Year = () => {
     const [duplication, setDuplication] = useState(false);
 
     const dispatch = useDispatch<any>();
-    const year = useSelector((state: any) => state.allYears.products);
+    const year = useSelector((state: any) => state.allYears.years);
     const history = useHistory();
     const location = useLocation();
 
