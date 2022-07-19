@@ -9,15 +9,15 @@ import {
   Container,
   Modal,
 } from "react-bootstrap";
-import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
-import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch, useSelector } from "react-redux";
 import { deletinggradesection, gettinggradesection,postinggradeactions } from "../../redux/actions/Gradeactions";
+import { fecthYears } from "../../redux/actions/yearsActions";
+import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 
 const Grade = () => {
   const [statusGradeAdd, setStatusGradeAdd] = useState(false);
@@ -30,6 +30,8 @@ const Grade = () => {
   const grade=useSelector((state: any)=>state.allgradesections.grades)
   const master=useSelector((state:any)=>state.setgrademastersections.gradetypes)  
   const year=useSelector((state:any)=>state.allYears.years.data)
+  const finalresult=useSelector((state: any)=>state.allgradesections.year_grade_section )
+ 
   
   const [academic_year_data, setAcademic_year_data] = useState("");
  useEffect(()=>{
@@ -46,7 +48,6 @@ const Grade = () => {
 
   };
  
-
   const SuddenhandleClose = () => {
     setShow(false);
     setdatatoDelete({});
@@ -55,7 +56,6 @@ const Grade = () => {
     setShow(true);
   };
   
-
   const paginate = [
     {
       text: "5",
@@ -86,7 +86,7 @@ const Grade = () => {
     },
     {
       dataField: "academic_year",
-      text: "Discount Fee Type Name",
+      text: "Academic Year",
       sort: true,
     },
     {
@@ -122,11 +122,14 @@ const Grade = () => {
       sort: true,
     },
   ];
-
+  useEffect(() => {    
+    dispatch(gettinggradesection(year, master));  
+   }, [ year, master]);
   useEffect(() => {
-    getAccessToken();
-    dispatch(gettinggradesection());
+    dispatch(settinggradesection());
+    dispatch(fecthYears());    
   }, []);
+   
   const handleSubmit =async (e:any) => {       
     if (      
       academic_year_data.length <= 0 ||
@@ -180,10 +183,7 @@ const Grade = () => {
       });
       setStatusGradeAdd(false);
       setTimeout( ()=>    dispatch(gettinggradesection())
-      , 500);
-
-
-     // window.location.reload()
+      , 600);
       setClickedGrade([]);
       setAcademic_year_data(year[0].year_id);
       setAcademic_section("");             
@@ -203,16 +203,10 @@ const Grade = () => {
     }
     setClickedGrade(newArr);
   };
-
-
-  
-
-
-
   const datatoFilterNull: any =
-    grade &&
-    grade.length &&
-    grade.sort().map((data: any) => {
+  finalresult &&
+  finalresult.length &&
+  finalresult.sort().map((data: any) => {
       let keys = Object.keys(data);
       keys.map((key: any) => {
         data[key] = data[key] == null ? "" : data[key];
@@ -222,7 +216,7 @@ const Grade = () => {
 
   const dataSearchBar: any =
     datatoFilterNull &&
-    datatoFilterNull.length &&
+    datatoFilterNull?.length &&
     datatoFilterNull.sort().filter((data: any) => {
       return Object.keys(data).some((key) =>  
         data[key]
@@ -231,24 +225,6 @@ const Grade = () => {
           .includes(filter.toString().toLowerCase())
       );
     });
-   grade &&
-    grade.length &&
-    grade.map((value:any ) => {//index
-      year &&
-      year.length &&
-        year.map((years:any) => {
-          if (years.year_id === value.academic_year_id)
-            
-            value.academic_year = years.academic_year;
-        });      master &&
-        master.length &&
-        master.map((grades:any) => {
-          if (grades.grade_master_id === value.grade_id)
-            
-            value.grade_master = grades.grade_master;
-        });        
-      })
-
   return (
     <div>
       <div id="page-top">
@@ -258,7 +234,7 @@ const Grade = () => {
             <div id="content">
               <Navbar></Navbar>
               <div className="container-fluid">
-                <div className="col-xl-11 m-auto">
+                <div className="col-xl-12 m-auto">
                   <div
                     className="col-lg-10"
                     style={{ marginLeft: "10%", width: "90%" }}
@@ -305,9 +281,8 @@ const Grade = () => {
                                 </Form.Label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-sm-12">
+                          
+                        
                               <BootstrapTable
                                 keyField="index"
                                 data={dataSearchBar}
@@ -316,10 +291,11 @@ const Grade = () => {
                                 striped
                                 pagination={paginationFactory({
                                   sizePerPageList: paginate,
+                                  
                                 })}
                               />
-                            </div>
-                          </div>                        
+                              </div>
+                                               
                           <Modal show={show} onHide={SuddenhandleClose}>
                             <Modal.Header closeButton>
                               <Modal.Title>
