@@ -217,7 +217,6 @@ const Grade = () => {
                   element.section == res.data.data.data.section &&
                   element.year_id == res.data.data.data.academic_year_id
                 ) {
-                  console.log(element);
                   toast.success(
                     `${element.academic_year},${element.grade_master},${element.section} Added`,
                     {

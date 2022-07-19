@@ -6,18 +6,25 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useDispatch } from "react-redux";
+import {
+  listOfPaymentstudentAllPayBalanceData,
+  listOfPaymentStudentYearPostData,
+} from "../../Redux/Actions/listOfPaymentRed";
 
 const Listofpayment = (props: any) => {
   const studentdeta = props.studentdetails;
   const [academicyear, setAcademicyear] = useState<any>([]);
   const [payments, setPayments] = useState<any>([]);
   const [academicYearId, setAcademicYearId] = useState<any>([]);
-  
+
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
   const [mergedata, setmergedata] = useState<any>([]);
   const [filter, setfilter] = useState<any>([]);
   const urlParams: any = useParams();
   const id = urlParams.id;
+
+  const dispatch = useDispatch<any>();
 
   const paginate = [
     { text: "5", value: 5 },
@@ -28,25 +35,15 @@ const Listofpayment = (props: any) => {
   ];
 
   useEffect(() => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentyear`, { student_id: id })
-      .then((response: any) => {
-        setAcademicyear(response.data.data);
-        setAcademicYearId(response.data.data[0].year_id);
-      });
+    dispatch(
+      listOfPaymentStudentYearPostData(id, setAcademicyear, setAcademicYearId)
+    );
   }, []);
 
   useEffect(() => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentAllPayBalance`, {
-        student_id: id,
-        year_id: academicYearId,
-      })
-      .then((res: any) => {
-        setPayments(res.data.data);
-      });
+    dispatch(
+      listOfPaymentstudentAllPayBalanceData(id, academicYearId, setPayments)
+    );
   }, [academicYearId]);
 
   const col: any = [
@@ -57,12 +54,11 @@ const Listofpayment = (props: any) => {
       sort: true,
     },
     { dataField: "actual_fees", text: "Actual Fees", sort: true },
-    // { dataField: "amount_paid", text: "Cum_Amount", sort: true },
     { dataField: "cum_amt", text: "Paid", sort: true },
     { dataField: "refund", text: "Refund Amount", sort: true },
     { dataField: "discount", text: "Discount", sort: true },
     { dataField: "comments", text: "Comments", sort: true },
-  ];  
+  ];
 
   useEffect(() => {
     payments && payments.length
@@ -114,10 +110,6 @@ const Listofpayment = (props: any) => {
           <div className="card-header text-center">
             <h6 className="m-0 text-danger">List of Payment</h6>
           </div>
-
-          {/* <div className="card-header text-center">
-						<h6 className="m-0 text-danger">Under Construction {`\u{1F6A7}`}</h6>
-					</div> */}
           {studentdeta &&
             studentdeta.length &&
             studentdeta.map((values: any) => {

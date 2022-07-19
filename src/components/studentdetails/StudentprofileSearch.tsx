@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
@@ -15,13 +10,14 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Hostel from "./Hostel";
+import { useDispatch } from "react-redux";
+import { studentDetailsPost } from "../../Redux/Actions/studentProfileSearchActions";
 
 const StudentprofileSearch = () => {
   //To Make Edit
   let history = useHistory();
   const urlParams: any = useParams();
   const id = urlParams.id;
-  console.log(id);
   const [search, setSearch] = useState<any>({
     text: "",
     suggestions: [],
@@ -41,6 +37,8 @@ const StudentprofileSearch = () => {
   const [FinalSectionIdData, setFinalSectionIdData] = useState<any>([]);
   const [sectionFilter, setSectionFilter] = useState<any>([]);
   const mobileNoPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+  const dispatch = useDispatch<any>();
 
   const onTextChanged = (e: any) => {
     const value = e.target.value;
@@ -62,33 +60,23 @@ const StudentprofileSearch = () => {
       suggestions: [],
     });
   };
-  const { suggestions } = search;
+
   const searchData = () => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentProfile`, { student_admissions_id: Number(id) })
-      .then((response: AxiosResponse) => {
-        setStatusStudentDetails(response.data.data[0]);
-        // setStatusStudentDetailsData(response.data.data)
-        setStatusStudentDetailsData(response.data.data[0].grade_id);
-        console.log(response.data.data[0]);
-      });
+    dispatch(
+      studentDetailsPost(
+        id,
+        setStatusStudentDetails,
+        setStatusStudentDetailsData
+      )
+    );
   };
 
   useEffect(() => {
-    // if(statusStudentDetails && statusStudentDetails.length ){
     searchData();
-    // }
   }, []);
   useEffect(() => {
     axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
       setAllSection(res.data.data);
-      // console.log(res.data.data);
-      // console.log(statusStudentDetails);
-      // setGradeSectionList(res.data.data);
-      // setGradeSectionListAdd(res.data.data);
-      // setFrontSearchGrade(res.data.data[0].grade_id);
-      // setSearchGradeId(res.data.data[0].grade_id);
     });
   }, []);
   useEffect(() => {
@@ -97,15 +85,11 @@ const StudentprofileSearch = () => {
     }
   }, [StatusStudentDetailsData, AllSection]);
   function SectionId(Sectiondata: any) {
-    // console.log(AllSection,"sectionidata");
     var matchedyearid: any =
       AllSection &&
       AllSection.length &&
       AllSection.filter((data: any) => data.grade_id === Sectiondata);
-    // console.log(matchedyearid,"section");
     return FinalSectionId(matchedyearid, statusStudentDetails.academic_year_id);
-    // let combindobject = { ...Sectiondata, ...matchedyearid[0] };
-    // GetFinalYearData.push(combindobject);
   }
   function FinalSectionId(get: any, Year: any) {
     var matchedyearidfinal: any =
@@ -113,33 +97,7 @@ const StudentprofileSearch = () => {
       get.length &&
       get.filter((data: any) => data.academic_year_id === Year);
     setFinalSectionIdData(matchedyearidfinal);
-    // setFinalSectionIdData(matchedyearidfinal[0]);
-    // console.log(matchedyearidfinal,"Year_id");
   }
-  // const searchedit = () => {
-  //     axios
-  //         .put(`${baseUrl}studentProfile/${id}`, {
-  //             student_name: statusStudentDetails.student_name,
-  //             grade_section_id:Number( sectionFilter),
-  //             father_name: statusStudentDetails.father_name,
-  //             student_id: statusStudentDetails.student_id,
-  //             phone_number: statusStudentDetails.phone_number,
-  //             alt_phone_number: statusStudentDetails.alt_phone_number,
-  //             address: statusStudentDetails.address,
-  //             email: statusStudentDetails.email,
-  //             status: UpdateProfileActive,
-  //             admission_no: statusStudentDetails.admission_no,
-  //         })
-  //         .then((response: AxiosResponse) => {
-  //             setStatusStudentDetails(response.data);
-  // 			setStatusStudentEdit(false)
-  // 			searchData()
-  // 			setUpdateProfileActive("");
-  //         })
-  //         .catch((error) => {
-  //             alert(error);
-  //         });
-  // };
   const onClear = () => {
     setStatusStudentSearch("");
   };
@@ -147,11 +105,6 @@ const StudentprofileSearch = () => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
-  console.log(statusStudentDetails.alt_phone_number);
-  console.log(statusStudentDetails.phone_number);
-  console.log(mobileNoPattern);
-  // console.log( statusStudentDetails.alt_phone_number.toString().match(mobileNoPattern) ===
-  // statusStudentDetails.phone_number.toString().match(mobileNoPattern));
 
   const searchedit = () => {
     if (
@@ -206,8 +159,6 @@ const StudentprofileSearch = () => {
         });
     }
   };
-
-  console.log(statusStudentDetails, "studentid");
 
   return (
     <div id="page-top">

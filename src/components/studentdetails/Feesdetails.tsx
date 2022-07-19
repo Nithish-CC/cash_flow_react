@@ -28,7 +28,7 @@ const Feesdetails = (props: any) => {
   useEffect(() => {
     if (status && status.toString().length > 0) {
       dispatch(feesDetailsAutosearchData(status, setYearOfBalanceByYearOnly));
-      dispatch(academicFeesSetFeeMasterIdData(setFeeMasterId));
+      dispatch(academicFeesSetFeeMasterIdData());
     }
     if (
       status &&

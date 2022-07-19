@@ -4,6 +4,7 @@ import { baseUrl } from "../..";
 import { toast } from "react-toastify";
 import {
   academicFeesDiscountType,
+  academicFeesSchoolDetails,
   academicFeesSetFeeMasterId,
   academicFeesStudentDiscount,
   academicFeesStudentDiscount2,
@@ -18,7 +19,7 @@ export const academicFeesStudentDiscountData =
     setEditingYearOfFee,
     getapi
   ) =>
-  async (dispatch) => {
+  async () => {
     try {
       getAccessToken();
       axios
@@ -46,7 +47,7 @@ export const academicFeesStudentDiscountData =
   };
 
 export const academicYearStudentYearData =
-  (id, setAcademic, setAcademicYear, student_id) => async (dispatch) => {
+  (id, setAcademic, setAcademicYear, student_id) => async () => {
     getAccessToken();
     axios
       .post(`${baseUrl}studentyear`, {
@@ -63,7 +64,7 @@ export const academicYearStudentYearData =
   };
 
 export const academicFeesSetAcademicYearData =
-  (id, student_id, setAcademic, setAcademicYear) => async (dispatch) => {
+  (id, student_id, setAcademic, setAcademicYear) => async () => {
     getAccessToken();
     axios
       .post(`${baseUrl}studentyear`, {
@@ -79,25 +80,24 @@ export const academicFeesSetAcademicYearData =
       });
   };
 
-export const academicFeesSetFeeMasterIdData =
-  (setfeemasterid) => async (dispatch) => {
-    try {
-      getAccessToken();
-      const {
-        data: { data },
-      } = await axios.get(`${baseUrl}feeMaster`);
-      dispatch({
-        type: academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID,
-        payload: data,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const academicFeesSetFeeMasterIdData = () => async (dispatch) => {
+  try {
+    getAccessToken();
+    const {
+      data: { data },
+    } = await axios.get(`${baseUrl}feeMaster`);
+    dispatch({
+      type: academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const academicfeesStudentDiscountData2 =
   (id, academicYear, termsmaster, setstudentdiscount, setSpinnerLoad) =>
-  async (dispatch) => {
+  async () => {
     getAccessToken();
     axios
       .post(`${baseUrl}studentdiscount`, {
@@ -122,6 +122,21 @@ export const academicFeesDiscountTypeData = () => async (dispatch) => {
     } = await axios.get(`${baseUrl}discountfee`);
     dispatch({
       type: academicFeesDiscountType.ACADEMIC_FEES_DISCOUNT_TYPE,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const academicFeesSchoolDetailsData = () => async (dispatch) => {
+  try {
+    getAccessToken();
+    const {
+      data: { data },
+    } = await axios.get(`${baseUrl}school`);
+    dispatch({
+      type: academicFeesSchoolDetails.ACADEMIC_FEES_SCHOOL_DETAILS,
       payload: data,
     });
   } catch (error) {

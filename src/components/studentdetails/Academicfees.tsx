@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   academicFeesDiscountTypeData,
+  academicFeesSchoolDetailsData,
   academicFeesSetAcademicYearData,
   academicFeesSetFeeMasterIdData,
   academicFeesStudentDiscountData,
@@ -123,7 +124,7 @@ const Academicfees = (props: any) => {
   };
 
   const feemaster = () => {
-    dispatch(academicFeesSetFeeMasterIdData(setfeemasterid));
+    dispatch(academicFeesSetFeeMasterIdData());
   };
   const getapi = () => {
     setSpinnerLoad(true);
@@ -203,15 +204,7 @@ const Academicfees = (props: any) => {
   }, [discountallrecord]);
 
   useEffect(() => {
-    getAccessToken();
-    axios
-      .get(`${baseUrl}school`)
-      .then((res: any) => {
-        setGotSchoolDetails(res.data.data);
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
+    dispatch(academicFeesSchoolDetailsData());
   }, []);
 
   useEffect(() => {

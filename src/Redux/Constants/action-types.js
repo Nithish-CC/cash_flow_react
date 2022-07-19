@@ -46,3 +46,40 @@ export const academicFeesStudentDiscount2 = {
 export const academicFeesDiscountType = {
   ACADEMIC_FEES_DISCOUNT_TYPE: "ACADEMIC_FEES_DISCOUNT_TYPE",
 };
+
+export const listOfPaymentStudentYearPost = {
+  LIST_OF_PAYMENT_STUDENT_YEAR_POST: "LIST_OF_PAYMENT_STUDENT_YEAR_POST",
+};
+
+export const listOfPaymentstudentAllPayBalance = {
+  LIST_OF_PAYMENT_STUDENT_ALL_PAY_BALANCE:
+    "LIST_OF_PAYMENT_STUDENT_ALL_PAY_BALANCE",
+};
+
+export const studentPayAutosearch = {
+  STUDENT_PAY_AUTOSEARCH: "STUDENT_PAY_AUTOSEARCH",
+};
+
+export const studentPayFeemaster = {
+  STUDENT_PAY_FEEMASTER: "STUDENT_PAY_FEEMASTER",
+};
+
+export const studentPayTermsChange = {
+  STUDENT_PAY_TERMS_CHANGE: "STUDENT_PAY_TERMS_CHANGE",
+};
+
+export const studentPayHandleBalance = {
+  STUDENT_PAY_HANDLE_BALANCE: "STUDENT_PAY_HANDLE_BALANCE",
+};
+
+export const studentPayUpdatestudentBalance = {
+  STUDENT_PAY_UPDATE_STUDENT_BALANCE: "STUDENT_PAY_UPDATE_STUDENT_BALANCE",
+};
+
+export const academicFeesSchoolDetails = {
+  ACADEMIC_FEES_SCHOOL_DETAILS: "ACADEMIC_FEES_SCHOOL_DETAILS",
+};
+
+export const studentPayUpdatestudentBalance2 = {
+  STUDENT_PAY_UPDATE_STUDENT_BALANCE_2: "STUDENT_PAY_UPDATE_STUDENT_BALANCE_2",
+};

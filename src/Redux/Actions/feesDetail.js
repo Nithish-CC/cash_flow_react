@@ -7,7 +7,7 @@ import {
 } from "../Constants/action-types";
 
 export const feesDetailsAutosearchData =
-  (status, setYearOfBalanceByYearOnly) => async (dispatch) => {
+  (status, setYearOfBalanceByYearOnly) => async () => {
     try {
       getAccessToken();
       axios

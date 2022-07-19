@@ -1,9 +1,11 @@
 import {
   academicFeesDiscountType,
+  academicFeesSchoolDetails,
   academicFeesSetFeeMasterId,
   ActionTypes,
   hostelFeeValues,
   hostelModeOfTransport,
+  studentPayFeemaster,
 } from "../Constants/action-types";
 
 const initialState = {
@@ -13,6 +15,8 @@ const initialState = {
   hostelTransport: {},
   feesDetails_SetFeeMasterId: {},
   academicFeesDiscountTypeRed: {},
+  studentPayfeeMasterRed: {},
+  academicFeesSchoolDetailsRed: {},
 };
 
 export const studentReducerGet = (state = initialState, { type, payload }) => {
@@ -29,6 +33,10 @@ export const studentReducerGet = (state = initialState, { type, payload }) => {
       return { ...state, feesDetails_SetFeeMasterId: payload };
     case academicFeesDiscountType.ACADEMIC_FEES_DISCOUNT_TYPE:
       return { ...state, academicFeesDiscountTypeRed: payload };
+    case studentPayFeemaster.STUDENT_PAY_FEEMASTER:
+      return { ...state, studentPayfeeMasterRed: payload };
+    case academicFeesSchoolDetails.ACADEMIC_FEES_SCHOOL_DETAILS:
+      return { ...state, academicFeesSchoolDetailsRed: payload };
     default:
       return state;
   }

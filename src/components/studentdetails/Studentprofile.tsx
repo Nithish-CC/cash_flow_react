@@ -6,7 +6,6 @@ import Academicfees from "./Academicfees";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 
-
 const StudentProfile = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
@@ -16,29 +15,29 @@ const StudentProfile = () => {
 
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
-  const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>({});
+  const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>(
+    {}
+  );
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
 
-
   const [alterPhoneno, setAlterPhoneno] = useState<any>("");
-
-  console.log(statusStudentDetails)
 
   const onTextChanged = (e: any) => {
     const value = e.target.value;
     setStatusStudentSearch(value);
-    let suggestions:any = {};
+    let suggestions: any = {};
     if (value.length > 0) {
       const regex = new RegExp(`^${value}`, "i");
-      suggestions = statusStudentDetails.sort().filter((v:any) => regex.test(v.student_admissions_id));
+      suggestions = statusStudentDetails
+        .sort()
+        .filter((v: any) => regex.test(v.student_admissions_id));
     }
     setIsComponentVisible(true);
     setSearch({ suggestions, text: value });
   };
-  
 
-  const suggestionSelected = (value:any) => {
+  const suggestionSelected = (value: any) => {
     setIsComponentVisible(false);
 
     setSearch({
@@ -46,10 +45,6 @@ const StudentProfile = () => {
       suggestions: [],
     });
   };
-
-  const { suggestions } = search;
-
-  
 
   const searchData = () => {
     axios
@@ -98,11 +93,9 @@ const StudentProfile = () => {
   const handleChangeMobileAlter = (e: any) => {
     const re = /^[0-9\b]+$/; //rules
     if (e.target.value === "" || re.test(e.target.value)) {
-        setAlterPhoneno(e.target.value);
+      setAlterPhoneno(e.target.value);
     }
-};
-
-  // console.log(statusStudentDetails)
+  };
 
   return (
     <div id="page-top">
@@ -123,9 +116,9 @@ const StudentProfile = () => {
                           placeholder="Search for..."
                           aria-label="Search"
                           aria-describedby="basic-addon2"
-                           style={{ width: "480px" }} 
-                            // value={search.text}
-                           onChange={onTextChanged}
+                          style={{ width: "480px" }}
+                          // value={search.text}
+                          onChange={onTextChanged}
                         />
 
                         {/* {suggestions.length > 0 && isComponentVisible && (
@@ -183,7 +176,7 @@ const StudentProfile = () => {
                                     <Col md={5}>
                                       <i
                                         className="fa fa-save btn"
-                                        onClick={()=>searchedit()}
+                                        onClick={() => searchedit()}
                                         style={{
                                           fontSize: "25px",
                                           color: "red",
@@ -361,12 +354,10 @@ const StudentProfile = () => {
                                     </div>
                                   ) : (
                                     <Form.Control
-                                    
-                                      onChange={(e:any) => {
-                                          
-                                          setAlterPhoneno(e.target.value);
-                                          setAlterPhoneno(alterPhoneno)
-                                    }}
+                                      onChange={(e: any) => {
+                                        setAlterPhoneno(e.target.value);
+                                        setAlterPhoneno(alterPhoneno);
+                                      }}
                                       type="text"
                                       name="phone_number"
                                       value={statusStudentDetails.phone_number}
@@ -390,11 +381,10 @@ const StudentProfile = () => {
                                     </div>
                                   ) : (
                                     <Form.Control
-                                    onChange={(e:any) => {
-                                          
-                                      setAlterPhoneno(e.target.value);
-                                      setAlterPhoneno(alterPhoneno)
-                                }}
+                                      onChange={(e: any) => {
+                                        setAlterPhoneno(e.target.value);
+                                        setAlterPhoneno(alterPhoneno);
+                                      }}
                                       type="text"
                                       name="alt_phone_number"
                                       value={

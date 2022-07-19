@@ -1,28 +1,34 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Listofpayment from "./Listofpayment";
-import { Button, Row, Col, Table, Form } from "react-bootstrap";
+import { Button, Table, Form } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import "./index.css";
-import { useHistory, useParams } from "react-router-dom";
-import { values } from "lodash";
+import { useParams } from "react-router-dom";
 import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-import { Right } from "react-bootstrap/lib/Media";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  studentPayAutosearchData,
+  studentPayFeemasterData,
+  studentPayHandleBalanceData,
+  studentPayTermsChangeData,
+  studentPayUpdateStudentBalanceData,
+  studentPayUpdateStudentBalanceData2,
+} from "../../Redux/Actions/studentPayReducer";
+import { academicFeesSchoolDetailsData } from "../../Redux/Actions/academicYearActions";
+
 const Studentpay = () => {
-  const [RefundTableStatus, setRefundTableStatus] = useState(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
   const [searchResultData, setMainSearch] = useState<any>([]);
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
-  const [priceChange, setPriceChange] = useState(0);
   const [paymentDetails, setPaymentDetails] = useState<any>([]);
-  const [newDate, setNewDate] = useState<any>(new Date());
   const [AllDetailsOfStudent, setAllDetailsOfStudent] = useState<any>([]);
   const [buttonDisable, setButtonDisable] = useState(false);
   const [admissionidd, setadmissionsid] = useState<any>([]);
@@ -35,30 +41,21 @@ const Studentpay = () => {
 
   const [amountTextBox, setAmountTextBox] = useState<any>([]);
 
-  console.log(amountTextBox, "rewrewrwerwe");
-
-  console.log(termsmaster, "4444444");
+  const dispatch = useDispatch<any>();
 
   const urlParams: any = useParams();
-  const id = urlParams.id;
   const year = urlParams.year;
-  console.log(year);
-  console.log(allGotFinalData);
   const ShowingTextBox = (terms: any) => {
     let Textbox = [];
-    console.log(terms);
     if (terms > 0) {
       for (var i = 0; i < terms; i++) {
-        console.log(i);
         Textbox.push(i);
       }
-      console.log(Textbox);
     }
 
     setTermsTextBox(Textbox);
   };
 
-  //For Refund Initiate
   const [refundSwitch, setRefundSwitch] = useState(false);
 
   useEffect(() => {
@@ -71,16 +68,11 @@ const Studentpay = () => {
     let AllRoundData: any[] = [];
     let resultantData: any[] = [];
     if (searchResultData && searchResultData.length > 0) {
-      //console.log(searchResultData);
       searchResultData.forEach((allData: any) => {
-        //	console.log(allData[0]);
-        //	console.log(allData[1]);
         let newData = allData[1];
-        console.log(newData);
         let ParticularStudentData: any = [];
         let ParticularStudentBalance: any = [];
         newData.forEach((element: any) => {
-          console.log(element);
           if (element && element.balance >= 0) {
             ParticularStudentBalance.push({ Allbalance: element.balance });
           }
@@ -108,24 +100,19 @@ const Studentpay = () => {
             element.studentData &&
             Object.keys(element.studentData).length > 0
           ) {
-            console.log(element.studentData);
             resultantData.push(element.studentData);
             if (ParticularStudentData && ParticularStudentData.length == 0) {
               ParticularStudentData.push(element.studentData);
-              //	console.log(element.studentData)
             }
           }
         });
 
-        console.log(ParticularStudentBalance);
         let newFinalArr = [
           { ...ParticularStudentBalance[0], ...ParticularStudentData[0] },
         ];
         AllRoundData.push(newData[0]);
-        console.log(newFinalArr);
         setAllDetailsOfStudent([...ParticularStudentBalance, ...newFinalArr]);
       });
-      //	console.log(AllRoundData);
       setAllGotFinalData(resultantData);
       handleGetAllData(resultantData);
       setPaymentDetails(resultantData);
@@ -149,10 +136,6 @@ const Studentpay = () => {
       setmodeOfPayRefundChange(modeOfPaymentStart);
       setcommentChange(commentsStart);
       setcommentRefundChange(commentsStart);
-      //	console.log(AllRoundData)
-      // console.log(searchResultData[0]);
-      // console.log(searchResultData[0][0]);
-      // console.log(searchResultData[0][1]);
     } else {
       setAllGotFinalData([]);
     }
@@ -167,7 +150,6 @@ const Studentpay = () => {
   };
 
   const callStudentData = () => {
-    //setIsComponentVisible(false);
     let academicYear = urlParams.year;
     let searchBy = urlParams.id;
     if (academicYear && academicYear.length > 0) {
@@ -178,18 +160,15 @@ const Studentpay = () => {
           academicYear &&
           academicYear.length > 0
         ) {
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              searchby: searchBy,
-              academic_year: academicYear,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-
-              setadmissionsid(response.data.data[0][0]);
-              console.log(response.data.data);
-              termsChange(response.data.data[0][1][1].studentData, "term1");
-            });
+          dispatch(
+            studentPayAutosearchData(
+              searchBy,
+              academicYear,
+              setMainSearch,
+              setadmissionsid,
+              termsChange
+            )
+          );
         }
       }
     } else {
@@ -210,16 +189,12 @@ const Studentpay = () => {
     var sortedObjs = _.sortBy(SortByOrder, "index");
     setPriceDateChange(sortedObjs);
   };
-  console.log(priceDateChange);
   useEffect(() => {
     feemaster();
   }, []);
 
   const feemaster = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}feeMaster`).then((res: any) => {
-      setfeemasterid(res.data.data);
-    });
+    dispatch(studentPayFeemasterData(setfeemasterid));
   };
 
   const [priceRefundDateChange, setPriceRefundDateChange] = useState<any>([]);
@@ -248,7 +223,6 @@ const Studentpay = () => {
     var sortedObjs = _.sortBy(SortByOrder, "index");
     setmodeOFPaymnetChange(sortedObjs);
   };
-  console.log(modeOFPaymnetChange);
 
   const [modeOfPayRefundChange, setmodeOfPayRefundChange] = useState<any>([]);
   const handlemodeOfPayRefundChange = (value: any) => {
@@ -262,7 +236,6 @@ const Studentpay = () => {
     var sortedObjs = _.sortBy(SortByOrder, "index");
     setmodeOfPayRefundChange(sortedObjs);
   };
-  console.log(modeOfPayRefundChange);
 
   //======================Handle Mode Of Comment Change=================================//
   const [commentChange, setcommentChange] = useState<any>([]);
@@ -277,7 +250,6 @@ const Studentpay = () => {
     var sortedObjs = _.sortBy(SortByOrder, "index");
     setcommentChange(sortedObjs);
   };
-  console.log(commentChange);
 
   const [commentRefundChange, setcommentRefundChange] = useState<any>([]);
   const handleRefundCommentChange = (value: any) => {
@@ -291,7 +263,7 @@ const Studentpay = () => {
     var sortedObjs = _.sortBy(SortByOrder, "index");
     setcommentRefundChange(sortedObjs);
   };
-  console.log(commentRefundChange);
+
   //=====================Handle Balance================================//
   const [priceArr, setPriceArr] = useState<any>([]);
 
@@ -313,7 +285,6 @@ const Studentpay = () => {
   if (amountTextBox.length > 0) {
     setAmountTextBox(priceArr[0].amoundTyped);
   }
-  console.log(priceArr);
 
   //==============================Handle Redund====================================//
   const [priceRefundArr, setPriceRefundArr] = useState<any>([]);
@@ -332,7 +303,6 @@ const Studentpay = () => {
       setPriceRefundArr(sortedObjsRefund);
     }
   };
-  console.log(priceRefundArr);
 
   //============================================Sending to API============================//
 
@@ -345,25 +315,11 @@ const Studentpay = () => {
   };
 
   const termsChange = (student: any, terms: any) => {
-    console.log(student, "454");
-
-    axios
-      .post(`${baseUrl}payment`, {
-        student_id: student.student_id,
-        year_id: student.year_id,
-        term_name: terms,
-      })
-      .then((response: AxiosResponse) => {
-        setPayment(response.data.data);
-      });
+    dispatch(studentPayTermsChangeData(student, terms, setPayment));
   };
 
   //Handle Balance
   const handleBalance = () => {
-    let text = "123456789!@#$%fgfgdgdfgdfg";
-    let pattern = /[^0-9]/g;
-    let result = priceArr.toString().match(pattern);
-    console.log(result);
     setButtonDisable(true);
     let SendBalace = priceArr;
     let FeetempArr: any[] = [];
@@ -389,39 +345,23 @@ const Studentpay = () => {
       alert("Please Enter Amount");
       setButtonDisable(false);
     } else {
-      console.log(FeetempArr);
-      getAccessToken();
-      axios
-        .put(`${baseUrl}updateStudentBalance`, {
-          data: FeetempArr,
-        })
-        .then((response: AxiosResponse) => {
-          console.log(response.data.data);
-          toast.success("Payment Success", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          windowReload();
-        })
-        .catch((err: any) => {
-          setButtonDisable(false);
-          toast.warning("something went wrong", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        });
+      dispatch(
+        studentPayHandleBalanceData(
+          FeetempArr,
+          toast,
+          windowReload,
+          setButtonDisable
+        )
+      );
+      dispatch(
+        studentPayUpdateStudentBalanceData(
+          FeetempArr,
+          toast,
+          windowReload,
+          setButtonDisable
+        )
+      );
     }
-    console.log(FeetempArr);
   };
 
   //Handle Refund
@@ -445,52 +385,18 @@ const Studentpay = () => {
       alert("Please Enter Amount");
       setButtonDisable(false);
     } else {
-      console.log(FeetempArr);
-      getAccessToken();
-      axios
-        .put(`${baseUrl}updateStudentBalance`, {
-          data: FeetempArr,
-        })
-        .then((response: AxiosResponse) => {
-          console.log(response.data.data);
-          toast.success("Refund  Success", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          windowReload();
-        })
-        .catch((err: any) => {
-          setButtonDisable(false);
-          toast.warning("something went wrong", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        });
+      dispatch(
+        studentPayUpdateStudentBalanceData2(
+          FeetempArr,
+          toast,
+          windowReload,
+          setButtonDisable
+        )
+      );
     }
-    console.log(FeetempArr);
   };
   useEffect(() => {
-    getAccessToken();
-    axios
-      .get(`${baseUrl}school`)
-      .then((res: any) => {
-        console.log(res.data.data);
-        setGotSchoolDetails(res.data.data);
-        console.log(res.data.data);
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
+    dispatch(academicFeesSchoolDetailsData());
   }, []);
 
   useEffect(() => {
@@ -504,21 +410,12 @@ const Studentpay = () => {
         gotSchoolDetails.map((terms: any) => {
           let termscount = [];
           for (var i = 1; i <= terms.max_count; i++) {
-            console.log("Terms" + i, "----");
-
             termscount.push("Term" + i);
           }
-          console.log(termscount);
           setFinalterms(termscount);
         });
     }
   };
-  //  const termscount = gotSchoolDetails[0].term_count;
-
-  // 	for(var i=0; i<termscount; i++){
-  // console.log(i);
-
-  // 	}
   //============================End of Api===================================//
   return (
     <div>
@@ -615,7 +512,7 @@ const Studentpay = () => {
                         )}
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-8 col-sm-12 col-xs-8">
                           <Table striped bordered hover>
                             <thead>
                               <tr>
@@ -629,8 +526,6 @@ const Studentpay = () => {
                               {AllDetailsOfStudent &&
                                 AllDetailsOfStudent.length &&
                                 AllDetailsOfStudent.map((values: any) => {
-                                  console.log(AllDetailsOfStudent);
-
                                   if (
                                     values.student_name ||
                                     values.admission_no ||
@@ -682,7 +577,7 @@ const Studentpay = () => {
                             </tbody>
                           </Table>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4 col-xs-4">
                           <Table striped bordered hover>
                             <thead>
                               <tr>
