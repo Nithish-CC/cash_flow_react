@@ -216,7 +216,7 @@ const Transport = () => {
         getAccessToken();
         axios
             .post(`${baseUrl}transportval`, {
-                grade_id: [grade_id],
+                grade_id: grade_id,
                 year_id: year_id,
             })
             .then((res: any) => {
@@ -417,7 +417,7 @@ const Transport = () => {
     const handleSave = (values: any) => {
         let sumoftermFees = 0;
         values.year_id = frontSearchYear;
-        values.grade_id = [frontSearchGrade];
+        values.grade_id = frontSearchGrade;
         FeeDetailsFinal?.map((value: any) => {
             if (values.fee_master_id === value.fee_master_id) {
                 values.optional_fee = value.optional_fee === "true" ? true : false;
