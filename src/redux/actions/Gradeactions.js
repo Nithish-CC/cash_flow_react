@@ -1,8 +1,8 @@
-import { Actiontypes } from "../constants/Actiontypes";
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../..";
 import { toast } from "react-toastify";
+import { ActionTypes } from "../constants/action-types";
 
 export const gettinggradesection = (year, master) => async (dispatch) => {
   try {
@@ -11,7 +11,7 @@ export const gettinggradesection = (year, master) => async (dispatch) => {
 
     response.data.data.map((data, index) => {
       data.index = index + 1;
-    }, dispatch({ type: Actiontypes.SET_GRADE, payload: response.data.data }));
+    }, dispatch({ type: ActionTypes.SET_GRADE, payload: response.data.data }));
     dispatch(settinggradeaction(response.data.data, year, master));
   } catch (err) {
     alert(err);
@@ -119,7 +119,7 @@ export const settinggradeaction = (grade, year, master) => async (dispatch) => {
             if (grades.grade_master_id === value.grade_id) value.grade_master = grades.grade_master;
           });
       });
-    dispatch({ type: Actiontypes.SET_GRADE_YEAR, payload: grade });
+    dispatch({ type: ActionTypes.SET_GRADE_YEAR, payload: grade });
   } catch (err) {
     alert(err);
   }

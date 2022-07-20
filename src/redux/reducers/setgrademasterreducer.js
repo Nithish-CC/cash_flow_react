@@ -1,4 +1,4 @@
-import { Grademastertypes } from "../constants/Actiontypes";
+import { Grademastertypes } from "../constants/action-types";
 
 const initialState = {
   gradetypes: [],
