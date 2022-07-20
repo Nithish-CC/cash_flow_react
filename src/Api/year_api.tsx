@@ -1,6 +1,6 @@
-import { getAccessToken } from "../config/getAccessToken";
+import { getAccessToken } from "../config/getAccessToken"; 
 import axios from "axios";
-import {baseUrl} from "../index"
+import { baseUrl } from ".."; 
 
 export const getAllAcademicYear  = async() => {
         getAccessToken();
