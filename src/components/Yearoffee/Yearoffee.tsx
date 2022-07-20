@@ -95,7 +95,6 @@ const Yearoffee = () => {
 	};
 
 	const getAllGrade = () => {
-		getAllFeeMasterData();
 		axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
 			setAllGrade(res.data.data);
 			setGradeSectionList(res.data.data);
@@ -106,7 +105,6 @@ const Yearoffee = () => {
 	};
 
 	useEffect(() => {
-		getAllFeeMasterData();
 		getAccessToken();
 		axios
 			.get(`${baseUrl}grademaster`)
@@ -116,20 +114,7 @@ const Yearoffee = () => {
 			})
 			.catch((error) => console.log(error));
 	}, []);
-	useEffect(() => {
-		getAccessToken();
-		axios
-			.post(`${baseUrl}yearOffee/create_new_yearfee`, {
-				grade_id: Number(searchGradeId),
-				fee_amount: amount,
-				year_id: Number(searchAcademicYear),
-				fee_master_id: Number(feeTypeName),
-			})
-			.then((res: any) => {
-				console.log(res.data.data, "Optional");
-			})
-			.catch((error) => console.log(error));
-	}, []);
+
 	useEffect(() => {
 		// console.log(gradeSectionList,filterParticularYear,gradeMaster)
 		if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
@@ -241,7 +226,7 @@ const Yearoffee = () => {
 		if (terms > 0) {
 			for (var i = 0; i < terms; i++) {
 				termTitle = "term" + (i + 1)
-				term.push({ "term_name": termTitle, "term_amount": 0 })
+				term.push({ "term_name": termTitle, "term_amount": "" })
 			}
 		}
 
@@ -264,138 +249,7 @@ const Yearoffee = () => {
 		}
 		setFinalterms(termscount);
 	}
-
-	const handleSubmit = () => {
-		let newfeeTypeName = feeTypeName.toString();
-		if (amount.length <= 0 || searchGradeId.length <= 0 || searchAcademicYear.length <= 0 || newfeeTypeName.length <= 0) {
-			if (amount.length <= 0) {
-				toast.warning("Enter Amount", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-				setDuplication(false);
-			} else if (searchGradeId.length <= 0) {
-				toast.warning("Enter Grade", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-				setDuplication(false);
-			} else if (newfeeTypeName.length <= 0) {
-				toast.warning("Enter Fee Type Name", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-				setDuplication(false);
-			} else if (searchAcademicYear.length <= 0) {
-				toast.warning("Enter Academic Year", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-				setDuplication(false);
-			}
-		} else {
-			//alert("entered sub");
-			getAccessToken();
-			axios
-				.post(`${baseUrl}yearOffee/create_new_yearfee`, {
-					grade_id: Number(searchGradeId),
-					fee_amount: amount,
-					year_id: Number(searchAcademicYear),
-					fee_master_id: Number(feeTypeName),
-				})
-				.then((res: any) => {
-					if (res.data.data.IsExsist == true) {
-						toast.warning("Year of Fee Already Added", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
-					} else {
-						toast.success("Year Of Fee Added", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
-					}
-					setStatusFeeDetailsAdd(false);
-					setFinalAmount("");
-					getAllGrade();
-					getAllFeeMasterData();
-					list_fee_details(frontSearchYear, frontSearchGrade);
-					setDuplication(false);
-				})
-				.catch((error: any) => {
-					setDuplication(false);
-					setFinalAmount("");
-					getAllGrade();
-					getAllFeeMasterData();
-				});
-		}
-	};
-	const updatingYearOfFee = () => {
-		if (updateYearOfFee.length <= 0) {
-			toast.warning("Enter Amount", {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
-		} else {
-			getAccessToken();
-			axios
-				.put(`${baseUrl}yearOffee/${editingYearOfFee.yearoffeesid}`, {
-					fee_amount: updateYearOfFee,
-				})
-				.then((res: any) => {
-					console.log(res.data);
-					if (res.data.data === "Updated Succesfully") {
-						toast.success("Year oF Fee Updated Successsfully", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
-						setEditingYearOfFee({});
-						setUpdateYearOfFee("");
-						list_fee_details(frontSearchYear, frontSearchGrade);
-					}
-				});
-		}
-	};
+	
 	const deleteParticularDiscount = (fee_master_id: any) => {
 		getAccessToken();
 		axios

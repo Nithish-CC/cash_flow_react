@@ -1,8 +1,8 @@
-import { getAccessToken } from "../config/getAccessToken";
+import { getAccessToken } from "../config/getAccessToken"; 
 import axios from "axios";
-import {baseUrl} from "../index"
+import { baseUrl } from ".."; 
 
-export const getAllAcademicYear = () => {
+export const getAllAcademicYear  = async() => {
         getAccessToken();
-      return  axios.get(`${baseUrl}year`)  
+      return await axios.get(`${baseUrl}year`)  
 };
