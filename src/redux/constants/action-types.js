@@ -3,3 +3,7 @@ export const ActionTypes = {
     ADD_YEAR: "ADD_YEAR",
     DELETE_YEAR: "DELETE_YEAR",
 };
+export const TransportTypes = {
+    FETCH_TRANSPORT_FEES: "FETCH_TRANSPORT_FEES",
+    DELETE_TRANSPORT_FEES: "DELETE_TRANSPORT_FEES",
+};

@@ -10,6 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTransportFees, fecthTransportFees } from "../../redux/actions/transportActions";
+import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
+import { fecthYears } from "../../redux/actions/yearsActions";
 const Transport = () => {
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
     const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -23,7 +27,7 @@ const Transport = () => {
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
     const [searchGradeId, setSearchGradeId] = useState("");
-    const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
+    const [feeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
     const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
     const [gradeSectionList, setGradeSectionList] = useState<any>([]);
     const [academicYear, setAcademicYear] = useState<any>("");
@@ -56,6 +60,11 @@ const Transport = () => {
             ],
         },
     ]);
+
+    const dispatch = useDispatch<any>();
+    const transportfee = useSelector((state: any) => state.allTransportfees.transportfees);
+    const master = useSelector((state: any) => state.setgrademastersections.gradetypes);
+    const year = useSelector((state: any) => state.allYears.years.data);
     const [finalTerms, setFinalterms] = useState<any>([]);
     let removeFormFields = (i: any) => {
         let newFormValues = [...termFeessaveAdd];
@@ -90,30 +99,26 @@ const Transport = () => {
         }
         setClickedGrade(newArr);
     };
-
-    const getAllGradeSectionData = () => {
-        getAccessToken();
-        axios.get(`${baseUrl}feeMaster/transport`).then((res: any) => {
-            setFeeDetailsFinal(res.data.data);
-        });
-    };
-    const getAllGradeMaster = () => {
-        axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
-            setAllGradeMaster(res.data.data);
-        });
-    };
-
-    const getAllFeeMasterData = () => {
-        getAccessToken();
-        axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
-            setAllFeeMaster(response.data.data);
-            setSearchAcademicYear(response.data.data[0].year_id);
-            setFrontSearchYear(response.data.data[0].year_id);
-        });
-    };
+    useEffect(() => {
+        dispatch(fecthYears());
+    }, []);
+    useEffect(() => {
+        if (year && year?.length) {
+            setSearchAcademicYear(year[0]?.year_id);
+            setFrontSearchYear(year[0]?.year_id);
+        }
+    }, [year]);
+    // const getAllFeeMasterData = () => {
+    //     getAccessToken();
+    //     axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
+    //         setAllFeeMaster(response.data.data);
+    //         setSearchAcademicYear(response.data.data[0].year_id);
+    //         setFrontSearchYear(response.data.data[0].year_id);
+    //     });
+    // };
 
     const getAllGrade = () => {
-        getAllFeeMasterData();
+        dispatch(fecthYears());
         axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
             setAllGrade(res.data.data);
             setGradeSectionList(res.data.data);
@@ -124,7 +129,7 @@ const Transport = () => {
     };
 
     useEffect(() => {
-        getAllFeeMasterData();
+        dispatch(fecthYears());
         getAccessToken();
         axios
             .get(`${baseUrl}grademaster`)
@@ -136,12 +141,12 @@ const Transport = () => {
     }, []);
 
     useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
-            setAcademicYear(feeMaster[0].academic_year);
-            handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
-            handleGradeFilterAdd(gradeSectionListAdd, feeMaster[0].year_id);
+        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && gradeMaster && gradeMaster.length > 0) {
+            setAcademicYear(year[0].academic_year);
+            handleGradeFilter(gradeSectionList, year[0].year_id);
+            handleGradeFilterAdd(gradeSectionListAdd, year[0].year_id);
         }
-    }, [gradeSectionList, feeMaster, allGrade]);
+    }, [gradeSectionList, year, allGrade]);
 
     const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
         let resultData: any = [];
@@ -164,19 +169,18 @@ const Transport = () => {
         const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
         const idsofSection = grade_id_bind.map((o) => o.section);
         const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
-
-        getAllGradeMaster();
+        dispatch(settinggradesection());
         setFilterGradeByYear(filtered);
         setFilterSectionByYear(filteredForSection);
         setDisplayFinalData(filteredForSection);
     };
 
     useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
-            setAcademicYear(feeMaster[0].academic_year);
-            handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
+        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && gradeMaster && gradeMaster.length > 0) {
+            setAcademicYear(year[0].academic_year);
+            handleGradeFilter(gradeSectionList, year[0].year_id);
         }
-    }, [gradeSectionList, feeMaster, allGrade]);
+    }, [gradeSectionList, year, allGrade]);
     const handleGradeFilterAdd = (gradeSectionListAdd: any, searchInput: any) => {
         let resultData: any = [];
         gradeSectionListAdd.forEach((element: any) => {
@@ -201,8 +205,8 @@ const Transport = () => {
         setFilterSectionByYearAdd(filtered);
     };
     useEffect(() => {
-        getAllGradeSectionData();
-        getAllFeeMasterData();
+        dispatch(fecthTransportFees());
+        //dispatch(fecthYears());
         getAllGrade();
     }, []);
 
@@ -254,46 +258,9 @@ const Transport = () => {
         }
         setFinalterms(termscount);
     };
-
-    const deleteParticularDiscount = (fee_master_id: any) => {
-        getAccessToken();
-        axios
-            .delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id } })
-            .then((res: any) => {
-                if (res.data.data.isDeletable == false) {
-                    toast.warning("Students exists On Year oF Fee", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } else {
-                    toast.success("Year oF Fee Deleted Successsfully", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-                setdatatoDelete({});
-                setEditingYearOfFee({});
-                setUpdateYearOfFee("");
-                list_fee_details(frontSearchYear, frontSearchGrade);
-            })
-            .catch((e: any) => {
-                console.log(e);
-            });
-    };
     const handleClose = () => {
         setShow(false);
-
-        deleteParticularDiscount(datatoDelete.year_of_fee_id);
+        dispatch(deleteTransportFees(datatoDelete.year_of_fee_id));
     };
 
     const handleTermAmount = (data: any) => {
@@ -418,7 +385,7 @@ const Transport = () => {
         let sumoftermFees = 0;
         values.year_id = frontSearchYear;
         values.grade_id = frontSearchGrade;
-        FeeDetailsFinal?.map((value: any) => {
+        transportfee?.map((value: any) => {
             if (values.fee_master_id === value.fee_master_id) {
                 values.optional_fee = value.optional_fee === "true" ? true : false;
             }
@@ -531,10 +498,10 @@ const Transport = () => {
                                                                                 setStatusFeeDetailsAdd(true);
 
                                                                                 setTermsmasterValue("");
-                                                                                getAllFeeMasterData();
-                                                                                FeeDetailsFinal &&
-                                                                                    FeeDetailsFinal.length &&
-                                                                                    setFeeTypeName(FeeDetailsFinal[0].fee_master_id);
+                                                                                dispatch(fecthYears());
+                                                                                transportfee &&
+                                                                                    transportfee.length &&
+                                                                                    setFeeTypeName(transportfee[0].fee_master_id);
                                                                                 filterSectionByYearAdd &&
                                                                                     filterSectionByYearAdd.length &&
                                                                                     setSearchGradeId(
@@ -590,9 +557,9 @@ const Transport = () => {
                                                                                             );
                                                                                         }}
                                                                                     >
-                                                                                        {feeMaster &&
-                                                                                            feeMaster.length &&
-                                                                                            feeMaster.map((values: any, index: any) => {
+                                                                                        {year &&
+                                                                                            year.length &&
+                                                                                            year.map((values: any, index: any) => {
                                                                                                 return (
                                                                                                     <option value={values.year_id}>
                                                                                                         {values.academic_year}
@@ -685,9 +652,9 @@ const Transport = () => {
                                                                         }}
                                                                     >
                                                                         <option>Select Year</option>
-                                                                        {feeMaster &&
-                                                                            feeMaster.length &&
-                                                                            feeMaster.map((values: any, index: any) => {
+                                                                        {year &&
+                                                                            year.length &&
+                                                                            year.map((values: any, index: any) => {
                                                                                 return (
                                                                                     <option value={values.year_id}>
                                                                                         {values.academic_year}
@@ -708,9 +675,9 @@ const Transport = () => {
                                                                 </Form.Label>
                                                             </Col>
                                                             <Col sm="6">
-                                                                {allGradeMaster &&
-                                                                    allGradeMaster.length &&
-                                                                    allGradeMaster.map((romanvalues: any, index: any) => {
+                                                                {master &&
+                                                                    master.length &&
+                                                                    master.map((romanvalues: any, index: any) => {
                                                                         return (
                                                                             <Form.Check
                                                                                 inline
@@ -758,22 +725,20 @@ const Transport = () => {
                                                                                         }}
                                                                                     >
                                                                                         <option>Select Optional fee</option>
-                                                                                        {FeeDetailsFinal &&
-                                                                                            FeeDetailsFinal.length &&
-                                                                                            FeeDetailsFinal.map(
-                                                                                                (values: any, index: any) => {
-                                                                                                    return (
-                                                                                                        <>
-                                                                                                            <option
-                                                                                                                value={values.fee_master_id}
-                                                                                                                label={values.fee_type_name}
-                                                                                                            >
-                                                                                                                {values.fee_type_name}
-                                                                                                            </option>
-                                                                                                        </>
-                                                                                                    );
-                                                                                                }
-                                                                                            )}
+                                                                                        {transportfee &&
+                                                                                            transportfee.length &&
+                                                                                            transportfee.map((values: any, index: any) => {
+                                                                                                return (
+                                                                                                    <>
+                                                                                                        <option
+                                                                                                            value={values.fee_master_id}
+                                                                                                            label={values.fee_type_name}
+                                                                                                        >
+                                                                                                            {values.fee_type_name}
+                                                                                                        </option>
+                                                                                                    </>
+                                                                                                );
+                                                                                            })}
                                                                                     </Form.Select>
                                                                                 </td>
                                                                                 <td>
@@ -909,3 +874,5 @@ const Transport = () => {
     );
 };
 export default Transport;
+
+
