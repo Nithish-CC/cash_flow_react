@@ -11,23 +11,18 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTransportFees, fecthTransportFees } from "../../redux/actions/transportActions";
+import { deleteTransportFees, fecthTransportFees, listTransportFees } from "../../redux/actions/transportActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 import { fecthYears } from "../../redux/actions/yearsActions";
+import { gettinggradesection } from "../../redux/actions/Gradeactions";
 const Transport = () => {
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
-    const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
     const [feeTypeName, setFeeTypeName] = useState("");
-    const [amount, setFinalAmount] = useState("");
     const [clickedGrade, setClickedGrade] = useState<any[]>([]);
     const [searchAcademicYear, setSearchAcademicYear] = useState("");
-    const [editingYearOfFee, setEditingYearOfFee] = useState<any>({});
-    const [updateYearOfFee, setUpdateYearOfFee] = useState<any>("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
-    const [duplication, setDuplication] = useState(false);
     const [searchGradeId, setSearchGradeId] = useState("");
-    const [feeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
     const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
     const [gradeSectionList, setGradeSectionList] = useState<any>([]);
     const [academicYear, setAcademicYear] = useState<any>("");
@@ -36,13 +31,11 @@ const Transport = () => {
     const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
     const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
     const [filterSectionByYearAdd, setFilterSectionByYearAdd] = useState<any>([]);
-    const [gradeMaster, setGradeMaster] = useState<any>([]);
     const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
     const [termsmasterValue, setTermsmasterValue] = useState<any>([]);
     const [termFeesAdd, setTermFeesAdd] = useState(true);
     const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
     const school: any = sessionStorage.getItem("School");
-    const [total, setTotal] = useState<any>(0);
     const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
         {
             fee_amount: null,
@@ -65,6 +58,8 @@ const Transport = () => {
     const transportfee = useSelector((state: any) => state.allTransportfees.transportfees);
     const master = useSelector((state: any) => state.setgrademastersections.gradetypes);
     const year = useSelector((state: any) => state.allYears.years.data);
+    const grade = useSelector((state: any) => state.allgradesections.grades);
+    const transportfeeval = useSelector((state: any) => state.allTransportfees.transportfeeval);
     const [finalTerms, setFinalterms] = useState<any>([]);
     let removeFormFields = (i: any) => {
         let newFormValues = [...termFeessaveAdd];
@@ -76,7 +71,6 @@ const Transport = () => {
         ShowingTextBox(JSON.parse(school).term_count, termFeessaveAdd.length - 1);
     }, [termFeessaveAdd.length]);
 
-    const [allGradeMaster, setAllGradeMaster] = useState<any[]>([]);
     const [frontSearchGrade, setFrontSearchGrade] = useState<any>("");
     const [frontSearchYear, setFrontSearchYear] = useState<any>("");
     //Modal Popup
@@ -101,6 +95,9 @@ const Transport = () => {
     };
     useEffect(() => {
         dispatch(fecthYears());
+        dispatch(settinggradesection());
+        dispatch(gettinggradesection());
+        dispatch(fecthTransportFees());
     }, []);
     useEffect(() => {
         if (year && year?.length) {
@@ -108,40 +105,23 @@ const Transport = () => {
             setFrontSearchYear(year[0]?.year_id);
         }
     }, [year]);
-    // const getAllFeeMasterData = () => {
-    //     getAccessToken();
-    //     axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
-    //         setAllFeeMaster(response.data.data);
-    //         setSearchAcademicYear(response.data.data[0].year_id);
-    //         setFrontSearchYear(response.data.data[0].year_id);
-    //     });
-    // };
-
-    const getAllGrade = () => {
-        dispatch(fecthYears());
-        axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
-            setAllGrade(res.data.data);
-            setGradeSectionList(res.data.data);
-            setGradeSectionListAdd(res.data.data);
-            setFrontSearchGrade(res.data.data[0].grade_id);
-            setSearchGradeId(res.data.data[0].grade_id);
-        });
-    };
+    useEffect(() => {
+        if (grade && grade?.length) {
+            setAllGrade(grade);
+            setGradeSectionList(grade);
+            setGradeSectionListAdd(grade);
+            setFrontSearchGrade(grade[0].grade_id);
+            setSearchGradeId(grade[0].grade_id);
+        }
+    }, [grade]);
 
     useEffect(() => {
-        dispatch(fecthYears());
-        getAccessToken();
-        axios
-            .get(`${baseUrl}grademaster`)
-            .then((res: any) => {
-                setGradeMaster(res.data.data);
-                setGradeMasterParticular(res.data.data[0]);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
+        if (master && master?.length) {
+            setGradeMasterParticular(master[0]?.grade_master);
+        }
+    }, [master]);
     useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && gradeMaster && gradeMaster.length > 0) {
+        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && master && master.length > 0) {
             setAcademicYear(year[0].academic_year);
             handleGradeFilter(gradeSectionList, year[0].year_id);
             handleGradeFilterAdd(gradeSectionListAdd, year[0].year_id);
@@ -158,7 +138,7 @@ const Transport = () => {
 
         let grade_id_bind: any[] = [];
         resultData.forEach((element: any) => {
-            gradeMaster.forEach((grade: any) => {
+            master.forEach((grade: any) => {
                 if (element.grade_id == grade.grade_master_id) {
                     let obj: any = { ...element, ...grade };
                     grade_id_bind.push(obj);
@@ -176,7 +156,7 @@ const Transport = () => {
     };
 
     useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && gradeMaster && gradeMaster.length > 0) {
+        if (gradeSectionList && gradeSectionList.length > 0 && year && year.length > 0 && master && master.length > 0) {
             setAcademicYear(year[0].academic_year);
             handleGradeFilter(gradeSectionList, year[0].year_id);
         }
@@ -191,7 +171,7 @@ const Transport = () => {
 
         let grade_id_bind: any[] = [];
         resultData.forEach((element: any) => {
-            gradeMaster.forEach((grade: any) => {
+            master.forEach((grade: any) => {
                 if (element.grade_id == grade.grade_master_id) {
                     let obj: any = { ...element, ...grade };
                     grade_id_bind.push(obj);
@@ -204,34 +184,13 @@ const Transport = () => {
         const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
         setFilterSectionByYearAdd(filtered);
     };
-    useEffect(() => {
-        dispatch(fecthTransportFees());
-        //dispatch(fecthYears());
-        getAllGrade();
-    }, []);
 
     useEffect(() => {
         if (frontSearchGrade && frontSearchGrade != null && frontSearchYear && frontSearchYear != null) {
-            list_fee_details(frontSearchYear, frontSearchGrade);
+            dispatch(listTransportFees(frontSearchYear, frontSearchGrade));
         }
     }, [frontSearchGrade, frontSearchYear]);
-    const list_fee_details = (year_id: any, grade_id: any) => {
-        setSpinnerLoad(true);
-        getAccessToken();
-        axios
-            .post(`${baseUrl}transportval`, {
-                grade_id: grade_id,
-                year_id: year_id,
-            })
-            .then((res: any) => {
-                res.data.data.map((map: any) => {
-                    map.optional_fee = map?.optional_fee === 1 ? true : false;
-                });
-                setTermFeesSaveList(res.data.data);
 
-                setSpinnerLoad(false);
-            });
-    };
     const ShowingTextBox = (terms: any, index: any) => {
         let term: any = [];
         let termTitle: any = "";
@@ -276,12 +235,12 @@ const Transport = () => {
         for (let i: any = 0; i < 12; i++) {
             if (editORShow === "show") {
                 im.push(
-                    termFeessaveList[rowindex]?.terms && termFeessaveList[rowindex]?.terms.length > 0 ? (
-                        i <= termFeessaveList[rowindex]?.terms.length - 1 ? (
+                    transportfeeval[rowindex]?.terms && transportfeeval[rowindex]?.terms.length > 0 ? (
+                        i <= transportfeeval[rowindex]?.terms.length - 1 ? (
                             <td className="text-center">
                                 {"Term" + (i + 1)}
                                 <br />
-                                {termFeessaveList[rowindex]?.terms[i]?.term_amount}
+                                {transportfeeval[rowindex]?.terms[i]?.term_amount}
                             </td>
                         ) : (
                             <></>
@@ -599,7 +558,7 @@ const Transport = () => {
                                                             </div>
                                                             <BootstrapTable
                                                                 keyField="academic_year"
-                                                                data={termFeessaveList}
+                                                                data={transportfeeval}
                                                                 columns={col}
                                                                 hover
                                                                 pagination={paginationFactory({
@@ -874,5 +833,3 @@ const Transport = () => {
     );
 };
 export default Transport;
-
-
