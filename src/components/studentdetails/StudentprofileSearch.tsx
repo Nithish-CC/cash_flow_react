@@ -10,23 +10,17 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Hostel from "./Hostel";
-import { useDispatch } from "react-redux";
-import { studentDetailsPost } from "../../Redux/Actions/studentProfileSearchActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  studentDetailsPost,
+  stuProfileSearchSetAllSection,
+} from "../../Redux/Actions/studentProfileSearchActions";
 
 const StudentprofileSearch = () => {
-  //To Make Edit
-  let history = useHistory();
   const urlParams: any = useParams();
   const id = urlParams.id;
-  const [search, setSearch] = useState<any>({
-    text: "",
-    suggestions: [],
-  });
+
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
-  const [isComponentVisible, setIsComponentVisible] = useState(true);
-  const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>(
-    {}
-  );
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
   const [UpdateProfileActive, setUpdateProfileActive] = useState<any>({});
@@ -39,46 +33,26 @@ const StudentprofileSearch = () => {
   const mobileNoPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
   const dispatch = useDispatch<any>();
+  const studentProfile = useSelector(
+    (state: any) => state.studentDetailsGet.newUser?.data?.data
+  );
 
-  const onTextChanged = (e: any) => {
-    const value = e.target.value;
-    setStatusStudentSearch(value);
-    let suggestions: any = {};
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      suggestions = statusStudentDetails
-        .sort()
-        .filter((v: any) => regex.test(v.student_admissions_id));
+  useEffect(() => {
+    if (studentProfile && studentProfile?.length) {
+      setStatusStudentDetailsData(studentProfile[0].grade_id);
+      setStatusStudentDetails(studentProfile[0]);
     }
-    setIsComponentVisible(true);
-    setSearch({ suggestions, text: value });
-  };
-  const suggestionSelected = (value: any) => {
-    setIsComponentVisible(false);
-    setSearch({
-      text: value.student_admissions_id,
-      suggestions: [],
-    });
-  };
+  }, [studentProfile]);
 
   const searchData = () => {
-    dispatch(
-      studentDetailsPost(
-        id,
-        setStatusStudentDetails,
-        setStatusStudentDetailsData
-      )
-    );
+    dispatch(studentDetailsPost(id));
   };
 
   useEffect(() => {
     searchData();
+    dispatch(stuProfileSearchSetAllSection(setAllSection));
   }, []);
-  useEffect(() => {
-    axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
-      setAllSection(res.data.data);
-    });
-  }, []);
+
   useEffect(() => {
     if (AllSection && AllSection.length > 0) {
       SectionId(StatusStudentDetailsData);
@@ -98,9 +72,6 @@ const StudentprofileSearch = () => {
       get.filter((data: any) => data.academic_year_id === Year);
     setFinalSectionIdData(matchedyearidfinal);
   }
-  const onClear = () => {
-    setStatusStudentSearch("");
-  };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
