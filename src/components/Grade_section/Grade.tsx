@@ -9,7 +9,6 @@ import {
   Container,
   Modal,
 } from "react-bootstrap";
-import { getAccessToken } from "../../config/getAccessToken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";

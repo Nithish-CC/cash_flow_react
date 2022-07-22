@@ -14,7 +14,7 @@ export const gettinggradesection = (year, master) => async (dispatch) => {
     }, dispatch({ type: ActionTypes.SET_GRADE, payload: response.data.data }));
     dispatch(settinggradeaction(response.data.data, year, master));
   } catch (err) {
-    alert(err);
+    alert(err, "ihyvyvguvutvtuvtu");
   }
 };
 export const deletinggradesection = (gradeid) => async (dispatch) => {
@@ -63,7 +63,7 @@ export const deletinggradesection = (gradeid) => async (dispatch) => {
         });
       });
   } catch (err) {
-    alert(err);
+    alert(err, "1");
   }
 };
 export const postinggradeactions = (sendData, grade, setDuplication) => async (dispatch) => {
