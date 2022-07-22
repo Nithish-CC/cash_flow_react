@@ -64,6 +64,7 @@ const Academicfees = (props: any) => {
     if (studentDiscountData && studentDiscountData?.length) {
       setstudentdiscount(studentDiscountData);
       setSpinnerLoad(false);
+    } else if (studentDiscountData && studentDiscountData?.length === 0) {
     }
   }, [studentDiscountData]);
   const discountType = useSelector(

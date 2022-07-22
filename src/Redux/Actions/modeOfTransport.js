@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   hostelFeeValues,
   hostelModeOfTransport,
+  modeOfTransportTypes,
 } from "../Constants/action-types";
 import { toast } from "react-toastify";
 import { getAccessToken } from "../../config/getAccessToken";

@@ -93,3 +93,7 @@ export const academicFeesSetAcademicYearDataAction = {
   ACADEMIC_FEES_SET_ACADEMIC_YEAR_DATA_ACTION:
     "ACADEMIC_FEES_SET_ACADEMIC_YEAR_DATA_ACTION",
 };
+
+export const studentProfileSearchwithid = {
+  STUDENT_PROFILE_SEARCH_WITH_ID: "STUDENT_PROFILE_SEARCH_WITH_ID",
+};

@@ -13,11 +13,11 @@ import {
   listOfPaymentstudentAllPayBalance,
   listOfPaymentStudentYearPost,
   studentPayFeemaster,
+  studentProfileSearchwithid,
   studentProfileSetAllSection,
 } from "../Constants/action-types";
 
 const initialState = {
-  details: [],
   newUser: {},
   hostalFee: {},
   hostelTransport: {},
@@ -33,12 +33,11 @@ const initialState = {
   feesDetailsLastFourRecordsReducer: {},
   listOfPaymentStudentYearPostReducer: {},
   listOfPaymentstudentAllPayBalanceReducer: {},
+  studentProfileSearchWithIdReducer: {},
 };
 
 export const studentReducerGet = (state = initialState, { type, payload }) => {
   switch (type) {
-    case ActionTypes.STUDENT_DETAIL_GET:
-      return { ...state, details: payload };
     case ActionTypes.STUDENT_DETAIL_POST:
       return { ...state, newUser: payload };
     case hostelFeeValues.HOSTAL_FEE_VALUES:
@@ -69,6 +68,10 @@ export const studentReducerGet = (state = initialState, { type, payload }) => {
       return { ...state, listOfPaymentStudentYearPostReducer: payload };
     case listOfPaymentstudentAllPayBalance.LIST_OF_PAYMENT_STUDENT_ALL_PAY_BALANCE:
       return { ...state, listOfPaymentstudentAllPayBalanceReducer: payload };
+    case studentProfileSearchwithid.STUDENT_PROFILE_SEARCH_WITH_ID: {
+      console.log(payload);
+      return { ...state, studentProfileSearchWithIdReducer: payload };
+    }
     default:
       return state;
   }

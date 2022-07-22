@@ -3,16 +3,16 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
 import Academicfees from "./Academicfees";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
-import { getAccessToken } from "../../config/getAccessToken";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Hostel from "./Hostel";
 import { useDispatch, useSelector } from "react-redux";
 import {
   studentDetailsPost,
+  studentProfileSearchWithIdData,
   stuProfileSearchSetAllSection,
 } from "../../Redux/Actions/studentProfileSearchActions";
 
@@ -24,7 +24,6 @@ const StudentprofileSearch = () => {
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
   const [UpdateProfileActive, setUpdateProfileActive] = useState<any>({});
-  const [AllSection, setAllSection] = useState<any>({});
   const [StatusStudentDetailsData, setStatusStudentDetailsData] = useState<any>(
     []
   );
@@ -48,21 +47,28 @@ const StudentprofileSearch = () => {
     dispatch(studentDetailsPost(id));
   };
 
+  const studentdetailsgetdata = useSelector(
+    (state: any) => state.studentDetailsGet.studentProfileAllSection
+  );
+  console.log(studentdetailsgetdata);
+
   useEffect(() => {
     searchData();
-    dispatch(stuProfileSearchSetAllSection(setAllSection));
+    dispatch(stuProfileSearchSetAllSection());
   }, []);
 
   useEffect(() => {
-    if (AllSection && AllSection.length > 0) {
+    if (studentdetailsgetdata && studentdetailsgetdata.length > 0) {
       SectionId(StatusStudentDetailsData);
     }
-  }, [StatusStudentDetailsData, AllSection]);
+  }, [StatusStudentDetailsData, studentdetailsgetdata]);
   function SectionId(Sectiondata: any) {
     var matchedyearid: any =
-      AllSection &&
-      AllSection.length &&
-      AllSection.filter((data: any) => data.grade_id === Sectiondata);
+      studentdetailsgetdata &&
+      studentdetailsgetdata.length &&
+      studentdetailsgetdata.filter(
+        (data: any) => data.grade_id === Sectiondata
+      );
     return FinalSectionId(matchedyearid, statusStudentDetails.academic_year_id);
   }
   function FinalSectionId(get: any, Year: any) {
@@ -76,6 +82,30 @@ const StudentprofileSearch = () => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
+
+  const studentProfileParameters = {
+    student_name: statusStudentDetails.student_name,
+    grade_section_id: Number(sectionFilter),
+    father_name: statusStudentDetails.father_name,
+    student_id: statusStudentDetails.student_id,
+    phone_number: statusStudentDetails.phone_number,
+    alt_phone_number: statusStudentDetails.alt_phone_number,
+    address: statusStudentDetails.address,
+    email: statusStudentDetails.email,
+    status: UpdateProfileActive,
+    admission_no: statusStudentDetails.admission_no,
+  };
+
+  const studentprofilewithid = useSelector(
+    (state: any) => state.studentDetailsGet.studentProfileSearchWithIdReducer
+  );
+  console.log(studentprofilewithid);
+
+  useEffect(() => {
+    if (studentprofilewithid && studentprofilewithid?.length) {
+      setStatusStudentDetails(studentprofilewithid);
+    }
+  }, [studentprofilewithid]);
 
   const searchedit = () => {
     if (
@@ -94,40 +124,10 @@ const StudentprofileSearch = () => {
         progress: undefined,
       });
     } else {
-      axios
-        .put(`${baseUrl}studentProfile/${id}`, {
-          student_name: statusStudentDetails.student_name,
-          grade_section_id: Number(sectionFilter),
-          father_name: statusStudentDetails.father_name,
-          student_id: statusStudentDetails.student_id,
-          phone_number: statusStudentDetails.phone_number,
-          alt_phone_number: statusStudentDetails.alt_phone_number,
-          address: statusStudentDetails.address,
-          email: statusStudentDetails.email,
-          status: UpdateProfileActive,
-          admission_no: statusStudentDetails.admission_no,
-        })
-        .then((response: AxiosResponse) => {
-          if (response.data.status == true) {
-            toast.success("Student Details Updated", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-
-          setStatusStudentDetails(response.data);
-          setStatusStudentEdit(false);
-          searchData();
-          setUpdateProfileActive("");
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      dispatch(studentProfileSearchWithIdData(id, studentProfileParameters));
+      setStatusStudentEdit(false);
+      // searchData();
+      setUpdateProfileActive("");
     }
   };
 

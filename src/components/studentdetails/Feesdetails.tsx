@@ -24,7 +24,6 @@ const Feesdetails = (props: any) => {
   const feesdetailsautosearch = useSelector(
     (state: any) => state.studentDetailsGet.feesDetailsautoSearch
   );
-  console.log(feesdetailsautosearch);
 
   const feesdetailslastfourrecord = useSelector(
     (state: any) => state.studentDetailsGet.feesDetailsLastFourRecordsReducer

@@ -1,24 +1,13 @@
 import axios from "axios";
 import {
   ActionTypes,
+  studentProfileSearchwithid,
   studentProfileSetAllSection,
 } from "../Constants/action-types";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
-
-export const studentDetailsGet = () => async (dispatch) => {
-  try {
-    const {
-      data: { data },
-    } = await axios.get(`${baseUrl}gradeSection`);
-    dispatch({
-      type: ActionTypes.STUDENT_DETAIL_GET,
-      payload: data,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 export const studentDetailsPost = (id) => async (dispatch) => {
   try {
@@ -41,10 +30,29 @@ export const stuProfileSearchSetAllSection =
       const {
         data: { data },
       } = await axios.get(`${baseUrl}gradeSection`);
-      setAllSection(data);
       dispatch({
         type: studentProfileSetAllSection.STUDENT_PROFILE_SET_ALL_SECTION,
         payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const studentProfileSearchWithIdData =
+  (id, studentProfileParameters, toast) => async (dispatch) => {
+    try {
+      const response = await axios.put(
+        `${baseUrl}studentProfile/${id}`,
+        studentProfileParameters
+      );
+      if (response.data.status == true) {
+        toast.success("Student Details Updated");
+        dispatch(studentDetailsPost(id));
+      }
+      dispatch({
+        type: studentProfileSearchwithid.STUDENT_PROFILE_SEARCH_WITH_ID,
+        payload: response,
       });
     } catch (error) {
       console.log(error);

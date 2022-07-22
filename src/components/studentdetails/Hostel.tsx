@@ -1,9 +1,9 @@
 import { Button, Form, Modal } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   hostalFeeValueData,
   hostalModeOfTransportData,
@@ -44,6 +44,19 @@ const Hostel = (props: any) => {
   const handleShow = () => {
     setShow(true);
   };
+
+  // const modeoftransportdata = useSelector(
+  //   (state: any) => state.studentDetailsGet.modeoftransportReducer
+  // );
+
+  // useEffect(() => {
+  //   if (modeoftransportdata.data.data.IsExsist === false) {
+  //     toast.success(modeoftransportdata.data.message);
+  //     setShow(false);
+  //   } else if (modeoftransportdata.data.data.IsExsist === "year") {
+  //     toast.warning(modeoftransportdata.data.message);
+  //   }
+  // }, []);
 
   const handleTrans = (e: any) => {
     let transportRadio;

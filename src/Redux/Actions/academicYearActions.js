@@ -68,7 +68,7 @@ export const academicFeesSetAcademicYearData =
   (id, student_id, setAcademic, setAcademicYear) => async (dispatch) => {
     try {
       getAccessToken();
-      const response = await axios
+      axios
         .post(`${baseUrl}studentyear`, {
           student_admissions_id: Number(id),
           student_id: student_id,
@@ -104,8 +104,7 @@ export const academicFeesSetFeeMasterIdData =
   };
 
 export const academicfeesStudentDiscountData2 =
-  (id, academicYear, termsmaster, setstudentdiscount, setSpinnerLoad) =>
-  async (dispatch) => {
+  (id, academicYear, termsmaster) => async (dispatch) => {
     try {
       getAccessToken();
       const response = await axios.post(`${baseUrl}studentdiscount`, {
@@ -113,6 +112,7 @@ export const academicfeesStudentDiscountData2 =
         year_id: Number(academicYear),
         term_name: termsmaster,
       });
+      console.log(response);
       dispatch({
         type: academicFeesStudentDiscount2.ACADEMIC_FEES_STUDENT_DISCOUNT_2,
         payload: response,
