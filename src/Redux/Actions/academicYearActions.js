@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   academicFeesDiscountType,
   academicFeesSchoolDetails,
+  academicFeesSetAcademicYearDataAction,
   academicFeesSetFeeMasterId,
   academicFeesStudentDiscount,
   academicFeesStudentDiscount2,
@@ -47,71 +48,78 @@ export const academicFeesStudentDiscountData =
   };
 
 export const academicYearStudentYearData =
-  (id, setAcademic, setAcademicYear, student_id) => async () => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentyear`, {
+  (id, student_id) => async (dispatch) => {
+    try {
+      getAccessToken();
+      const response = await axios.post(`${baseUrl}studentyear`, {
         student_admissions_id: Number(id),
         student_id: student_id,
-      })
-      .then((res) => {
-        setAcademic(res.data.data);
-        setAcademicYear(res.data.data[0].year_id);
-      })
-      .dispatch({
-        type: academicFeesStudentYearPost.ACADEMIC_YEAR_STUDENT_YEAR_POST,
       });
+      dispatch({
+        type: academicFeesStudentYearPost.ACADEMIC_YEAR_STUDENT_YEAR_POST,
+        payload: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 export const academicFeesSetAcademicYearData =
-  (id, student_id, setAcademic, setAcademicYear) => async () => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentyear`, {
-        student_admissions_id: Number(id),
-        student_id: student_id,
-      })
-      .then((res) => {
-        setAcademic(res.data.data);
-        setAcademicYear(res.data.data[0].year_id);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  (id, student_id, setAcademic, setAcademicYear) => async (dispatch) => {
+    try {
+      getAccessToken();
+      const response = await axios
+        .post(`${baseUrl}studentyear`, {
+          student_admissions_id: Number(id),
+          student_id: student_id,
+        })
+        .then((res) => {
+          setAcademic(res.data.data);
+          setAcademicYear(res.data.data[0].year_id);
+        });
+      // dispatch({
+      //   type: academicFeesSetAcademicYearDataAction.ACADEMIC_FEES_SET_ACADEMIC_YEAR_DATA_ACTION,
+      //   payload: response,
+      // });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-export const academicFeesSetFeeMasterIdData = () => async (dispatch) => {
-  try {
-    getAccessToken();
-    const {
-      data: { data },
-    } = await axios.get(`${baseUrl}feeMaster`);
-    dispatch({
-      type: academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID,
-      payload: data,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const academicFeesSetFeeMasterIdData =
+  (setfeemasterid) => async (dispatch) => {
+    try {
+      getAccessToken();
+      const {
+        data: { data },
+      } = await axios.get(`${baseUrl}feeMaster`);
+
+      dispatch({
+        type: academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const academicfeesStudentDiscountData2 =
   (id, academicYear, termsmaster, setstudentdiscount, setSpinnerLoad) =>
-  async () => {
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentdiscount`, {
+  async (dispatch) => {
+    try {
+      getAccessToken();
+      const response = await axios.post(`${baseUrl}studentdiscount`, {
         student_admissions_id: Number(id),
         year_id: Number(academicYear),
         term_name: termsmaster,
-      })
-      .then((res) => {
-        setstudentdiscount(res.data.data);
-        setSpinnerLoad(false);
-      })
-      .dispatch({
-        type: academicFeesStudentDiscount2.ACADEMIC_FEES_STUDENT_DISCOUNT_2,
       });
+      dispatch({
+        type: academicFeesStudentDiscount2.ACADEMIC_FEES_STUDENT_DISCOUNT_2,
+        payload: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 export const academicFeesDiscountTypeData = () => async (dispatch) => {
@@ -129,17 +137,19 @@ export const academicFeesDiscountTypeData = () => async (dispatch) => {
   }
 };
 
-export const academicFeesSchoolDetailsData = () => async (dispatch) => {
-  try {
-    getAccessToken();
-    const {
-      data: { data },
-    } = await axios.get(`${baseUrl}school`);
-    dispatch({
-      type: academicFeesSchoolDetails.ACADEMIC_FEES_SCHOOL_DETAILS,
-      payload: data,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const academicFeesSchoolDetailsData =
+  (setGotSchoolDetails) => async (dispatch) => {
+    try {
+      getAccessToken();
+      const {
+        data: { data },
+      } = await axios.get(`${baseUrl}school`);
+      setGotSchoolDetails(data);
+      dispatch({
+        type: academicFeesSchoolDetails.ACADEMIC_FEES_SCHOOL_DETAILS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };

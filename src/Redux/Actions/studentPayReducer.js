@@ -28,7 +28,6 @@ export const studentPayFeemasterData = (setfeemasterid) => async (dispatch) => {
     const {
       data: { data },
     } = await axios.get(`${baseUrl}feeMaster`);
-    console.log(data);
     dispatch({
       type: studentPayFeemaster.STUDENT_PAY_FEEMASTER,
       payload: data,
@@ -64,28 +63,12 @@ export const studentPayHandleBalanceData =
           data: FeetempArr,
         })
         .then((response) => {
-          toast.success("Payment Success", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success("Payment Success");
           windowReload();
         })
         .catch((err) => {
           setButtonDisable(false);
-          toast.warning("something went wrong", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.warning("something went wrong");
         });
     } catch (error) {
       console.log(error);
@@ -101,28 +84,12 @@ export const studentPayUpdateStudentBalanceData =
           data: FeetempArr,
         })
         .then((response) => {
-          toast.success("Payment Success", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success("Payment Success");
           windowReload();
         })
         .catch((err) => {
           setButtonDisable(false);
-          toast.warning("something went wrong", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.warning("something went wrong");
         });
     } catch (error) {
       console.log(error);
@@ -138,28 +105,14 @@ export const studentPayUpdateStudentBalanceData2 =
           data: FeetempArr,
         })
         .then((response) => {
-          toast.success("Refund  Success", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success("Refund  Success");
           windowReload();
         })
         .catch((err) => {
           setButtonDisable(false);
-          toast.warning("something went wrong", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.warning("something went wrong");
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };

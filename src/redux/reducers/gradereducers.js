@@ -1,4 +1,4 @@
-import { Actiontypes } from "../constants/Actiontypes";
+import { ActionTypes } from "../Constants/action-types";
 
 const initialState = {
   grades: [],
@@ -7,11 +7,11 @@ const initialState = {
 };
 export const gradeReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case Actiontypes.SET_GRADE:
+    case ActionTypes.SET_GRADE:
       return { ...state, grades: payload };
-    case Actiontypes.CREATE_GRADE_SECTION:
+    case ActionTypes.CREATE_GRADE_SECTION:
       return { ...state, post_grades: payload };
-    case Actiontypes.SET_GRADE_YEAR:
+    case ActionTypes.SET_GRADE_YEAR:
       return { ...state, year_grade_section: payload };
     default:
       return state;

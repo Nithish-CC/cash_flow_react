@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { Table, Button, Col, Spinner, Form } from "react-bootstrap";
-import { baseUrl } from "../../index";
-import { getAccessToken } from "../../config/getAccessToken";
-import axios from "axios";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
@@ -36,7 +33,6 @@ const Academicfees = (props: any) => {
   const [mergedata, setmergedata] = useState<any[]>([]);
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
   const [editingdiscount, setEditingYearOfFee] = useState<any>({});
-  const [discounttype, setDiscounttype] = useState<any>({});
   const [discounttt, setdiscounttt] = useState<any>([]);
   const [discountallrecord, setDiscountallrecord] = useState<any>([]);
   const [updateYearOfFee, setUpdateYearOfFee] = useState<any>([]);
@@ -46,6 +42,30 @@ const Academicfees = (props: any) => {
   const [finalterms, setFinalterms] = useState<any>([]);
 
   const dispatch = useDispatch<any>();
+
+  const studentYearData = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.academicFeesStuYearPostRed?.data?.data
+  );
+
+  useEffect(() => {
+    if (studentYearData && studentYearData?.length) {
+      setAcademic(studentYearData);
+      setAcademicYear(studentYearData[0].year_id);
+    }
+  }, [studentYearData]);
+
+  const studentDiscountData = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.academicFeesStudentDiscount2Red?.data?.data
+  );
+
+  useEffect(() => {
+    if (studentDiscountData && studentDiscountData?.length) {
+      setstudentdiscount(studentDiscountData);
+      setSpinnerLoad(false);
+    }
+  }, [studentDiscountData]);
   const discountType = useSelector(
     (state: any) => state.studentDetailsGet.academicFeesDiscountTypeRed
   );
@@ -107,12 +127,8 @@ const Academicfees = (props: any) => {
     fetchData();
   }, [Merdattwpus]);
 
-  useEffect(() => {}, []);
-
   const yearacademic = () => {
-    dispatch(
-      academicYearStudentYearData(id, setAcademic, setAcademicYear, student_id)
-    );
+    dispatch(academicYearStudentYearData(id, student_id));
     dispatch(
       academicFeesSetAcademicYearData(
         id,
@@ -128,15 +144,7 @@ const Academicfees = (props: any) => {
   };
   const getapi = () => {
     setSpinnerLoad(true);
-    dispatch(
-      academicfeesStudentDiscountData2(
-        id,
-        academicYear,
-        termsmaster,
-        setstudentdiscount,
-        setSpinnerLoad
-      )
-    );
+    dispatch(academicfeesStudentDiscountData2(id, academicYear, termsmaster));
   };
   function studentyear(gradedata: any) {
     var matchedyearid: any =
@@ -204,7 +212,7 @@ const Academicfees = (props: any) => {
   }, [discountallrecord]);
 
   useEffect(() => {
-    dispatch(academicFeesSchoolDetailsData());
+    dispatch(academicFeesSchoolDetailsData(setGotSchoolDetails));
   }, []);
 
   useEffect(() => {

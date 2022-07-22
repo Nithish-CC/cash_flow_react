@@ -4,9 +4,6 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Listofpayment from "./Listofpayment";
 import { Button, Table, Form } from "react-bootstrap";
-import axios, { AxiosResponse } from "axios";
-import { baseUrl } from "../../index";
-import { getAccessToken } from "../../config/getAccessToken";
 import "./index.css";
 import { useParams } from "react-router-dom";
 import _ from "lodash";
@@ -396,7 +393,7 @@ const Studentpay = () => {
     }
   };
   useEffect(() => {
-    dispatch(academicFeesSchoolDetailsData());
+    dispatch(academicFeesSchoolDetailsData(setGotSchoolDetails));
   }, []);
 
   useEffect(() => {

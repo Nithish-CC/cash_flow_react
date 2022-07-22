@@ -6,7 +6,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   listOfPaymentstudentAllPayBalanceData,
   listOfPaymentStudentYearPostData,
@@ -15,7 +15,7 @@ import {
 const Listofpayment = (props: any) => {
   const studentdeta = props.studentdetails;
   const [academicyear, setAcademicyear] = useState<any>([]);
-  const [payments, setPayments] = useState<any>([]);
+  // const [studentyearpostdata, setPayments] = useState<any>([]);
   const [academicYearId, setAcademicYearId] = useState<any>([]);
 
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
@@ -26,6 +26,23 @@ const Listofpayment = (props: any) => {
 
   const dispatch = useDispatch<any>();
 
+  const studentyearpostdata = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.listOfPaymentStudentYearPostReducer?.data?.data
+  );
+  useEffect(() => {
+    if (studentyearpostdata && studentyearpostdata?.length) {
+      setAcademicyear(studentyearpostdata);
+      setAcademicYearId(studentyearpostdata[0].grade_id);
+    }
+  }, [studentyearpostdata]);
+
+  const studentallpaybalancedata = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.listOfPaymentstudentAllPayBalanceReducer?.data
+        ?.data
+  );
+
   const paginate = [
     { text: "5", value: 5 },
     { text: "10", value: 10 },
@@ -35,15 +52,11 @@ const Listofpayment = (props: any) => {
   ];
 
   useEffect(() => {
-    dispatch(
-      listOfPaymentStudentYearPostData(id, setAcademicyear, setAcademicYearId)
-    );
+    dispatch(listOfPaymentStudentYearPostData(id));
   }, []);
 
   useEffect(() => {
-    dispatch(
-      listOfPaymentstudentAllPayBalanceData(id, academicYearId, setPayments)
-    );
+    dispatch(listOfPaymentstudentAllPayBalanceData(id, academicYearId));
   }, [academicYearId]);
 
   const col: any = [
@@ -61,12 +74,12 @@ const Listofpayment = (props: any) => {
   ];
 
   useEffect(() => {
-    payments && payments.length
-      ? payments.map((data: any) => {
+    studentyearpostdata && studentyearpostdata.length
+      ? studentyearpostdata.map((data: any) => {
           studentyear(data);
         })
       : setMerdattwpus([]);
-  }, [payments]);
+  }, [studentyearpostdata]);
 
   function studentyear(gradedata: any) {
     var matchedyearid: any =

@@ -6,38 +6,31 @@ import {
   feesDetailsLastFourRecord,
 } from "../Constants/action-types";
 
-export const feesDetailsAutosearchData =
-  (status, setYearOfBalanceByYearOnly) => async () => {
-    try {
-      getAccessToken();
-      axios
-        .post(`${baseUrl}autosearch`, {
-          allbalance: status,
-        })
-        .then((res) => {
-          setYearOfBalanceByYearOnly(res.data);
-        })
-        .dispatch({
-          type: feesDetailsAutosearch.FEES_AUTOSEARCH,
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const feesDetailsAutosearchData = (status) => async (dispatch) => {
+  try {
+    getAccessToken();
+    const response = await axios.post(`${baseUrl}autosearch`, {
+      allbalance: status,
+    });
+    dispatch({
+      type: feesDetailsAutosearch.FEES_AUTOSEARCH,
+      payload: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const feesDetailsLastFourRecordData =
-  (status, year, setLastFourRecord) => async (dispatch) => {
+  (status, year) => async (dispatch) => {
     try {
-      axios
-        .post(`${baseUrl}studentAllPayBalance/four`, {
-          student_id: status,
-          year_id: year,
-        })
-        .then((res) => {
-          setLastFourRecord(res.data.data);
-        });
+      const response = await axios.post(`${baseUrl}studentAllPayBalance/four`, {
+        student_id: status,
+        year_id: year,
+      });
       dispatch({
         type: feesDetailsLastFourRecord.FEES_DETAILS_LAST_FOUR_RECORDS,
+        payload: response.data.data,
       });
     } catch (error) {
       console.log(error);

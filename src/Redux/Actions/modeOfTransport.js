@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   hostelFeeValues,
   hostelModeOfTransport,
-  modeOfTransportTypes,
 } from "../Constants/action-types";
 import { toast } from "react-toastify";
 import { getAccessToken } from "../../config/getAccessToken";
@@ -11,36 +10,13 @@ import { baseUrl } from "../..";
 export const modeOfTransports = (props, setShow) => async (dispatch) => {
   try {
     getAccessToken();
-    const response = await axios
-      .post(`${baseUrl}modeoftransport`, props)
-      .then((res) => {
-        console.log(res.data.message, "Hostel");
-        if (res.data.data.IsExsist === false) {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setShow(false);
-        } else if (res.data.data.IsExsist === "year") {
-          toast.warning(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      });
-    dispatch({
-      type: modeOfTransportTypes.MODE_OF_TRANSPORT,
-    });
+    const response = await axios.post(`${baseUrl}modeoftransport`, props);
+    if (response.data.data.IsExsist === false) {
+      toast.success(response.data.message);
+      setShow(false);
+    } else if (response.data.data.IsExsist === "year") {
+      toast.warning(response.data.message);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -67,6 +43,7 @@ export const hostalModeOfTransportData = (setBusValue) => async (dispatch) => {
     const {
       data: { data },
     } = await axios.get(`${baseUrl}modeoftransport`, {});
+    setBusValue(data);
     dispatch({
       type: hostelModeOfTransport.HOSTAL_MODE_OF_TRANSPORT,
       payload: data,

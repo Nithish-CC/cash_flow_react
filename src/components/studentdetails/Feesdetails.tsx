@@ -2,32 +2,38 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   feesDetailsAutosearchData,
   feesDetailsLastFourRecordData,
 } from "../../Redux/Actions/feesDetail";
-import { academicFeesSetFeeMasterId } from "../../Redux/Constants/action-types";
 import { academicFeesSetFeeMasterIdData } from "../../Redux/Actions/academicYearActions";
 const Feesdetails = (props: any) => {
   let history = useHistory();
   const status = props.student_id;
   const year = props.year;
-  const [YearOfBalanceByYearOnly, setYearOfBalanceByYearOnly] = useState<any>(
-    {}
-  );
   const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
 
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
-  const [lastFourRecord, setLastFourRecord] = useState<any>([]);
+  // const [feesdetailslastfourrecord, setLastFourRecord] = useState<any>([]);
   const [FeeMasterId, setFeeMasterId] = useState<any>([]);
   const [DisplayFinalData, setDisplayFinalData] = useState<any>([]);
 
   const dispatch = useDispatch<any>();
 
+  const feesdetailsautosearch = useSelector(
+    (state: any) => state.studentDetailsGet.feesDetailsautoSearch
+  );
+  console.log(feesdetailsautosearch);
+
+  const feesdetailslastfourrecord = useSelector(
+    (state: any) => state.studentDetailsGet.feesDetailsLastFourRecordsReducer
+  );
+  console.log(feesdetailslastfourrecord);
+
   useEffect(() => {
     if (status && status.toString().length > 0) {
-      dispatch(feesDetailsAutosearchData(status, setYearOfBalanceByYearOnly));
+      dispatch(feesDetailsAutosearchData(status));
       dispatch(academicFeesSetFeeMasterIdData());
     }
     if (
@@ -36,17 +42,17 @@ const Feesdetails = (props: any) => {
       year &&
       year.toString().length > 0
     ) {
-      dispatch(feesDetailsLastFourRecordData(status, year, setLastFourRecord));
+      dispatch(feesDetailsLastFourRecordData(status, year));
     }
-  }, [status]);
+  }, [status, year]);
 
   useEffect(() => {
-    lastFourRecord &&
-      lastFourRecord.length &&
-      lastFourRecord.map((data: any) => {
+    feesdetailslastfourrecord &&
+      feesdetailslastfourrecord.length &&
+      feesdetailslastfourrecord.map((data: any) => {
         FeeMaster(data);
       });
-  }, [status, lastFourRecord, FeeMasterId]);
+  }, [status, feesdetailslastfourrecord, FeeMasterId]);
   let GetId: any = [];
   function FeeMaster(feemasterdata: any) {
     var matchedyearid: any =
@@ -128,7 +134,8 @@ const Feesdetails = (props: any) => {
             </div>
             <div className="card-body">
               <div className="row">
-                {lastFourRecord && lastFourRecord.length > 0 ? (
+                {feesdetailslastfourrecord &&
+                feesdetailslastfourrecord.length > 0 ? (
                   <>
                     <div className="col-xl-4 col-md-3 mb-1">
                       <div>
@@ -137,9 +144,9 @@ const Feesdetails = (props: any) => {
 
                       <div>
                         <label>
-                          {lastFourRecord &&
-                            lastFourRecord.length &&
-                            lastFourRecord.map((data: any) => {
+                          {feesdetailslastfourrecord &&
+                            feesdetailslastfourrecord.length &&
+                            feesdetailslastfourrecord.map((data: any) => {
                               return (
                                 <option>
                                   {" "}
@@ -172,9 +179,9 @@ const Feesdetails = (props: any) => {
                       </div>
                       <div>
                         <label>
-                          {lastFourRecord &&
-                            lastFourRecord.length &&
-                            lastFourRecord.map((data: any) => {
+                          {feesdetailslastfourrecord &&
+                            feesdetailslastfourrecord.length &&
+                            feesdetailslastfourrecord.map((data: any) => {
                               return <option> {data.cum_amt}</option>;
                             })}
                         </label>
@@ -206,10 +213,9 @@ const Feesdetails = (props: any) => {
                   </div>
                   <div>
                     <label style={{ margin: "3px" }}>
-                      {YearOfBalanceByYearOnly.data &&
-                        YearOfBalanceByYearOnly.data.length &&
-                        YearOfBalanceByYearOnly.data.map((amount: any) => {
-                          console.log(amount, "ppppppppppp");
+                      {feesdetailsautosearch.data &&
+                        feesdetailsautosearch.data.length &&
+                        feesdetailsautosearch.data.map((amount: any) => {
                           return (
                             <option> {(amount = amount.academic_year)}</option>
                           );
@@ -223,9 +229,9 @@ const Feesdetails = (props: any) => {
                   </div>
                   <div>
                     <label style={{ margin: "3px" }}>
-                      {YearOfBalanceByYearOnly.data &&
-                        YearOfBalanceByYearOnly.data.length &&
-                        YearOfBalanceByYearOnly.data.map((amount: any) => {
+                      {feesdetailsautosearch.data &&
+                        feesdetailsautosearch.data.length &&
+                        feesdetailsautosearch.data.map((amount: any) => {
                           return <option> {amount.balance}</option>;
                         })}{" "}
                     </label>
@@ -238,9 +244,9 @@ const Feesdetails = (props: any) => {
                   <div>
                     {props.Student_status === "Active" ? (
                       <>
-                        {YearOfBalanceByYearOnly.data &&
-                          YearOfBalanceByYearOnly.data.length &&
-                          YearOfBalanceByYearOnly.data.map((amount: any) => {
+                        {feesdetailsautosearch.data &&
+                          feesdetailsautosearch.data.length &&
+                          feesdetailsautosearch.data.map((amount: any) => {
                             return (
                               <Button
                                 style={{ margin: "2px" }}
@@ -259,9 +265,9 @@ const Feesdetails = (props: any) => {
                       </>
                     ) : (
                       <>
-                        {YearOfBalanceByYearOnly.data &&
-                          YearOfBalanceByYearOnly.data.length &&
-                          YearOfBalanceByYearOnly.data.map((amount: any) => {
+                        {feesdetailsautosearch.data &&
+                          feesdetailsautosearch.data.length &&
+                          feesdetailsautosearch.data.map((amount: any) => {
                             return (
                               <Button
                                 style={{ margin: "2px" }}

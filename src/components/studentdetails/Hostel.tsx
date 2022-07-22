@@ -24,8 +24,6 @@ const Hostel = (props: any) => {
   const [FeeMasterId, setFeeMasterId] = useState<any>([]);
   const [DisplayFinalData, setDisplayFinalData] = useState<any>([]);
   const [feemaster, setFeemaster] = useState<any>([]);
-  const [allAcademicBalance, setAllAcademicBalance] = useState<any>([]);
-  const [van, setVan] = useState<any>(false);
   const [currentRadioValue, setCurrentValue] = React.useState("");
   const [busValue, setBusValue] = useState<any>([]);
   const [hostalFeeValue, setHostalFeeValue] = useState<any>([]);
@@ -86,7 +84,6 @@ const Hostel = (props: any) => {
     }
     dispatch(modeOfTransports(transportRadio, setShow));
   };
-  useEffect(() => {}, []);
 
   useEffect(() => {
     dispatch(hostalFeeValueData(setHostalFeeValue));

@@ -12,9 +12,9 @@ import {
   deletinggradesection,
   gettinggradesection,
   postinggradeactions,
-} from "../../redux/actions/Gradeactions";
-import { fecthYears } from "../../redux/actions/yearsActions";
-import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
+} from "../../Redux/Actions/Gradeactions";
+import { fecthYears } from "../../Redux/Actions/yearsActions";
+import { settinggradesection } from "../../Redux/Actions/Setgrademasteractions";
 
 const Grade = () => {
   const [statusGradeAdd, setStatusGradeAdd] = useState(false);

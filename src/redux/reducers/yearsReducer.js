@@ -1,4 +1,4 @@
-import { ActionTypes } from "../constants/action-types";
+import { ActionTypes } from "../Constants/action-types";
 const intialState = {
   years: [],
 };
