@@ -33,50 +33,21 @@ export const listTransportFees = (year_id, grade_id) => async (dispatch) => {
     }
 };
 
-export const addTransportFees = (values, fee_amount, fee_master_id, grade_id) => async (dispatch) => {
+export const addTransportFees = (values) => async (dispatch) => {
     try {
-        const res = await axios
-            .post(`${baseUrl}transportval/create_transport`, values, fee_amount, fee_master_id, grade_id)
-            .then((res) => {
-                if (res.data.message.includes("Year of Fee already present")) {
-                    toast.warning(res.data.message, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } else if (res.data.message.includes("Year of Fee inserted")) {
-                    toast.success("Saved successfully", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-            })
-            .catch((res) => {
-                toast.warning("Enter Correct data", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            });
+        const res = await axios.post(`${baseUrl}transportval/create_transport`, values);
+
+        if (res.data.message.includes("Year of Fee already present")) {
+            toast.warning(res.data.message);
+        } else if (res.data.message.includes("Year of Fee inserted")) {
+            toast.success("Saved successfully");
+        }
         dispatch({
             type: TransportTypes.ADD_TRANSPORT_FEES,
             payload: res.data.data,
         });
     } catch (err) {
-        alert("Error");
+        toast.warning("Enter Correct data");
     }
 };
 
@@ -85,30 +56,16 @@ export const deleteTransportFees = (fee_master_id) => async (dispatch) => {
         getAccessToken();
         axios.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id } }).then((res) => {
             if (res.data.data.isDeletable == false) {
-                toast.warning("Students exists On Year oF Fee", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                toast.warning("Students exists On Year oF Fee");
             } else {
-                toast.success("Year oF Fee Deleted Successsfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                dispatch(fecthTransportFees());
+                toast.success("Year oF Fee Deleted Successsfully");
             }
+            dispatch({
+                type: TransportTypes.DELETE_TRANSPORT_FEES,
+                payload: fee_master_id,
+            });
         });
     } catch (err) {
         alert("Error");
     }
-    dispatch(fecthTransportFees());
 };

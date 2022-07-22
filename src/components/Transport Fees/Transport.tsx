@@ -11,10 +11,11 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTransportFees, fecthTransportFees, listTransportFees } from "../../redux/actions/transportActions";
+import { addTransportFees, deleteTransportFees, fecthTransportFees, listTransportFees } from "../../redux/actions/transportActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 import { fecthYears } from "../../redux/actions/yearsActions";
 import { gettinggradesection } from "../../redux/actions/Gradeactions";
+import { convertCompilerOptionsFromJson } from "typescript";
 const Transport = () => {
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
@@ -97,7 +98,6 @@ const Transport = () => {
         dispatch(fecthYears());
         dispatch(settinggradesection());
         dispatch(gettinggradesection());
-        dispatch(fecthTransportFees());
     }, []);
     useEffect(() => {
         if (year && year?.length) {
@@ -217,7 +217,8 @@ const Transport = () => {
         }
         setFinalterms(termscount);
     };
-    const handleClose = () => {
+
+    const handleClose = (year_of_fee_id: any) => {
         setShow(false);
         dispatch(deleteTransportFees(datatoDelete.year_of_fee_id));
     };
@@ -358,42 +359,7 @@ const Transport = () => {
         values.term_count = values.optional_fees ? values.term_count : values.term_fees.length;
         if (sumoftermFees === values.fee_amount) {
             delete values.optional_fees;
-            axios
-                .post(`${baseUrl}transportval/create_transport`, values)
-                .then((res: any) => {
-                    if (res.data.message.includes("Year of Fee already present")) {
-                        toast.warning(res.data.message, {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    } else if (res.data.message.includes("Year of Fee inserted")) {
-                        toast.success("Saved successfully", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    }
-                })
-                .catch((res: any) => {
-                    toast.warning("Enter Correct data", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                });
+            dispatch(addTransportFees(values));
         } else if (sumoftermFees < values.fee_amount) {
             toast.warning("Fee amount is Greater than sum of term amount", {
                 position: "top-right",
@@ -458,6 +424,7 @@ const Transport = () => {
 
                                                                                 setTermsmasterValue("");
                                                                                 dispatch(fecthYears());
+                                                                                dispatch(fecthTransportFees());
                                                                                 transportfee &&
                                                                                     transportfee.length &&
                                                                                     setFeeTypeName(transportfee[0].fee_master_id);
@@ -473,7 +440,7 @@ const Transport = () => {
                                                                     ) : (
                                                                         <Button
                                                                             onClick={() => {
-                                                                                window.location.reload();
+                                                                                setStatusFeeDetailsAdd(false);
                                                                             }}
                                                                         >
                                                                             Back
