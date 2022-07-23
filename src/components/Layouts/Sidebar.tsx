@@ -121,8 +121,8 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                                 </MenuItem>
                             </SubMenu>
                             <SubMenu title="Transport Fees" icon={<FaChalkboardTeacher />}>
-                                <MenuItem active={window.location.pathname === "/Transport_Fees"}>
-                                    <Link to="/Transportfees" style={{ color: "#3a3b45" }}>
+                                <MenuItem active={window.location.pathname === "/transport_Fees"}>
+                                    <Link to="/transportfees" style={{ color: "#3a3b45" }}>
                                         Transport_Fees
                                     </Link>
                                 </MenuItem>

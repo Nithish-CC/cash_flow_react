@@ -4,6 +4,7 @@ const intialState = {
     transportfeeval: [],
     addtransportfeeval: [],
     datatoDelete: [],
+    year_grade_section: [],
 };
 
 export const transportfeesReducer = (state = intialState, { type, payload }) => {
@@ -23,6 +24,8 @@ export const transportfeesReducer = (state = intialState, { type, payload }) => 
             return { ...state, transportfeeval: payload };
         case TransportTypes.ADD_TRANSPORT_FEES:
             return { ...state, addtransportfeeval: payload };
+        case TransportTypes.SET_ACTION_TRANSPORT_FEES:
+            return { ...state, year_grade_section: payload };
         default:
             return state;
     }

@@ -11,10 +11,16 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { addTransportFees, deleteTransportFees, fecthTransportFees, listTransportFees } from "../../redux/actions/transportActions";
+import {
+    addTransportFees,
+    deleteTransportFees,
+    fecthTransportFees,
+    listTransportFees,
+    setactiontransportfees,
+} from "../../redux/actions/transportActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 import { fecthYears } from "../../redux/actions/yearsActions";
-import { gettinggradesection } from "../../redux/actions/Gradeactions";
+import { gettinggradesection, settinggradeaction } from "../../redux/actions/Gradeactions";
 import { convertCompilerOptionsFromJson } from "typescript";
 const Transport = () => {
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
@@ -61,6 +67,7 @@ const Transport = () => {
     const year = useSelector((state: any) => state.allYears.years.data);
     const grade = useSelector((state: any) => state.allgradesections.grades);
     const transportfeeval = useSelector((state: any) => state.allTransportfees.transportfeeval);
+    const year_grade_section = useSelector((state: any) => state.allTransportfees.year_grade_section);
     const [finalTerms, setFinalterms] = useState<any>([]);
     let removeFormFields = (i: any) => {
         let newFormValues = [...termFeessaveAdd];
@@ -149,7 +156,7 @@ const Transport = () => {
         const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
         const idsofSection = grade_id_bind.map((o) => o.section);
         const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
-        dispatch(settinggradesection());
+        dispatch(setactiontransportfees());
         setFilterGradeByYear(filtered);
         setFilterSectionByYear(filteredForSection);
         setDisplayFinalData(filteredForSection);
@@ -282,6 +289,9 @@ const Transport = () => {
         return im;
     };
 
+    const emptyDataMessage = () => {
+        return <p className="text-center">No Data Found</p>;
+    };
     const paginate = [
         {
             text: "5",
@@ -423,7 +433,7 @@ const Transport = () => {
                                                                                 setStatusFeeDetailsAdd(true);
 
                                                                                 setTermsmasterValue("");
-                                                                                dispatch(fecthYears());
+
                                                                                 dispatch(fecthTransportFees());
                                                                                 transportfee &&
                                                                                     transportfee.length &&
@@ -480,6 +490,13 @@ const Transport = () => {
                                                                                             handleGradeFilter(
                                                                                                 gradeSectionList,
                                                                                                 e.target.value
+                                                                                            );
+                                                                                            dispatch(
+                                                                                                settinggradeaction(
+                                                                                                    year_grade_section,
+                                                                                                    year,
+                                                                                                    grade
+                                                                                                )
                                                                                             );
                                                                                         }}
                                                                                     >

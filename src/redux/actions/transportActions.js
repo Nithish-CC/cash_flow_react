@@ -69,3 +69,25 @@ export const deleteTransportFees = (fee_master_id) => async (dispatch) => {
         alert("Error");
     }
 };
+export const setactiontransportfees = (grade, year, master) => async (dispatch) => {
+    try {
+        master &&
+            master?.length &&
+            master.map((value) => {
+                //index
+                year &&
+                    year?.length &&
+                    year.map((years) => {
+                        if (years.year_id === value.academic_year_id) value.academic_year = years.academic_year;
+                    });
+                grade &&
+                    grade?.length &&
+                    grade.map((grades) => {
+                        if (grades.grade_section_id === value.grade_master_id) value.grade_master_id = grades.grade_master_id;
+                    });
+            });
+        dispatch({ type: TransportTypes.SET_ACTION_TRANSPORT_FEES, payload: master });
+    } catch (err) {
+        alert(err);
+    }
+};
