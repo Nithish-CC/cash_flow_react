@@ -15,7 +15,6 @@ import {
 const Listofpayment = (props: any) => {
   const studentdeta = props.studentdetails;
   const [academicyear, setAcademicyear] = useState<any>([]);
-  // const [studentyearpostdata, setPayments] = useState<any>([]);
   const [academicYearId, setAcademicYearId] = useState<any>([]);
 
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
@@ -33,7 +32,7 @@ const Listofpayment = (props: any) => {
   useEffect(() => {
     if (studentyearpostdata && studentyearpostdata?.length) {
       setAcademicyear(studentyearpostdata);
-      setAcademicYearId(studentyearpostdata[0].grade_id);
+      setAcademicYearId(studentyearpostdata[0].year_id);
     }
   }, [studentyearpostdata]);
 
@@ -74,12 +73,12 @@ const Listofpayment = (props: any) => {
   ];
 
   useEffect(() => {
-    studentyearpostdata && studentyearpostdata.length
-      ? studentyearpostdata.map((data: any) => {
+    studentallpaybalancedata && studentallpaybalancedata.length
+      ? studentallpaybalancedata.map((data: any) => {
           studentyear(data);
         })
       : setMerdattwpus([]);
-  }, [studentyearpostdata]);
+  }, [studentallpaybalancedata]);
 
   function studentyear(gradedata: any) {
     var matchedyearid: any =

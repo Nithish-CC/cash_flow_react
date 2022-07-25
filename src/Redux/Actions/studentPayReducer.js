@@ -1,13 +1,17 @@
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../..";
-import { studentPayFeemaster } from "../Constants/action-types";
+import {
+  studentPayAutoSearchDataAction,
+  studentPayFeemaster,
+  studentPayTermsChangeDataAction,
+} from "../Constants/action-types";
 
 export const studentPayAutosearchData =
   (searchBy, academicYear, setMainSearch, setadmissionsid, termsChange) =>
-  async () => {
+  async (dispatch) => {
     try {
-      axios
+      const response = await axios
         .post(`${baseUrl}autoSearch`, {
           searchby: searchBy,
           academic_year: academicYear,
@@ -17,12 +21,16 @@ export const studentPayAutosearchData =
           setadmissionsid(response.data.data[0][0]);
           termsChange(response.data.data[0][1][1].studentData, "term1");
         });
+      // dispatch({
+      //   type: studentPayAutoSearchDataAction.STUDENT_PAY_AUTO_SEARCH_DATA_ACTION,
+      //   payload: response,
+      // });
     } catch (error) {
       console.log(error);
     }
   };
 
-export const studentPayFeemasterData = (setfeemasterid) => async (dispatch) => {
+export const studentPayFeemasterData = () => async (dispatch) => {
   try {
     getAccessToken();
     const {
@@ -38,17 +46,17 @@ export const studentPayFeemasterData = (setfeemasterid) => async (dispatch) => {
 };
 
 export const studentPayTermsChangeData =
-  (student, terms, setPayment) => async () => {
+  (student, terms) => async (dispatch) => {
     try {
-      axios
-        .post(`${baseUrl}payment`, {
-          student_id: student.student_id,
-          year_id: student.year_id,
-          term_name: terms,
-        })
-        .then((response) => {
-          setPayment(response.data.data);
-        });
+      const response = await axios.post(`${baseUrl}payment`, {
+        student_id: student.student_id,
+        year_id: student.year_id,
+        term_name: terms,
+      });
+      dispatch({
+        type: studentPayTermsChangeDataAction.STUDENT_PAY_TERMS_CHANGE_DATA,
+        payload: response,
+      });
     } catch (error) {
       console.log(error);
     }

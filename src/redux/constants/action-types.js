@@ -97,3 +97,11 @@ export const academicFeesSetAcademicYearDataAction = {
 export const studentProfileSearchwithid = {
   STUDENT_PROFILE_SEARCH_WITH_ID: "STUDENT_PROFILE_SEARCH_WITH_ID",
 };
+
+export const studentPayAutoSearchDataAction = {
+  STUDENT_PAY_AUTO_SEARCH_DATA_ACTION: "STUDENT_PAY_AUTO_SEARCH_DATA_ACTION",
+};
+
+export const studentPayTermsChangeDataAction = {
+  STUDENT_PAY_TERMS_CHANGE_DATA: "STUDENT_PAY_TERMS_CHANGE_DATA",
+};

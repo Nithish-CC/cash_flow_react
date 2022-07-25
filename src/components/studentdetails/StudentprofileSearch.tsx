@@ -4,8 +4,6 @@ import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
 import Academicfees from "./Academicfees";
 import { Row, Col, Form } from "react-bootstrap";
-import axios, { AxiosResponse } from "axios";
-import { baseUrl } from "../../index";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Hostel from "./Hostel";
@@ -126,7 +124,6 @@ const StudentprofileSearch = () => {
     } else {
       dispatch(studentProfileSearchWithIdData(id, studentProfileParameters));
       setStatusStudentEdit(false);
-      // searchData();
       setUpdateProfileActive("");
     }
   };

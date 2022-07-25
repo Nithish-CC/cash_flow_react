@@ -59,12 +59,14 @@ const Academicfees = (props: any) => {
     (state: any) =>
       state.studentDetailsGet.academicFeesStudentDiscount2Red?.data?.data
   );
+  console.log(studentDiscountData);
 
   useEffect(() => {
     if (studentDiscountData && studentDiscountData?.length) {
       setstudentdiscount(studentDiscountData);
       setSpinnerLoad(false);
     } else if (studentDiscountData && studentDiscountData?.length === 0) {
+      setstudentdiscount(studentDiscountData);
     }
   }, [studentDiscountData]);
   const discountType = useSelector(
@@ -130,14 +132,7 @@ const Academicfees = (props: any) => {
 
   const yearacademic = () => {
     dispatch(academicYearStudentYearData(id, student_id));
-    dispatch(
-      academicFeesSetAcademicYearData(
-        id,
-        student_id,
-        setAcademic,
-        setAcademicYear
-      )
-    );
+    dispatch(academicFeesSetAcademicYearData(id, student_id));
   };
 
   const feemaster = () => {
@@ -146,6 +141,7 @@ const Academicfees = (props: any) => {
   const getapi = () => {
     setSpinnerLoad(true);
     dispatch(academicfeesStudentDiscountData2(id, academicYear, termsmaster));
+    setSpinnerLoad(false);
   };
   function studentyear(gradedata: any) {
     var matchedyearid: any =

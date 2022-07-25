@@ -32,6 +32,7 @@ export const feesDetailsLastFourRecordData =
         type: feesDetailsLastFourRecord.FEES_DETAILS_LAST_FOUR_RECORDS,
         payload: response.data.data,
       });
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

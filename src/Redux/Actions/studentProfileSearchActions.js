@@ -7,7 +7,6 @@ import {
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 
 export const studentDetailsPost = (id) => async (dispatch) => {
   try {
@@ -40,13 +39,13 @@ export const stuProfileSearchSetAllSection =
   };
 
 export const studentProfileSearchWithIdData =
-  (id, studentProfileParameters, toast) => async (dispatch) => {
+  (id, studentProfileParameters) => async (dispatch) => {
     try {
       const response = await axios.put(
         `${baseUrl}studentProfile/${id}`,
         studentProfileParameters
       );
-      if (response.data.status == true) {
+      if (response.data.status === true) {
         toast.success("Student Details Updated");
         dispatch(studentDetailsPost(id));
       }

@@ -22,7 +22,7 @@ import {
 import { academicFeesSchoolDetailsData } from "../../Redux/Actions/academicYearActions";
 
 const Studentpay = () => {
-  const [feemasterid, setfeemasterid] = useState<any>([]);
+  // const [feemasterid, setfeemasterid] = useState<any>([]);
   const [searchResultData, setMainSearch] = useState<any>([]);
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
   const [paymentDetails, setPaymentDetails] = useState<any>([]);
@@ -30,7 +30,7 @@ const Studentpay = () => {
   const [buttonDisable, setButtonDisable] = useState(false);
   const [admissionidd, setadmissionsid] = useState<any>([]);
 
-  const [Payment, setPayment] = useState<any>([]);
+  // const [Payment, setPayment] = useState<any>([]);
   const [termsTextBox, setTermsTextBox] = useState<any>([]);
   const [termsmaster, setTermsmaster] = useState<any>([]);
   const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
@@ -54,6 +54,25 @@ const Studentpay = () => {
   };
 
   const [refundSwitch, setRefundSwitch] = useState(false);
+
+  const studentpayautosearchdatas = useSelector(
+    (state: any) => state.studentDetailsGet.studentPayAutoSearchDataReducer
+  );
+
+  console.log(studentpayautosearchdatas);
+
+  const feemasteriddata = useSelector(
+    (state: any) => state.studentDetailsGet.studentPayfeeMasterRed
+  );
+
+  console.log(feemasteriddata);
+
+  const studentpaytermschangedata = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.studentPayTermsChangeDataActionReducer?.data?.data
+  );
+
+  console.log(studentpaytermschangedata);
 
   useEffect(() => {
     callStudentData();
@@ -191,7 +210,7 @@ const Studentpay = () => {
   }, []);
 
   const feemaster = () => {
-    dispatch(studentPayFeemasterData(setfeemasterid));
+    dispatch(studentPayFeemasterData());
   };
 
   const [priceRefundDateChange, setPriceRefundDateChange] = useState<any>([]);
@@ -312,7 +331,7 @@ const Studentpay = () => {
   };
 
   const termsChange = (student: any, terms: any) => {
-    dispatch(studentPayTermsChangeData(student, terms, setPayment));
+    dispatch(studentPayTermsChangeData(student, terms));
   };
 
   //Handle Balance
@@ -641,337 +660,369 @@ const Studentpay = () => {
                                 </tr>
                               </thead>
                               <tbody className="pointer">
-                                {Payment &&
-                                  Payment[0]?.map((value: any, index: any) => {
-                                    return (
-                                      <tr key={index}>
-                                        <td>{value?.fee_type_name}</td>
-                                        <td>{value?.actual_fees}</td>
-                                        <td>{value?.cum_amt}</td>
-                                        <td>{value?.refund}</td>
-                                        <td>{value?.discount_amount}</td>
+                                {studentpaytermschangedata &&
+                                  studentpaytermschangedata[0]?.map(
+                                    (value: any, index: any) => {
+                                      return (
+                                        <tr key={index}>
+                                          <td>{value?.fee_type_name}</td>
+                                          <td>{value?.actual_fees}</td>
+                                          <td>{value?.cum_amt}</td>
+                                          <td>{value?.refund}</td>
+                                          <td>{value?.discount_amount}</td>
 
-                                        {/* <td>{Number(value.balance)}</td> */}
-                                        <td style={{ width: "10%" }}>
+                                          {/* <td>{Number(value.balance)}</td> */}
+                                          <td style={{ width: "10%" }}>
+                                            {!refundSwitch ? (
+                                              <Form.Control
+                                                type="date"
+                                                style={{ width: "82%" }}
+                                                value={
+                                                  index ==
+                                                  priceDateChange[index].index
+                                                    ? moment(
+                                                        priceDateChange[index]
+                                                          .date
+                                                      ).format("YYYY-MM-DD")
+                                                    : moment(new Date()).format(
+                                                        "YYYY-MM-DD"
+                                                      )
+                                                }
+                                                onChange={(e: any) => {
+                                                  handleDateChange({
+                                                    index: index,
+                                                    date: e.target.value,
+                                                  });
+                                                }}
+                                              />
+                                            ) : (
+                                              <Form.Control
+                                                type="date"
+                                                style={{ width: "82%" }}
+                                                value={
+                                                  index ==
+                                                  priceRefundDateChange[index]
+                                                    .index
+                                                    ? moment(
+                                                        priceRefundDateChange[
+                                                          index
+                                                        ].date
+                                                      ).format("YYYY-MM-DD")
+                                                    : moment(new Date()).format(
+                                                        "YYYY-MM-DD"
+                                                      )
+                                                }
+                                                onChange={(e: any) => {
+                                                  handleRefundDateChange({
+                                                    index: index,
+                                                    date: e.target.value,
+                                                  });
+                                                }}
+                                              />
+                                            )}
+                                          </td>
                                           {!refundSwitch ? (
-                                            <Form.Control
-                                              type="date"
-                                              style={{ width: "82%" }}
-                                              value={
-                                                index ==
-                                                priceDateChange[index].index
-                                                  ? moment(
-                                                      priceDateChange[index]
-                                                        .date
-                                                    ).format("YYYY-MM-DD")
-                                                  : moment(new Date()).format(
-                                                      "YYYY-MM-DD"
-                                                    )
-                                              }
-                                              onChange={(e: any) => {
-                                                handleDateChange({
-                                                  index: index,
-                                                  date: e.target.value,
-                                                });
-                                              }}
-                                            />
+                                            <td>{Number(value.balance)}</td>
                                           ) : (
-                                            <Form.Control
-                                              type="date"
-                                              style={{ width: "82%" }}
-                                              value={
-                                                index ==
-                                                priceRefundDateChange[index]
-                                                  .index
-                                                  ? moment(
-                                                      priceRefundDateChange[
-                                                        index
-                                                      ].date
-                                                    ).format("YYYY-MM-DD")
-                                                  : moment(new Date()).format(
-                                                      "YYYY-MM-DD"
-                                                    )
-                                              }
-                                              onChange={(e: any) => {
-                                                handleRefundDateChange({
-                                                  index: index,
-                                                  date: e.target.value,
-                                                });
-                                              }}
-                                            />
+                                            <td>{value.amount_paid}</td>
                                           )}
-                                        </td>
-                                        {!refundSwitch ? (
-                                          <td>{Number(value.balance)}</td>
-                                        ) : (
-                                          <td>{value.amount_paid}</td>
-                                        )}
 
-                                        <td>
-                                          {!refundSwitch ? (
-                                            <input
-                                              type="number"
-                                              className="form-control input-sm txtamt nk border border-warning"
-                                              placeholder="Enter Amount"
-                                              value={
-                                                priceArr &&
-                                                priceArr.length &&
-                                                priceArr[index].amoundTyped >= 0
-                                                  ? priceArr[index]
-                                                      .amoundTyped == 0
-                                                    ? ""
-                                                    : priceArr[index]
-                                                        .amoundTyped
-                                                  : ""
-                                              }
-                                              onChange={(e: any) => {
-                                                Number(e.target.value) >
-                                                Number(value.balance)
-                                                  ? alert(
-                                                      "Amount Greater the Actual Fees"
-                                                    )
-                                                  : handlePriceChange({
-                                                      index: index,
-                                                      amoundTyped: Number(
-                                                        Math.round(
-                                                          e.target.value
-                                                        )
-                                                      ),
-                                                      amount_paid:
-                                                        Number(e.target.value) +
-                                                        Number(
-                                                          value.amount_paid
+                                          <td>
+                                            {!refundSwitch ? (
+                                              <input
+                                                type="number"
+                                                className="form-control input-sm txtamt nk border border-warning"
+                                                placeholder="Enter Amount"
+                                                value={
+                                                  priceArr &&
+                                                  priceArr.length &&
+                                                  priceArr[index].amoundTyped >=
+                                                    0
+                                                    ? priceArr[index]
+                                                        .amoundTyped == 0
+                                                      ? ""
+                                                      : priceArr[index]
+                                                          .amoundTyped
+                                                    : ""
+                                                }
+                                                onChange={(e: any) => {
+                                                  Number(e.target.value) >
+                                                  Number(value.balance)
+                                                    ? alert(
+                                                        "Amount Greater the Actual Fees"
+                                                      )
+                                                    : handlePriceChange({
+                                                        index: index,
+                                                        amoundTyped: Number(
+                                                          Math.round(
+                                                            e.target.value
+                                                          )
                                                         ),
-                                                      student_payment_info_id:
-                                                        value.student_payment_info_id,
-                                                      grade_id: value.grade_id,
-                                                      student_id:
-                                                        value.student_id,
-                                                      refund: Number(
-                                                        value.refund
-                                                      ),
-                                                      balance:
-                                                        Number(value.balance) -
-                                                        Number(e.target.value),
-                                                      cum_amt:
-                                                        Number(e.target.value) +
-                                                        Number(value.cum_amt),
-                                                    });
-                                              }}
-                                            />
-                                          ) : (
-                                            <input
-                                              type="number"
-                                              className="form-control input-sm txtamt nk border border-primary"
-                                              placeholder="Enter Amount"
-                                              value={
-                                                priceRefundArr &&
-                                                priceRefundArr.length
-                                                  ? priceRefundArr[index]
-                                                      .amoundTyped == 0
-                                                    ? ""
-                                                    : priceRefundArr[index]
-                                                        .amoundTyped
-                                                  : ""
-                                              }
-                                              onChange={(e: any) => {
-                                                Number(e.target.value) >
-                                                Number(value.amount_paid)
-                                                  ? alert(
-                                                      "Amount Greater the Actual Fees"
-                                                    )
-                                                  : handleRefundPriceChange({
-                                                      index: index,
-                                                      amoundTyped: Number(
-                                                        Math.round(
+                                                        amount_paid:
+                                                          Number(
+                                                            e.target.value
+                                                          ) +
+                                                          Number(
+                                                            value.amount_paid
+                                                          ),
+                                                        student_payment_info_id:
+                                                          value.student_payment_info_id,
+                                                        grade_id:
+                                                          value.grade_id,
+                                                        student_id:
+                                                          value.student_id,
+                                                        refund: Number(
+                                                          value.refund
+                                                        ),
+                                                        balance:
+                                                          Number(
+                                                            value.balance
+                                                          ) -
+                                                          Number(
+                                                            e.target.value
+                                                          ),
+                                                        cum_amt:
+                                                          Number(
+                                                            e.target.value
+                                                          ) +
+                                                          Number(value.cum_amt),
+                                                      });
+                                                }}
+                                              />
+                                            ) : (
+                                              <input
+                                                type="number"
+                                                className="form-control input-sm txtamt nk border border-primary"
+                                                placeholder="Enter Amount"
+                                                value={
+                                                  priceRefundArr &&
+                                                  priceRefundArr.length
+                                                    ? priceRefundArr[index]
+                                                        .amoundTyped == 0
+                                                      ? ""
+                                                      : priceRefundArr[index]
+                                                          .amoundTyped
+                                                    : ""
+                                                }
+                                                onChange={(e: any) => {
+                                                  Number(e.target.value) >
+                                                  Number(value.amount_paid)
+                                                    ? alert(
+                                                        "Amount Greater the Actual Fees"
+                                                      )
+                                                    : handleRefundPriceChange({
+                                                        index: index,
+                                                        amoundTyped: Number(
+                                                          Math.round(
+                                                            e.target.value
+                                                          )
+                                                        ),
+                                                        amount_paid:
+                                                          Number(
+                                                            value.amount_paid
+                                                          ) -
+                                                          Number(
+                                                            e.target.value
+                                                          ),
+                                                        student_payment_info_id:
+                                                          value.student_payment_info_id,
+                                                        grade_id:
+                                                          value.grade_id,
+                                                        student_id:
+                                                          value.student_id,
+                                                        refund:
+                                                          Number(
+                                                            e.target.value
+                                                          ) +
+                                                          Number(value.refund),
+                                                        refundtyped: Number(
                                                           e.target.value
-                                                        )
-                                                      ),
-                                                      amount_paid:
-                                                        Number(
-                                                          value.amount_paid
-                                                        ) -
-                                                        Number(e.target.value),
-                                                      student_payment_info_id:
-                                                        value.student_payment_info_id,
-                                                      grade_id: value.grade_id,
-                                                      student_id:
-                                                        value.student_id,
-                                                      refund:
-                                                        Number(e.target.value) +
-                                                        Number(value.refund),
-                                                      refundtyped: Number(
-                                                        e.target.value
-                                                      ),
-                                                      balance:
-                                                        Number(value.balance) +
-                                                        Number(e.target.value),
-                                                      cum_amt: value.cum_amt,
-                                                    });
-                                              }}
-                                            />
-                                          )}
-                                        </td>
-                                        <td>
-                                          {!refundSwitch ? (
-                                            <select
-                                              className="form-control pointer"
-                                              style={{ width: "100%" }}
-                                              value={
-                                                modeOFPaymnetChange[index]
-                                                  .payment_mode
-                                              }
-                                              onChange={(e: any) => {
-                                                handleModeOFPaymnetChange({
-                                                  index: index,
-                                                  payment_mode: e.target.value,
-                                                });
-                                              }}
-                                            >
-                                              <option
-                                                style={{
-                                                  fontSize: "10px!important",
+                                                        ),
+                                                        balance:
+                                                          Number(
+                                                            value.balance
+                                                          ) +
+                                                          Number(
+                                                            e.target.value
+                                                          ),
+                                                        cum_amt: value.cum_amt,
+                                                      });
                                                 }}
-                                                value="Cash"
-                                              >
-                                                Cash
-                                              </option>
-                                              <option
-                                                style={{
-                                                  fontSize: "10px!important",
+                                              />
+                                            )}
+                                          </td>
+                                          <td>
+                                            {!refundSwitch ? (
+                                              <select
+                                                className="form-control pointer"
+                                                style={{ width: "100%" }}
+                                                value={
+                                                  modeOFPaymnetChange[index]
+                                                    .payment_mode
+                                                }
+                                                onChange={(e: any) => {
+                                                  handleModeOFPaymnetChange({
+                                                    index: index,
+                                                    payment_mode:
+                                                      e.target.value,
+                                                  });
                                                 }}
-                                                value="Card"
                                               >
-                                                Card
-                                              </option>
-                                              <option
-                                                style={{
-                                                  fontSize: "10px!important",
+                                                <option
+                                                  style={{
+                                                    fontSize: "10px!important",
+                                                  }}
+                                                  value="Cash"
+                                                >
+                                                  Cash
+                                                </option>
+                                                <option
+                                                  style={{
+                                                    fontSize: "10px!important",
+                                                  }}
+                                                  value="Card"
+                                                >
+                                                  Card
+                                                </option>
+                                                <option
+                                                  style={{
+                                                    fontSize: "10px!important",
+                                                  }}
+                                                  value="Direct Account"
+                                                >
+                                                  Direct Acc.
+                                                </option>
+                                                <option
+                                                  style={{
+                                                    fontSize: "10px!important",
+                                                  }}
+                                                  value="Employee Account"
+                                                >
+                                                  Emp. Account
+                                                </option>
+                                              </select>
+                                            ) : (
+                                              <select
+                                                className="form-control pointer"
+                                                style={{ width: "100%" }}
+                                                value={
+                                                  modeOfPayRefundChange[index]
+                                                    .payment_mode
+                                                }
+                                                onChange={(e: any) => {
+                                                  handlemodeOfPayRefundChange({
+                                                    index: index,
+                                                    payment_mode:
+                                                      e.target.value,
+                                                  });
                                                 }}
-                                                value="Direct Account"
                                               >
-                                                Direct Acc.
-                                              </option>
-                                              <option
-                                                style={{
-                                                  fontSize: "10px!important",
+                                                <option value="Cash">
+                                                  Cash
+                                                </option>
+                                                <option value="Card">
+                                                  Card
+                                                </option>
+                                                <option value="Direct Account.">
+                                                  Direct Acc.
+                                                </option>
+                                                <option value="Employee Account">
+                                                  Emp. Account
+                                                </option>
+                                              </select>
+                                            )}
+                                          </td>
+                                          <td>
+                                            {!refundSwitch ? (
+                                              <Form.Control
+                                                as="textarea"
+                                                value={
+                                                  commentChange[index].comments
+                                                }
+                                                onChange={(e: any) => {
+                                                  handleCommentChange({
+                                                    index: index,
+                                                    comments: e.target.value,
+                                                  });
                                                 }}
-                                                value="Employee Account"
-                                              >
-                                                Emp. Account
-                                              </option>
-                                            </select>
-                                          ) : (
-                                            <select
-                                              className="form-control pointer"
-                                              style={{ width: "100%" }}
-                                              value={
-                                                modeOfPayRefundChange[index]
-                                                  .payment_mode
-                                              }
-                                              onChange={(e: any) => {
-                                                handlemodeOfPayRefundChange({
-                                                  index: index,
-                                                  payment_mode: e.target.value,
-                                                });
-                                              }}
-                                            >
-                                              <option value="Cash">Cash</option>
-                                              <option value="Card">Card</option>
-                                              <option value="Direct Account.">
-                                                Direct Acc.
-                                              </option>
-                                              <option value="Employee Account">
-                                                Emp. Account
-                                              </option>
-                                            </select>
-                                          )}
-                                        </td>
-                                        <td>
-                                          {!refundSwitch ? (
-                                            <Form.Control
-                                              as="textarea"
-                                              value={
-                                                commentChange[index].comments
-                                              }
-                                              onChange={(e: any) => {
-                                                handleCommentChange({
-                                                  index: index,
-                                                  comments: e.target.value,
-                                                });
-                                              }}
-                                              rows={1}
-                                            />
-                                          ) : (
-                                            <Form.Control
-                                              as="textarea"
-                                              value={
-                                                commentRefundChange[index]
-                                                  .comments
-                                              }
-                                              onChange={(e: any) => {
-                                                handleRefundCommentChange({
-                                                  index: index,
-                                                  comments: e.target.value,
-                                                });
-                                              }}
-                                              rows={1}
-                                            />
-                                          )}
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
+                                                rows={1}
+                                              />
+                                            ) : (
+                                              <Form.Control
+                                                as="textarea"
+                                                value={
+                                                  commentRefundChange[index]
+                                                    .comments
+                                                }
+                                                onChange={(e: any) => {
+                                                  handleRefundCommentChange({
+                                                    index: index,
+                                                    comments: e.target.value,
+                                                  });
+                                                }}
+                                                rows={1}
+                                              />
+                                            )}
+                                          </td>
+                                        </tr>
+                                      );
+                                    }
+                                  )}
                               </tbody>
                               <tfoot>
-                                {Payment &&
-                                Payment.length &&
-                                Payment[0] &&
-                                Payment[0].length ? (
+                                {studentpaytermschangedata &&
+                                studentpaytermschangedata.length &&
+                                studentpaytermschangedata[0] &&
+                                studentpaytermschangedata[0].length ? (
                                   <tr>
                                     <th>Total</th>
                                     <th id="totalfeeamt">
-                                      {Payment &&
-                                        Payment.length &&
-                                        Payment[4].totalFees}
+                                      {studentpaytermschangedata &&
+                                        studentpaytermschangedata.length &&
+                                        studentpaytermschangedata[4].totalFees}
                                     </th>
                                     <th>
-                                      {Payment &&
-                                        Payment.length &&
-                                        Payment[5].totalcumamt}
+                                      {studentpaytermschangedata &&
+                                        studentpaytermschangedata.length &&
+                                        studentpaytermschangedata[5]
+                                          .totalcumamt}
                                     </th>
                                     <th>
-                                      {Payment &&
-                                        Payment.length &&
-                                        Payment[2].totalRefund}
+                                      {studentpaytermschangedata &&
+                                        studentpaytermschangedata.length &&
+                                        studentpaytermschangedata[2]
+                                          .totalRefund}
                                     </th>
                                     <th>
-                                      {Payment &&
-                                        Payment.length &&
-                                        Payment[6].totaldiscountamount}
+                                      {studentpaytermschangedata &&
+                                        studentpaytermschangedata.length &&
+                                        studentpaytermschangedata[6]
+                                          .totaldiscountamount}
                                     </th>
 
                                     <th />
                                     <th>
-                                      {Payment &&
-                                        Payment.length &&
-                                        Payment[1].balance}
+                                      {studentpaytermschangedata &&
+                                        studentpaytermschangedata.length &&
+                                        studentpaytermschangedata[1].balance}
                                     </th>
                                     {!refundSwitch ? (
                                       <th
                                         style={{ padding: "13px" }}
                                         id="totalbalamt"
                                       >
-                                        {Payment &&
-                                          Payment.length &&
-                                          Payment[1].Allbalance}
+                                        {studentpaytermschangedata &&
+                                          studentpaytermschangedata.length &&
+                                          studentpaytermschangedata[1]
+                                            .Allbalance}
                                       </th>
                                     ) : (
                                       <th id="totalpaidamt">
                                         {" "}
-                                        {Payment &&
-                                          Payment.length &&
-                                          Payment[2].Alltotalpaid}
+                                        {studentpaytermschangedata &&
+                                          studentpaytermschangedata.length &&
+                                          studentpaytermschangedata[2]
+                                            .Alltotalpaid}
                                       </th>
                                     )}
                                   </tr>
@@ -989,7 +1040,7 @@ const Studentpay = () => {
                   </div>
                 </div>
                 <Listofpayment
-                  feemasterid={feemasterid}
+                  feemasterid={feemasteriddata}
                   studentdetails={AllDetailsOfStudent}
                   studentadmission={AllDetailsOfStudent}
                 ></Listofpayment>

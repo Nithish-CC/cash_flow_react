@@ -30,6 +30,11 @@ const Feesdetails = (props: any) => {
   );
   console.log(feesdetailslastfourrecord);
 
+  const setfeemasterdata = useSelector(
+    (state: any) => state.studentDetailsGet.feesDetails_SetFeeMasterId
+  );
+  console.log(setfeemasterdata);
+
   useEffect(() => {
     if (status && status.toString().length > 0) {
       dispatch(feesDetailsAutosearchData(status));
@@ -58,7 +63,7 @@ const Feesdetails = (props: any) => {
       FeeMasterId &&
       FeeMasterId.length &&
       FeeMasterId.filter(
-        (data: any) => data.fee_master_id == feemasterdata.fee_master_id
+        (data: any) => data.fee_master_id === feemasterdata.fee_master_id
       );
     matchedyearid &&
       matchedyearid.length &&

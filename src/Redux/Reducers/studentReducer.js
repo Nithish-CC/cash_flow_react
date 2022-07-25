@@ -3,6 +3,7 @@ import {
   academicFeesSchoolDetails,
   academicFeesSetAcademicYearDataAction,
   academicFeesSetFeeMasterId,
+  academicFeesStudentDiscount,
   academicFeesStudentDiscount2,
   academicFeesStudentYearPost,
   ActionTypes,
@@ -12,7 +13,9 @@ import {
   hostelModeOfTransport,
   listOfPaymentstudentAllPayBalance,
   listOfPaymentStudentYearPost,
+  studentPayAutoSearchDataAction,
   studentPayFeemaster,
+  studentPayTermsChangeDataAction,
   studentProfileSearchwithid,
   studentProfileSetAllSection,
 } from "../Constants/action-types";
@@ -34,6 +37,9 @@ const initialState = {
   listOfPaymentStudentYearPostReducer: {},
   listOfPaymentstudentAllPayBalanceReducer: {},
   studentProfileSearchWithIdReducer: {},
+  academicFeesStudentDiscountReducer: {},
+  studentPayAutoSearchDataReducer: {},
+  studentPayTermsChangeDataActionReducer: {},
 };
 
 export const studentReducerGet = (state = initialState, { type, payload }) => {
@@ -72,6 +78,12 @@ export const studentReducerGet = (state = initialState, { type, payload }) => {
       console.log(payload);
       return { ...state, studentProfileSearchWithIdReducer: payload };
     }
+    case academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT:
+      return { ...state, academicFeesStudentDiscountReducer: payload };
+    case studentPayAutoSearchDataAction.STUDENT_PAY_AUTO_SEARCH_DATA_ACTION:
+      return { ...state, studentPayAutoSearchDataReducer: payload };
+    case studentPayTermsChangeDataAction.STUDENT_PAY_TERMS_CHANGE_DATA:
+      return { ...state, studentPayTermsChangeDataActionReducer: payload };
     default:
       return state;
   }

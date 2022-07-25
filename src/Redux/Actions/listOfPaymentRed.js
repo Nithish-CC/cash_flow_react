@@ -22,16 +22,13 @@ export const listOfPaymentStudentYearPostData = (id) => async (dispatch) => {
 };
 
 export const listOfPaymentstudentAllPayBalanceData =
-  (id, academicYearId, setPayments) => async (dispatch) => {
+  (id, academicYearId) => async (dispatch) => {
     try {
       getAccessToken();
       const response = await axios.post(`${baseUrl}studentAllPayBalance`, {
         student_id: id,
         year_id: academicYearId,
       });
-      // .then((res) => {
-      //   setPayments(res.data.data);
-      // });
       dispatch({
         type: listOfPaymentstudentAllPayBalance.LIST_OF_PAYMENT_STUDENT_ALL_PAY_BALANCE,
         payload: response,

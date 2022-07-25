@@ -20,31 +20,26 @@ export const academicFeesStudentDiscountData =
     setEditingYearOfFee,
     getapi
   ) =>
-  async () => {
+  async (dispatch) => {
     try {
       getAccessToken();
-      axios
-        .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
+      const response = await axios.put(
+        `${baseUrl}studentdiscount/${values.student_payment_info_id}`,
+        {
           discount_amount: updateYearOfFee,
           dis_feetype_id: updateDiscountFeeType,
-        })
-        .then((res) => {
-          toast.success("Discount amount is saved successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setEditingYearOfFee({});
-          getapi();
-        })
-        .dispatch({
-          type: academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT,
-        });
-    } catch (error) {}
+        }
+      );
+      toast.success("Discount amount is saved successfully");
+      setEditingYearOfFee({});
+      getapi();
+      dispatch({
+        type: academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT,
+        payload: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 export const academicYearStudentYearData =
@@ -98,6 +93,7 @@ export const academicFeesSetFeeMasterIdData =
         type: academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID,
         payload: data,
       });
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
