@@ -56,20 +56,19 @@ const Studentpay = () => {
   const [refundSwitch, setRefundSwitch] = useState(false);
 
   const studentpayautosearchdatas = useSelector(
-    (state: any) => state.studentDetailsGet.studentPayAutoSearchDataReducer
+    (state: any) => state.studentDetailsGet.studentPay_AutosearchData
   );
 
   console.log(studentpayautosearchdatas);
 
   const feemasteriddata = useSelector(
-    (state: any) => state.studentDetailsGet.studentPayfeeMasterRed
+    (state: any) => state.studentDetailsGet.studentPay_feeMaster
   );
 
   console.log(feemasteriddata);
 
   const studentpaytermschangedata = useSelector(
-    (state: any) =>
-      state.studentDetailsGet.studentPayTermsChangeDataActionReducer?.data?.data
+    (state: any) => state.studentDetailsGet.studentPay_paymentapi?.data?.data
   );
 
   console.log(studentpaytermschangedata);

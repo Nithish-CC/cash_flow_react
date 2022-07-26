@@ -27,7 +27,7 @@ const Listofpayment = (props: any) => {
 
   const studentyearpostdata = useSelector(
     (state: any) =>
-      state.studentDetailsGet.listOfPaymentStudentYearPostReducer?.data?.data
+      state.studentDetailsGet.listOfPayment_StudentYearPost?.data?.data
   );
   useEffect(() => {
     if (studentyearpostdata && studentyearpostdata?.length) {
@@ -38,9 +38,10 @@ const Listofpayment = (props: any) => {
 
   const studentallpaybalancedata = useSelector(
     (state: any) =>
-      state.studentDetailsGet.listOfPaymentstudentAllPayBalanceReducer?.data
-        ?.data
+      state.studentDetailsGet.listOfPayment_studentAllPayBalance?.data?.data
   );
+
+  console.log(studentallpaybalancedata);
 
   const paginate = [
     { text: "5", value: 5 },
@@ -52,11 +53,11 @@ const Listofpayment = (props: any) => {
 
   useEffect(() => {
     dispatch(listOfPaymentStudentYearPostData(id));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     dispatch(listOfPaymentstudentAllPayBalanceData(id, academicYearId));
-  }, [academicYearId]);
+  }, [id, academicYearId]);
 
   const col: any = [
     { dataField: "fee_type_name", text: "Fee Type Name", sort: true },

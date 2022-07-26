@@ -44,8 +44,7 @@ const Academicfees = (props: any) => {
   const dispatch = useDispatch<any>();
 
   const studentYearData = useSelector(
-    (state: any) =>
-      state.studentDetailsGet.academicFeesStuYearPostRed?.data?.data
+    (state: any) => state.studentDetailsGet.academicFees_studentYear?.data?.data
   );
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const Academicfees = (props: any) => {
 
   const studentDiscountData = useSelector(
     (state: any) =>
-      state.studentDetailsGet.academicFeesStudentDiscount2Red?.data?.data
+      state.studentDetailsGet.academicFees_studentDiscount?.data?.data
   );
   console.log(studentDiscountData);
 
@@ -70,7 +69,7 @@ const Academicfees = (props: any) => {
     }
   }, [studentDiscountData]);
   const discountType = useSelector(
-    (state: any) => state.studentDetailsGet.academicFeesDiscountTypeRed
+    (state: any) => state.studentDetailsGet.academicFees_DiscountType
   );
 
   const feeId = useSelector(

@@ -22,11 +22,11 @@ const Feesdetails = (props: any) => {
   const dispatch = useDispatch<any>();
 
   const feesdetailsautosearch = useSelector(
-    (state: any) => state.studentDetailsGet.feesDetailsautoSearch
+    (state: any) => state.studentDetailsGet.feesDetails_autoSearch
   );
 
   const feesdetailslastfourrecord = useSelector(
-    (state: any) => state.studentDetailsGet.feesDetailsLastFourRecordsReducer
+    (state: any) => state.studentDetailsGet.feesDetails_lastFourRecords
   );
   console.log(feesdetailslastfourrecord);
 
