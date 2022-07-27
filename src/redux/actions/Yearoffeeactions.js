@@ -7,14 +7,14 @@ import { toast } from "react-toastify";
 export const deleteyearoffee = (fee_master_id, frontSearchYear, frontSearchGrade) => async (dispatch) => {
   try {
     getAccessToken();
-    axios.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id } }).then((res) => {
+    console.log(fee_master_id);
+    axios.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id.term.year_of_fees_id } }).then((res) => {
       if (res.data.data.isDeletable === false) {
         toast.warning("Students exists On Year oF Fee");
       } else {
         toast.success("Year oF Fee Deleted Successsfully");
+        dispatch({ type: ActionTypes.DELETE_YEAR_OF_FEE, payload: fee_master_id.index });
       }
-      dispatch({ type: ActionTypes.DELETE_YEAR_OF_FEE, payload: fee_master_id });
-      // dispatch(yearoffeeactions(frontSearchYear, frontSearchGrade));
     });
   } catch (err) {
     alert(err);
@@ -39,13 +39,13 @@ export const yearoffeeactions = (year_id, grade_id) => async (dispatch) => {
 export const addYearOfFee = (values) => async (dispatch) => {
   try {
     getAccessToken();
-    const yearresponse = await axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values);
-
-    if (yearresponse.data.message.includes("Year of Fee already present")) {
-      toast.warning(yearresponse.data.message);
-    } else if (yearresponse.data.message.includes("Year of Fee inserted")) {
+    const postyear = await axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values);
+    if (postyear.data.message.includes("Year of Fee already present")) {
+      toast.warning(postyear.data.message);
+    } else if (postyear.data.message.includes("Year of Fee inserted")) {
       toast.success("Saved successfully");
     }
+    dispatch({ type: ActionTypes.POST_YEAR_OF_FEE, payload: postyear });
   } catch (err) {
     toast.warning("Enter Correct data");
   }

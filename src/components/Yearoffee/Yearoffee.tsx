@@ -157,8 +157,7 @@ const Yearoffee = () => {
 
   const handleClose = () => {
     setShow(false);
-    dispatch(deleteyearoffee(datatoDelete.year_of_fee_id, frontSearchYear, frontSearchGrade));
-    dispatch(yearoffeeactions(frontSearchYear, frontSearchGrade));
+    dispatch(deleteyearoffee(datatoDelete, frontSearchYear, frontSearchGrade));
   };
 
   const handleTermAmount = (data: any) => {
@@ -241,14 +240,14 @@ const Yearoffee = () => {
     {
       dataField: "Actions",
       text: "Actions",
-      formatter: (cell: any, row: any) => {
+      formatter: (cell: any, row: any, rowIndex: any) => {
         return (
           <i
             className="fas fa-trash"
             style={{ color: "red", cursor: "pointer" }}
             onClick={() => {
               setShow(true);
-              setdatatoDelete(row.terms[0]);
+              setdatatoDelete({ term: row.terms[0], index: rowIndex });
             }}
           ></i>
         );
@@ -275,7 +274,9 @@ const Yearoffee = () => {
     values.term_count = values.optional_fees ? values.term_count : values.term_fees.length;
     if (sumoftermFees === values.fee_amount) {
       delete values.optional_fees;
+
       dispatch(addYearOfFee(values));
+      //dispatch(yearoffeeactions(frontSearchYear, frontSearchGrade));
     } else if (sumoftermFees < values.fee_amount) {
       toast.warning("Fee amount is Greater than sum of term amount");
     } else if (sumoftermFees > values.fee_amount) {
@@ -318,7 +319,8 @@ const Yearoffee = () => {
                               ) : (
                                 <Button
                                   onClick={() => {
-                                    window.location.reload();
+                                    setStatusFeeDetailsAdd(false);
+                                    dispatch(yearoffeeactions(frontSearchYear, frontSearchGrade));
                                   }}
                                 >
                                   Back
