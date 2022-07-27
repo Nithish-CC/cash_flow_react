@@ -17,7 +17,9 @@ export const transportfeesReducer = (state = intialState, { type, payload }) => 
         case TransportTypes.DELETE_TRANSPORT_FEES: {
             return {
                 ...state,
-                transportfeeval: state.transportfeeval.filter((datatoDelete) => datatoDelete.terms[0].year_of_fees_id !== payload),
+                transportfeeval: state.transportfeeval
+                    .slice(0, payload)
+                    .concat(state.transportfeeval.slice(payload + 1, state.transportfeeval.length)),
             };
         }
         case TransportTypes.LIST_TRANSPORT_FEES:

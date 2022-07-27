@@ -51,22 +51,20 @@ export const addTransportFees = (values) => async (dispatch) => {
     }
 };
 
-export const deleteTransportFees = (fee_master_id) => async (dispatch) => {
+export const deleteTransportFees = (fee_master_id, frontSearchYear, frontSearchGrade) => async (dispatch) => {
     try {
         getAccessToken();
-        axios.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id } }).then((res) => {
-            if (res.data.data.isDeletable == false) {
+        console.log(fee_master_id);
+        axios.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id.term.year_of_fees_id } }).then((res) => {
+            if (res.data.data.isDeletable === false) {
                 toast.warning("Students exists On Year oF Fee");
             } else {
                 toast.success("Year oF Fee Deleted Successsfully");
+                dispatch({ type: TransportTypes.DELETE_TRANSPORT_FEES, payload: fee_master_id.index });
             }
-            dispatch({
-                type: TransportTypes.DELETE_TRANSPORT_FEES,
-                payload: fee_master_id,
-            });
         });
     } catch (err) {
-        alert("Error");
+        alert(err);
     }
 };
 export const setactiontransportfees = (grade, year, master) => async (dispatch) => {

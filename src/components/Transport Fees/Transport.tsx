@@ -224,10 +224,9 @@ const Transport = () => {
         }
         setFinalterms(termscount);
     };
-
-    const handleClose = (year_of_fee_id: any) => {
+    const handleClose = () => {
         setShow(false);
-        dispatch(deleteTransportFees(datatoDelete.year_of_fee_id));
+        dispatch(deleteTransportFees(datatoDelete, frontSearchYear, frontSearchGrade));
     };
 
     const handleTermAmount = (data: any) => {
@@ -335,14 +334,14 @@ const Transport = () => {
         {
             dataField: "Actions",
             text: "Actions",
-            formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+            formatter: (cell: any, row: any, rowIndex: any) => {
                 return (
                     <i
                         className="fas fa-trash"
                         style={{ color: "red", cursor: "pointer" }}
                         onClick={() => {
                             setShow(true);
-                            setdatatoDelete(row.terms[0]);
+                            setdatatoDelete({ term: row.terms[0], index: rowIndex });
                         }}
                     ></i>
                 );
@@ -545,6 +544,7 @@ const Transport = () => {
                                                                 data={transportfeeval}
                                                                 columns={col}
                                                                 hover
+                                                                noDataIndication={emptyDataMessage}
                                                                 pagination={paginationFactory({
                                                                     sizePerPageList: paginate,
                                                                 })}
