@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   listOfPaymentstudentAllPayBalanceData,
   listOfPaymentStudentYearPostData,
-} from "../../Redux/Actions/listOfPaymentRed";
+} from "../../redux/Actions/listOfPaymentRed";
 
 const Listofpayment = (props: any) => {
   const studentdeta = props.studentdetails;

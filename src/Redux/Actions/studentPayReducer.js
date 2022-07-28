@@ -55,7 +55,7 @@ export const studentPayTermsChangeData =
       });
       dispatch({
         type: studentPayTermsChangeDataAction.STUDENT_PAY_TERMS_CHANGE_DATA,
-        payload: response,
+        payload: response.data.data,
       });
     } catch (error) {
       console.log(error);

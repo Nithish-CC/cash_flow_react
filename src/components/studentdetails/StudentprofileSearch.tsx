@@ -12,7 +12,7 @@ import {
   studentDetailsPost,
   studentProfileSearchWithIdData,
   stuProfileSearchSetAllSection,
-} from "../../Redux/Actions/studentProfileSearchActions";
+} from "../../redux/Actions/studentProfileSearchActions";
 
 const StudentprofileSearch = () => {
   const urlParams: any = useParams();

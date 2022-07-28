@@ -23,7 +23,7 @@ import {
   addYear,
   deleteYear,
   fecthYears,
-} from "../../Redux/Actions/yearsActions";
+} from "../../redux/Actions/yearsActions";
 
 const Year = () => {
   //Academic Year

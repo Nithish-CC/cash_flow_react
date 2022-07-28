@@ -12,7 +12,7 @@ import {
   academicFeesStudentDiscountData,
   academicfeesStudentDiscountData2,
   academicYearStudentYearData,
-} from "../../Redux/Actions/academicYearActions";
+} from "../../redux/Actions/academicYearActions";
 
 const Academicfees = (props: any) => {
   const urlParams: any = useParams();

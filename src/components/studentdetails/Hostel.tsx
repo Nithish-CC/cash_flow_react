@@ -8,7 +8,7 @@ import {
   hostalFeeValueData,
   hostalModeOfTransportData,
   modeOfTransports,
-} from "../../Redux/Actions/modeOfTransport";
+} from "../../redux/Actions/modeOfTransport";
 
 const Hostel = (props: any) => {
   const status = props.student_id;

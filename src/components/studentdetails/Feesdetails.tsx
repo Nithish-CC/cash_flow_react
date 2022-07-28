@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   feesDetailsAutosearchData,
   feesDetailsLastFourRecordData,
-} from "../../Redux/Actions/feesDetail";
-import { academicFeesSetFeeMasterIdData } from "../../Redux/Actions/academicYearActions";
+} from "../../redux/Actions/feesDetail";
+import { academicFeesSetFeeMasterIdData } from "../../redux/Actions/academicYearActions";
 const Feesdetails = (props: any) => {
   let history = useHistory();
   const status = props.student_id;
@@ -23,6 +23,11 @@ const Feesdetails = (props: any) => {
 
   const feesdetailsautosearch = useSelector(
     (state: any) => state.studentDetailsGet.feesDetailsautoSearch
+  );
+
+  const studentpaytermschangedata = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.studentPayTermsChangeDataActionReducer
   );
 
   const feesdetailslastfourrecord = useSelector(
@@ -116,6 +121,24 @@ const Feesdetails = (props: any) => {
       setAllGotFinalData([]);
     }
   }, [YearOfBalanceByYear]);
+  const feeTypeNameDisplay = () => {
+    feesdetailslastfourrecord &&
+      feesdetailslastfourrecord?.length &&
+      feesdetailslastfourrecord.map((feeType: any) => {
+        setfeemasterdata &&
+          setfeemasterdata?.length &&
+          setfeemasterdata.map((value: any) => {
+            if (feeType.fee_master_id === value.fee_master_id) {
+              feeType.fee_type_name = value.fee_type_name;
+            }
+            return feesdetailslastfourrecord;
+          });
+      });
+  };
+
+  useEffect(() => {
+    feeTypeNameDisplay();
+  }, [feesdetailslastfourrecord, setfeemasterdata]);
   return (
     <div>
       <div className="row">
@@ -169,9 +192,9 @@ const Feesdetails = (props: any) => {
                       </div>
                       <div>
                         <label>
-                          {DisplayFinalData &&
-                            DisplayFinalData.length &&
-                            DisplayFinalData.map((data: any) => {
+                          {feesdetailslastfourrecord &&
+                            feesdetailslastfourrecord.length &&
+                            feesdetailslastfourrecord.map((data: any) => {
                               return <option> {data.fee_type_name}</option>;
                             })}
                         </label>

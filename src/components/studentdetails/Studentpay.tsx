@@ -18,8 +18,8 @@ import {
   studentPayTermsChangeData,
   studentPayUpdateStudentBalanceData,
   studentPayUpdateStudentBalanceData2,
-} from "../../Redux/Actions/studentPayReducer";
-import { academicFeesSchoolDetailsData } from "../../Redux/Actions/academicYearActions";
+} from "../../redux/Actions/studentPayReducer";
+import { academicFeesSchoolDetailsData } from "../../redux/Actions/academicYearActions";
 
 const Studentpay = () => {
   // const [feemasterid, setfeemasterid] = useState<any>([]);
@@ -69,7 +69,7 @@ const Studentpay = () => {
 
   const studentpaytermschangedata = useSelector(
     (state: any) =>
-      state.studentDetailsGet.studentPayTermsChangeDataActionReducer?.data?.data
+      state.studentDetailsGet.studentPayTermsChangeDataActionReducer
   );
 
   console.log(studentpaytermschangedata);
