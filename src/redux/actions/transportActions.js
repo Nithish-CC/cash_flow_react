@@ -37,9 +37,9 @@ export const addTransportFees = (values) => async (dispatch) => {
     try {
         const res = await axios.post(`${baseUrl}transportval/create_transport`, values);
 
-        if (res.data.message.includes("Year of Fee already present")) {
+        if (res.data.message.includes("Transport fee already present")) {
             toast.warning(res.data.message);
-        } else if (res.data.message.includes("Year of Fee inserted")) {
+        } else if (res.data.message.includes("Transport fee inserted")) {
             toast.success("Saved successfully");
         }
         dispatch({
@@ -47,7 +47,7 @@ export const addTransportFees = (values) => async (dispatch) => {
             payload: res.data.data,
         });
     } catch (err) {
-        toast.warning("Enter Correct data");
+        toast.warning("Enter Correct datassss");
     }
 };
 

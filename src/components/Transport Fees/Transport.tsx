@@ -88,19 +88,16 @@ const Transport = () => {
         setdatatoDelete({});
     };
 
-    const callTheAddGrade = (value: any) => {
-        let newArr = clickedGrade;
-        if (clickedGrade.includes(value)) {
-            const index = newArr.indexOf(value);
-            if (index > -1) {
-                newArr.splice(index, 1);
-            }
-            setClickedGrade(newArr);
+    const callGrade = (e: any) => {
+        let checked: any[] = [];
+
+        if (e.target.checked) {
+            setClickedGrade([...clickedGrade, e.target.value]);
         } else {
-            newArr.push(value);
+            setClickedGrade(checked);
         }
-        setClickedGrade(newArr);
     };
+
     useEffect(() => {
         dispatch(fecthYears());
         dispatch(settinggradesection());
@@ -291,6 +288,7 @@ const Transport = () => {
     const emptyDataMessage = () => {
         return <p className="text-center">No Data Found</p>;
     };
+
     const paginate = [
         {
             text: "5",
@@ -353,7 +351,7 @@ const Transport = () => {
     const handleSave = (values: any) => {
         let sumoftermFees = 0;
         values.year_id = frontSearchYear;
-        values.grade_id = frontSearchGrade;
+        values.grade_id = filterGradeByYear.length ? clickedGrade : null;
         transportfee?.map((value: any) => {
             if (values.fee_master_id === value.fee_master_id) {
                 values.optional_fee = value.optional_fee === "true" ? true : false;
@@ -450,6 +448,9 @@ const Transport = () => {
                                                                         <Button
                                                                             onClick={() => {
                                                                                 setStatusFeeDetailsAdd(false);
+                                                                                dispatch(
+                                                                                    listTransportFees(frontSearchYear, frontSearchGrade)
+                                                                                );
                                                                             }}
                                                                         >
                                                                             Back
@@ -468,7 +469,7 @@ const Transport = () => {
                                                             <div
                                                                 style={{
                                                                     position: "relative",
-                                                                    marginLeft: "150px",
+                                                                    marginLeft: "80px",
                                                                 }}
                                                             >
                                                                 <table width="120%">
@@ -512,7 +513,10 @@ const Transport = () => {
                                                                                 </div>
                                                                             </td>
                                                                             <td>
-                                                                                <div className="form-group" style={{ width: "28%" }}>
+                                                                                <div
+                                                                                    className="form-group"
+                                                                                    style={{ width: "28%", marginRight: "20" }}
+                                                                                >
                                                                                     <Form.Select
                                                                                         value={frontSearchGrade}
                                                                                         onChange={(e: any) => {
@@ -539,16 +543,18 @@ const Transport = () => {
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <BootstrapTable
-                                                                keyField="academic_year"
-                                                                data={transportfeeval}
-                                                                columns={col}
-                                                                hover
-                                                                noDataIndication={emptyDataMessage}
-                                                                pagination={paginationFactory({
-                                                                    sizePerPageList: paginate,
-                                                                })}
-                                                            />
+                                                            <Table bordered responsive>
+                                                                <BootstrapTable
+                                                                    keyField="academic_year"
+                                                                    data={transportfeeval}
+                                                                    columns={col}
+                                                                    hover
+                                                                    noDataIndication={emptyDataMessage}
+                                                                    pagination={paginationFactory({
+                                                                        sizePerPageList: paginate,
+                                                                    })}
+                                                                />
+                                                            </Table>
                                                             <div style={{ marginLeft: "20%" }}>
                                                                 <Modal show={show} onHide={SuddenhandleClose}>
                                                                     <Modal.Header closeButton>
@@ -629,9 +635,7 @@ const Transport = () => {
                                                                                 type="checkbox"
                                                                                 key={index}
                                                                                 value={romanvalues.grade_master_id}
-                                                                                onChange={(e: any) => {
-                                                                                    callTheAddGrade(Number(e.target.value));
-                                                                                }}
+                                                                                onChange={callGrade}
                                                                                 id={`inline-checkbox-${index}`}
                                                                                 style={{
                                                                                     marginTop: "unset !important",
