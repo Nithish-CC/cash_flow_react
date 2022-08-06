@@ -35,6 +35,7 @@ export const listTransportFees = (year_id, grade_id) => async (dispatch) => {
 
 export const addTransportFees = (values) => async (dispatch) => {
     try {
+        getAccessToken();
         const res = await axios.post(`${baseUrl}transportval/create_transport`, values);
 
         if (res.data.message.includes("Transport fee already present")) {
