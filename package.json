@@ -29,6 +29,7 @@
     "react-bootstrap": "^2.1.0",
     "react-bootstrap-sidebar-menu": "^0.1.2",
     "react-bootstrap-table-next": "^4.0.3",
+    "react-bootstrap-table2-overlay": "^2.0.0",
     "react-bootstrap-table2-paginator": "^2.1.2",
     "react-dom": "^16.2.0",
     "react-icons": "^4.3.1",

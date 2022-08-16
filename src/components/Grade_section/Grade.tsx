@@ -1,21 +1,13 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import {
-  Button,
-  Form,
-  Col,
-  Row,
-  Container,
-  Modal,
-} from "react-bootstrap";
-import { getAccessToken } from "../../config/getAccessToken";
+import { Button, Form, Col, Row, Container, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch, useSelector } from "react-redux";
-import { deletinggradesection, gettinggradesection,postinggradeactions } from "../../redux/actions/Gradeactions";
+import { deletinggradesection, gettinggradesection, postinggradeactions } from "../../redux/actions/Gradeactions";
 import { fecthYears } from "../../redux/actions/yearsActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 
@@ -26,28 +18,25 @@ const Grade = () => {
   const [datatoDelete, setdatatoDelete] = useState<any>({});
   const [duplication, setDuplication] = useState(false);
   const [filter, setfilter] = useState<any>([]);
-  const dispatch=useDispatch<any>()
-  const grade=useSelector((state: any)=>state.allgradesections.grades)
-  const master=useSelector((state:any)=>state.setgrademastersections.gradetypes)  
-  const year=useSelector((state:any)=>state.allYears.years.data)
-  const finalresult=useSelector((state: any)=>state.allgradesections.year_grade_section )
- 
-  
+  const dispatch = useDispatch<any>();
+  const grade = useSelector((state: any) => state.allgradesections.grades);
+  const master = useSelector((state: any) => state.setgrademastersections.gradetypes);
+  const year = useSelector((state: any) => state.allYears.years.data);
+  const finalresult = useSelector((state: any) => state.allgradesections.year_grade_section);
+
   const [academic_year_data, setAcademic_year_data] = useState("");
- useEffect(()=>{
-  if(year&&year.length)
-  setAcademic_year_data(year[0].year_id)
- },[year])
-  
+  useEffect(() => {
+    if (year && year.length) setAcademic_year_data(year[0].year_id);
+  }, [year]);
+
   //Modal Popup
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
-   
-    dispatch(deletinggradesection(datatoDelete.id));
 
+    dispatch(deletinggradesection(datatoDelete.id));
   };
- 
+
   const SuddenhandleClose = () => {
     setShow(false);
     setdatatoDelete({});
@@ -55,7 +44,7 @@ const Grade = () => {
   const handleShow = () => {
     setShow(true);
   };
-  
+
   const paginate = [
     {
       text: "5",
@@ -122,20 +111,16 @@ const Grade = () => {
       sort: true,
     },
   ];
-  useEffect(() => {    
-    dispatch(gettinggradesection(year, master));  
-   }, [ year, master]);
+  useEffect(() => {
+    dispatch(gettinggradesection(year, master));
+  }, [year, master]);
   useEffect(() => {
     dispatch(settinggradesection());
-    dispatch(fecthYears());    
+    dispatch(fecthYears());
   }, []);
-   
-  const handleSubmit =async (e:any) => {       
-    if (      
-      academic_year_data.length <= 0 ||
-      clickedGrade.length <= 0 ||
-      academic_section.length <= 0
-    ) {
+
+  const handleSubmit = async (e: any) => {
+    if (academic_year_data.length <= 0 || clickedGrade.length <= 0 || academic_section.length <= 0) {
       if (academic_year_data.length <= 0) {
         alert("a");
         toast.error("Please Select Academic Year", {
@@ -178,18 +163,18 @@ const Grade = () => {
           grade_id: Number(element),
           section: academic_section.toUpperCase(),
         };
-        dispatch(postinggradeactions(sendData,grade,setDuplication))
-        
+        setTimeout(() => {
+          dispatch(postinggradeactions(sendData, setDuplication));
+        }, 700);
       });
       setStatusGradeAdd(false);
-      setTimeout( ()=>    dispatch(gettinggradesection())
-      , 600);
+      dispatch(gettinggradesection());
       setClickedGrade([]);
       setAcademic_year_data(year[0].year_id);
-      setAcademic_section("");             
+      setAcademic_section("");
     }
   };
-  
+
   const callTheAddGrade = (value: any) => {
     let newArr = clickedGrade;
     if (clickedGrade.includes(value)) {
@@ -204,9 +189,9 @@ const Grade = () => {
     setClickedGrade(newArr);
   };
   const datatoFilterNull: any =
-  finalresult &&
-  finalresult.length &&
-  finalresult.sort().map((data: any) => {
+    grade &&
+    grade?.length &&
+    grade.sort().map((data: any) => {
       let keys = Object.keys(data);
       keys.map((key: any) => {
         data[key] = data[key] == null ? "" : data[key];
@@ -218,12 +203,7 @@ const Grade = () => {
     datatoFilterNull &&
     datatoFilterNull?.length &&
     datatoFilterNull.sort().filter((data: any) => {
-      return Object.keys(data).some((key) =>  
-        data[key]
-          .toString()
-          .toLowerCase()
-          .includes(filter.toString().toLowerCase())
-      );
+      return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
     });
   return (
     <div>
@@ -235,10 +215,7 @@ const Grade = () => {
               <Navbar></Navbar>
               <div className="container-fluid">
                 <div className="col-xl-12 m-auto">
-                  <div
-                    className="col-lg-10"
-                    style={{ marginLeft: "10%", width: "90%" }}
-                  >
+                  <div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
                     <div className="card mb-3">
                       <div style={{ color: "rgb(230, 39, 39)" }}>
                         <div className="card-header mb-4 bg-transparent border-1 text-center">
@@ -247,11 +224,7 @@ const Grade = () => {
                           </h4>
                           <div style={{ textAlign: "right" }}>
                             {!statusGradeAdd ? (
-                              <Button
-                                type="submit"
-                                className="btn btn-primary btn-sm btn-save"
-                                onClick={() => setStatusGradeAdd(true)}
-                              >
+                              <Button type="submit" className="btn btn-primary btn-sm btn-save" onClick={() => setStatusGradeAdd(true)}>
                                 Add
                               </Button>
                             ) : (
@@ -264,53 +237,39 @@ const Grade = () => {
                         <div className="card-body">
                           <div className="table-responsive">
                             <div className="dataTables_wrapper dt-bootstrap4 no-footer">
-                              <div
-                                id="dataTable_filter"
-                                className="dataTables_filter"
-                              >
-                                <Form.Label
-                                  htmlFor="inputPassword5"
-                                  style={{ marginLeft: "75%" }}
-                                >
+                              <div id="dataTable_filter" className="dataTables_filter">
+                                <Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
                                   Search:
                                   <Form.Control
                                     type="search"
                                     className="form-control form-control-sm"
                                     onChange={(e) => setfilter(e.target.value)}
-                                  />                                  
+                                  />
                                 </Form.Label>
                               </div>
                             </div>
-                          
-                        
-                              <BootstrapTable
-                                keyField="index"
-                                data={dataSearchBar}
-                                columns={col}
-                                hover
-                                striped
-                                pagination={paginationFactory({
-                                  sizePerPageList: paginate,
-                                  
-                                })}
-                              />
-                              </div>
-                                               
+
+                            <BootstrapTable
+                              keyField="index"
+                              data={dataSearchBar}
+                              columns={col}
+                              hover
+                              striped
+                              pagination={paginationFactory({
+                                sizePerPageList: paginate,
+                              })}
+                            />
+                          </div>
+
                           <Modal show={show} onHide={SuddenhandleClose}>
                             <Modal.Header closeButton>
-                              <Modal.Title>
-                                Delete {datatoDelete.year}
-                              </Modal.Title>
+                              <Modal.Title>Delete {datatoDelete.year}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                              Are You Sure You What To Delete{" "}
-                              <b>{datatoDelete.year}</b> ?
+                              Are You Sure You What To Delete <b>{datatoDelete.year}</b> ?
                             </Modal.Body>
                             <Modal.Footer>
-                              <Button
-                                variant="secondary"
-                                onClick={SuddenhandleClose}
-                              >
+                              <Button variant="secondary" onClick={SuddenhandleClose}>
                                 Close
                               </Button>
                               <Button variant="danger" onClick={handleClose}>
@@ -345,11 +304,7 @@ const Grade = () => {
                           />
                           <Container>
                             <Row>
-                              <Form.Group
-                                as={Row}
-                                className="mb-12 pb-4"
-                                controlId="formPlaintextPassword"
-                              >
+                              <Form.Group as={Row} className="mb-12 pb-4" controlId="formPlaintextPassword">
                                 <Form.Label
                                   column
                                   sm="4"
@@ -368,15 +323,9 @@ const Grade = () => {
                                   >
                                     {year &&
                                       year.length &&
-                                      year.map(
-                                        (values: any, index: any) => {
-                                          return (
-                                            <option value={values.year_id}>
-                                              {values.academic_year}
-                                            </option>
-                                          );
-                                        }
-                                      )}
+                                      year.map((values: any, index: any) => {
+                                        return <option value={values.year_id}>{values.academic_year}</option>;
+                                      })}
                                   </Form.Select>
                                 </Col>
                               </Form.Group>
@@ -393,33 +342,27 @@ const Grade = () => {
                               <Col sm="6">
                                 {master &&
                                   master.length &&
-                                  master.map(
-                                    (romanvalues: any, index: any) => {
-                                      return (
-                                        <Form.Check
-                                          inline
-                                          label={`${romanvalues.grade_master}`}
-                                          name="group1"
-                                          type="checkbox"
-                                          key={index}
-                                          value={romanvalues.grade_master_id}
-                                          onChange={(e: any) => {
-                                             callTheAddGrade(e.target.value);
-                                          }}
-                                          id={`inline-checkbox-${index}`}
-                                          style={{
-                                            marginTop: "unset !important",
-                                          }}
-                                        />
-                                      );
-                                    }
-                                  )}
+                                  master.map((romanvalues: any, index: any) => {
+                                    return (
+                                      <Form.Check
+                                        inline
+                                        label={`${romanvalues.grade_master}`}
+                                        name="group1"
+                                        type="checkbox"
+                                        key={index}
+                                        value={romanvalues.grade_master_id}
+                                        onChange={(e: any) => {
+                                          callTheAddGrade(e.target.value);
+                                        }}
+                                        id={`inline-checkbox-${index}`}
+                                        style={{
+                                          marginTop: "unset !important",
+                                        }}
+                                      />
+                                    );
+                                  })}
                               </Col>
-                              <Form.Group
-                                as={Row}
-                                className="mb-12 pt-4 pb-2"
-                                controlId="formPlaintextPassword"
-                              >
+                              <Form.Group as={Row} className="mb-12 pt-4 pb-2" controlId="formPlaintextPassword">
                                 <Form.Label
                                   column
                                   sm="4"
@@ -454,9 +397,7 @@ const Grade = () => {
                                   setStatusGradeAdd(false);
                                   setClickedGrade([]);
                                   setAcademic_section("");
-                                  setAcademic_year_data(
-                                    year[0].year_id
-                                  );
+                                  setAcademic_year_data(year[0].year_id);
                                 }}
                               >
                                 Cancel
@@ -464,12 +405,8 @@ const Grade = () => {
                               &nbsp;
                               <Button
                                 type="submit"
-                                className={
-                                  duplication
-                                    ? "disabled btn btn-danger btn-save"
-                                    : "btn btn-danger btn-save"
-                                }
-                                onClick={(e:any) => {
+                                className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
+                                onClick={(e: any) => {
                                   setDuplication(false);
                                   setClickedGrade([]);
                                   handleSubmit(e);
@@ -491,5 +428,5 @@ const Grade = () => {
       </div>
     </div>
   );
-}
+};
 export default Grade;

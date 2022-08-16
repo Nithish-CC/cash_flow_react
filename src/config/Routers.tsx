@@ -2,7 +2,7 @@ import axios from "axios";
 
 import "../config/Axiosconfiq";
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import Login from "../components/auth/Login";
 import StudentProfileId from "../components/studentdetails/Student";
@@ -28,6 +28,7 @@ import HostalFee from "../components/Hostal/HostalFee";
 import Placesspotting from "../components/Transport/Placesspotting";
 import Profile from "../components/setting_page/Profile";
 import Optional from "../components/Optional Fees/Optional";
+//import Gradess from "../components/Grade_section/gradess";
 import Transport from "../components/Transport Fees/Transport";
 
 const PrivateRoute = (props: any) => {
