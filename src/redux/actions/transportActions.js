@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
-import { ActionTypes, TransportTypes } from "../constants/action-types";
+import { TransportTypes } from "../constants/action-types";
 
 export const fecthTransportFees = () => async (dispatch) => {
     try {

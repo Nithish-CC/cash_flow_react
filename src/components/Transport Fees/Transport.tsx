@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Form, Col, Row, Spinner, Modal, Tab } from "react-bootstrap";
-import axios, { AxiosResponse } from "axios";
-import { getAccessToken } from "../../config/getAccessToken";
-import { baseUrl } from "../../index";
+import { Button, Table, Form, Col, Row, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -21,10 +18,8 @@ import {
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 import { fecthYears } from "../../redux/actions/yearsActions";
 import { gettinggradesection, settinggradeaction } from "../../redux/actions/Gradeactions";
-import { convertCompilerOptionsFromJson } from "typescript";
 const Transport = () => {
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
-    const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
     const [feeTypeName, setFeeTypeName] = useState("");
     const [clickedGrade, setClickedGrade] = useState<any[]>([]);
     const [searchAcademicYear, setSearchAcademicYear] = useState("");
@@ -41,7 +36,6 @@ const Transport = () => {
     const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
     const [termsmasterValue, setTermsmasterValue] = useState<any>([]);
     const [termFeesAdd, setTermFeesAdd] = useState(true);
-    const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
     const school: any = sessionStorage.getItem("School");
     const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
         {
