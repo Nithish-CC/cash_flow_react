@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import {
   academicFeesDiscountType,
   academicFeesSchoolDetails,
-  academicFeesSetAcademicYearDataAction,
   academicFeesSetFeeMasterId,
   academicFeesStudentDiscount,
   academicFeesStudentDiscount2,
@@ -13,14 +12,7 @@ import {
 } from "../Constants/action-types";
 
 export const academicFeesStudentDiscountData =
-  (
-    updateYearOfFee,
-    updateDiscountFeeType,
-    values,
-    setEditingYearOfFee,
-    getapi
-  ) =>
-  async (dispatch) => {
+  (updateYearOfFee, updateDiscountFeeType, values) => async (dispatch) => {
     try {
       getAccessToken();
       const response = await axios.put(
@@ -30,9 +22,7 @@ export const academicFeesStudentDiscountData =
           dis_feetype_id: updateDiscountFeeType,
         }
       );
-      toast.success("Discount amount is saved successfully");
-      setEditingYearOfFee({});
-      getapi();
+      console.log(response);
       dispatch({
         type: academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT,
         payload: response,

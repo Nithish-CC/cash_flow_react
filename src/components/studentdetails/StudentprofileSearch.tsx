@@ -31,7 +31,7 @@ const StudentprofileSearch = () => {
 
   const dispatch = useDispatch<any>();
   const studentProfile = useSelector(
-    (state: any) => state.studentDetailsGet.newUser?.data?.data
+    (state: any) => state.studentDetailsGet.studentProfileData?.data?.data
   );
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const StudentprofileSearch = () => {
   };
 
   const studentdetailsgetdata = useSelector(
-    (state: any) => state.studentDetailsGet.studentProfileAllSection
+    (state: any) => state.studentDetailsGet.gradeSections
   );
   console.log(studentdetailsgetdata);
 
@@ -95,9 +95,8 @@ const StudentprofileSearch = () => {
   };
 
   const studentprofilewithid = useSelector(
-    (state: any) => state.studentDetailsGet.studentProfileSearchWithIdReducer
+    (state: any) => state.studentDetailsGet.studentProfile_WithId
   );
-  console.log(studentprofilewithid);
 
   useEffect(() => {
     if (studentprofilewithid && studentprofilewithid?.length) {
@@ -124,6 +123,7 @@ const StudentprofileSearch = () => {
     } else {
       dispatch(studentProfileSearchWithIdData(id, studentProfileParameters));
       setStatusStudentEdit(false);
+      dispatch(studentDetailsPost(id));
       setUpdateProfileActive("");
     }
   };

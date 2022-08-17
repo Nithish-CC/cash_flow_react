@@ -47,7 +47,6 @@ export const studentProfileSearchWithIdData =
       );
       if (response.data.status === true) {
         toast.success("Student Details Updated");
-        dispatch(studentDetailsPost(id));
       }
       dispatch({
         type: studentProfileSearchwithid.STUDENT_PROFILE_SEARCH_WITH_ID,

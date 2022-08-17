@@ -83,26 +83,26 @@ export const studentPayHandleBalanceData =
     }
   };
 
-export const studentPayUpdateStudentBalanceData =
-  (FeetempArr, toast, windowReload, setButtonDisable) => async () => {
-    try {
-      getAccessToken();
-      axios
-        .put(`${baseUrl}updateStudentBalance`, {
-          data: FeetempArr,
-        })
-        .then((response) => {
-          toast.success("Payment Success");
-          windowReload();
-        })
-        .catch((err) => {
-          setButtonDisable(false);
-          toast.warning("something went wrong");
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+// export const studentPayUpdateStudentBalanceData =
+//   (FeetempArr, toast, windowReload, setButtonDisable) => async () => {
+//     try {
+//       getAccessToken();
+//       axios
+//         .put(`${baseUrl}updateStudentBalance`, {
+//           data: FeetempArr,
+//         })
+//         .then((response) => {
+//           toast.success("Payment Success");
+//           windowReload();
+//         })
+//         .catch((err) => {
+//           setButtonDisable(false);
+//           toast.warning("something went wrong");
+//         });
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
 
 export const studentPayUpdateStudentBalanceData2 =
   (FeetempArr, toast, windowReload, setButtonDisable) => async () => {

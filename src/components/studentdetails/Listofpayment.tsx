@@ -27,7 +27,7 @@ const Listofpayment = (props: any) => {
 
   const studentyearpostdata = useSelector(
     (state: any) =>
-      state.studentDetailsGet.listOfPaymentStudentYearPostReducer?.data?.data
+      state.studentDetailsGet.listOfPayment_StudentYear?.data?.data
   );
   useEffect(() => {
     if (studentyearpostdata && studentyearpostdata?.length) {
@@ -37,9 +37,7 @@ const Listofpayment = (props: any) => {
   }, [studentyearpostdata]);
 
   const studentallpaybalancedata = useSelector(
-    (state: any) =>
-      state.studentDetailsGet.listOfPaymentstudentAllPayBalanceReducer?.data
-        ?.data
+    (state: any) => state.studentDetailsGet.student_pay_balance?.data?.data
   );
 
   const paginate = [

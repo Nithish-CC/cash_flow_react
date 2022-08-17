@@ -16,7 +16,6 @@ import {
   studentPayFeemasterData,
   studentPayHandleBalanceData,
   studentPayTermsChangeData,
-  studentPayUpdateStudentBalanceData,
   studentPayUpdateStudentBalanceData2,
 } from "../../redux/Actions/studentPayReducer";
 import { academicFeesSchoolDetailsData } from "../../redux/Actions/academicYearActions";
@@ -30,7 +29,7 @@ const Studentpay = () => {
   const [buttonDisable, setButtonDisable] = useState(false);
   const [admissionidd, setadmissionsid] = useState<any>([]);
 
-  // const [Payment, setPayment] = useState<any>([]);
+  const [Payment, setPayment] = useState<any>([]);
   const [termsTextBox, setTermsTextBox] = useState<any>([]);
   const [termsmaster, setTermsmaster] = useState<any>([]);
   const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
@@ -62,14 +61,13 @@ const Studentpay = () => {
   console.log(studentpayautosearchdatas);
 
   const feemasteriddata = useSelector(
-    (state: any) => state.studentDetailsGet.studentPayfeeMasterRed
+    (state: any) => state.studentDetailsGet.studentPay_Feemaster
   );
 
   console.log(feemasteriddata);
 
   const studentpaytermschangedata = useSelector(
-    (state: any) =>
-      state.studentDetailsGet.studentPayTermsChangeDataActionReducer
+    (state: any) => state.studentDetailsGet.studentPay_TermsChange
   );
 
   console.log(studentpaytermschangedata);
@@ -329,7 +327,6 @@ const Studentpay = () => {
 
     return () => clearInterval(interval);
   };
-
   const termsChange = (student: any, terms: any) => {
     dispatch(studentPayTermsChangeData(student, terms));
   };
@@ -369,14 +366,14 @@ const Studentpay = () => {
           setButtonDisable
         )
       );
-      dispatch(
-        studentPayUpdateStudentBalanceData(
-          FeetempArr,
-          toast,
-          windowReload,
-          setButtonDisable
-        )
-      );
+      // dispatch(
+      //   studentPayUpdateStudentBalanceData(
+      //     FeetempArr,
+      //     toast,
+      //     windowReload,
+      //     setButtonDisable
+      //   )
+      // );
     }
   };
 

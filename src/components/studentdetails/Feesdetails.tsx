@@ -22,7 +22,7 @@ const Feesdetails = (props: any) => {
   const dispatch = useDispatch<any>();
 
   const feesdetailsautosearch = useSelector(
-    (state: any) => state.studentDetailsGet.feesDetailsautoSearch
+    (state: any) => state.studentDetailsGet.feesDetails_AutoSearch
   );
 
   const studentpaytermschangedata = useSelector(
@@ -31,12 +31,12 @@ const Feesdetails = (props: any) => {
   );
 
   const feesdetailslastfourrecord = useSelector(
-    (state: any) => state.studentDetailsGet.feesDetailsLastFourRecordsReducer
+    (state: any) => state.studentDetailsGet.feesDetails_four_api
   );
   console.log(feesdetailslastfourrecord);
 
   const setfeemasterdata = useSelector(
-    (state: any) => state.studentDetailsGet.feesDetails_SetFeeMasterId
+    (state: any) => state.studentDetailsGet.academicfees_Feemaster
   );
   console.log(setfeemasterdata);
 
