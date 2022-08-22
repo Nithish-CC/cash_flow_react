@@ -41,10 +41,9 @@ export const stuProfileSearchSetAllSection =
 export const studentProfileSearchWithIdData =
   (id, studentProfileParameters) => async (dispatch) => {
     try {
-      const response = await axios.put(
-        `${baseUrl}studentProfile/${id}`,
-        studentProfileParameters
-      );
+      const response = await axios.put(`${baseUrl}studentProfile/${id}`, {
+        studentProfileParameters,
+      });
       if (response.data.status === true) {
         toast.success("Student Details Updated");
       }
