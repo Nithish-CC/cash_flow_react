@@ -116,6 +116,26 @@ const Feesdetails = (props: any) => {
       setAllGotFinalData([]);
     }
   }, [YearOfBalanceByYear]);
+
+  const feeTypeNameDisplay = () => {
+    feesdetailslastfourrecord &&
+      feesdetailslastfourrecord?.length &&
+      feesdetailslastfourrecord.map((feeType: any) => {
+        setfeemasterdata &&
+          setfeemasterdata?.length &&
+          setfeemasterdata.map((value: any) => {
+            if (feeType.fee_master_id === value.fee_master_id) {
+              feeType.fee_type_name = value.fee_type_name;
+            }
+            return feesdetailslastfourrecord;
+          });
+      });
+  };
+
+  useEffect(() => {
+    feeTypeNameDisplay();
+  }, [feesdetailslastfourrecord, setfeemasterdata]);
+
   return (
     <div>
       <div className="row">
@@ -169,9 +189,9 @@ const Feesdetails = (props: any) => {
                       </div>
                       <div>
                         <label>
-                          {DisplayFinalData &&
-                            DisplayFinalData.length &&
-                            DisplayFinalData.map((data: any) => {
+                          {feesdetailslastfourrecord &&
+                            feesdetailslastfourrecord.length &&
+                            feesdetailslastfourrecord.map((data: any) => {
                               return <option> {data.fee_type_name}</option>;
                             })}
                         </label>
