@@ -259,7 +259,7 @@ const Yearoffee = () => {
   const handleSave = (values: any) => {
     let sumoftermFees = 0;
     values.year_id = frontSearchYear;
-    values.grade_id = frontSearchGrade;
+    values.grade_id = filterGradeByYear.length ? frontSearchGrade : null;
     feemaster?.map((value: any) => {
       if (values.fee_master_id === value.fee_master_id) {
         values.optional_fee = value.optional_fee === "true" ? true : false;
@@ -276,6 +276,7 @@ const Yearoffee = () => {
       delete values.optional_fees;
 
       dispatch(addYearOfFee(values));
+
       //dispatch(yearoffeeactions(frontSearchYear, frontSearchGrade));
     } else if (sumoftermFees < values.fee_amount) {
       toast.warning("Fee amount is Greater than sum of term amount");
@@ -374,7 +375,7 @@ const Yearoffee = () => {
                                           >
                                             {filterGradeByYear &&
                                               filterGradeByYear.length &&
-                                              filterGradeByYear.map((values: any) => {
+                                              filterGradeByYear.map((values: any, value: any) => {
                                                 return <option value={values.grade_master_id}>{values.grade_master}</option>;
                                               })}
                                           </Form.Select>
@@ -555,7 +556,7 @@ const Yearoffee = () => {
                                             <i
                                               className="fas fa-save fa-1x"
                                               style={{ color: "blue", cursor: "pointer" }}
-                                              onClick={() => {
+                                              onClick={(value: any) => {
                                                 handleSave(termFeessaveAdd[rowindex]);
                                               }}
                                             ></i>{" "}
