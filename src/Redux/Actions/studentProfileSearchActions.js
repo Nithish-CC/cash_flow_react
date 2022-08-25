@@ -41,18 +41,18 @@ export const stuProfileSearchSetAllSection =
 export const studentProfileSearchWithIdData =
   (id, studentProfileParameters) => async (dispatch) => {
     try {
-      const response = await axios.put(
-        `${baseUrl}studentProfile/${id}`,
-        studentProfileParameters
-      );
-      if (response.data.status === true) {
-        toast.success("Student Details Updated");
-        dispatch(studentDetailsPost(id));
-      }
-      dispatch({
-        type: studentProfileSearchwithid.STUDENT_PROFILE_SEARCH_WITH_ID,
-        payload: response,
-      });
+      const response = await axios
+        .put(`${baseUrl}studentProfile/${id}`, studentProfileParameters)
+        .then((res) => {
+          if (res.data.status === true) {
+            toast.success("Student Details Updated");
+            dispatch(studentDetailsPost(id));
+          }
+          dispatch({
+            type: studentProfileSearchwithid.STUDENT_PROFILE_SEARCH_WITH_ID,
+            payload: res,
+          });
+        });
     } catch (error) {
       console.log(error);
     }

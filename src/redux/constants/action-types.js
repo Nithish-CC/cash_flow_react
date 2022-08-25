@@ -40,6 +40,10 @@ export const modeOfTransportTypes = {
   MODE_OF_TRANSPORT: "MODE_OF_TRANSPORT",
 };
 
+export const modeOfTransport = {
+  MODE_OF_TRANSPORT_DATA: "MODE_OF_TRANSPORT_DATA",
+};
+
 export const hostelFeeValues = {
   HOSTAL_FEE_VALUES: "HOSTAL_FEE_VALUES",
 };

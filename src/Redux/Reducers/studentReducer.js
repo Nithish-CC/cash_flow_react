@@ -13,6 +13,7 @@ import {
   hostelModeOfTransport,
   listOfPaymentstudentAllPayBalance,
   listOfPaymentStudentYearPost,
+  modeOfTransport,
   studentPayAutoSearchDataAction,
   studentPayFeemaster,
   studentPayTermsChangeDataAction,
@@ -24,6 +25,7 @@ const initialState = {
   studentProfile: {},
   hostalFee: {},
   studentFacilities_hostel: {},
+  modeOfTransportData: {},
   feesDetails_SetFeeMasterId: {},
   academicFees_DiscountType: {},
   studentPay_feeMaster: {},
@@ -50,6 +52,8 @@ export const studentReducerGet = (state = initialState, { type, payload }) => {
       return { ...state, hostalFee: payload };
     case hostelModeOfTransport.HOSTAL_MODE_OF_TRANSPORT:
       return { ...state, studentFacilities_hostel: payload };
+    case modeOfTransport.MODE_OF_TRANSPORT_DATA:
+      return { ...state, modeOfTransportData: payload };
     case academicFeesSetFeeMasterId.ACADEMIC_FEES_SET_FEE_MASTER_ID:
       return { ...state, feesDetails_SetFeeMasterId: payload };
     case academicFeesDiscountType.ACADEMIC_FEES_DISCOUNT_TYPE:

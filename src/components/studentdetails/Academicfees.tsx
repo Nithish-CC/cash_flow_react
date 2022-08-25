@@ -71,6 +71,7 @@ const Academicfees = (props: any) => {
   const discountType = useSelector(
     (state: any) => state.studentDetailsGet.academicFees_DiscountType
   );
+  console.log(discountType);
 
   const feeId = useSelector(
     (state: any) => state.studentDetailsGet.feesDetails_SetFeeMasterId
@@ -94,7 +95,7 @@ const Academicfees = (props: any) => {
       dispatch(
         academicFeesStudentDiscountData(
           updateYearOfFee,
-          discountType,
+          updateDiscountFeeType,
           values,
           setEditingYearOfFee,
           getapi
@@ -385,6 +386,14 @@ const Academicfees = (props: any) => {
                                     <Button
                                       variant="warning"
                                       onClick={() => {
+                                        dispatch(
+                                          academicFeesSetAcademicYearData(
+                                            id,
+                                            student_id,
+                                            setAcademic,
+                                            setAcademicYear
+                                          )
+                                        );
                                         updateDiscount(values);
                                         handlespechar(values, updateYearOfFee);
                                       }}

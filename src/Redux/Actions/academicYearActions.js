@@ -23,20 +23,20 @@ export const academicFeesStudentDiscountData =
   async (dispatch) => {
     try {
       getAccessToken();
-      const response = await axios.put(
-        `${baseUrl}studentdiscount/${values.student_payment_info_id}`,
-        {
+      const response = await axios
+        .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
           discount_amount: updateYearOfFee,
           dis_feetype_id: updateDiscountFeeType,
-        }
-      );
-      toast.success("Discount amount is saved successfully");
-      setEditingYearOfFee({});
-      getapi();
-      dispatch({
-        type: academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT,
-        payload: response,
-      });
+        })
+        .then((res) => {
+          toast.success("Discount amount is saved successfully");
+          setEditingYearOfFee({});
+          getapi();
+          dispatch({
+            type: academicFeesStudentDiscount.ACADEMIC_FEES_STUD_DISCOUNT,
+            payload: res,
+          });
+        });
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +63,7 @@ export const academicFeesSetAcademicYearData =
   (id, student_id, setAcademic, setAcademicYear) => async (dispatch) => {
     try {
       getAccessToken();
-      axios
+      const response = axios
         .post(`${baseUrl}studentyear`, {
           student_admissions_id: Number(id),
           student_id: student_id,
@@ -71,11 +71,11 @@ export const academicFeesSetAcademicYearData =
         .then((res) => {
           setAcademic(res.data.data);
           setAcademicYear(res.data.data[0].year_id);
+          dispatch({
+            type: academicFeesSetAcademicYearDataAction.ACADEMIC_FEES_SET_ACADEMIC_YEAR_DATA_ACTION,
+            payload: res,
+          });
         });
-      // dispatch({
-      //   type: academicFeesSetAcademicYearDataAction.ACADEMIC_FEES_SET_ACADEMIC_YEAR_DATA_ACTION,
-      //   payload: response,
-      // });
     } catch (error) {
       console.log(error);
     }

@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   hostelFeeValues,
   hostelModeOfTransport,
+  modeOfTransport,
   modeOfTransportTypes,
 } from "../Constants/action-types";
 import { toast } from "react-toastify";
@@ -18,6 +19,10 @@ export const modeOfTransports = (props, setShow) => async (dispatch) => {
     } else if (response.data.data.IsExsist === "year") {
       toast.warning(response.data.message);
     }
+    dispatch({
+      type: modeOfTransport.MODE_OF_TRANSPORT_DATA,
+      payload: response,
+    });
   } catch (error) {
     console.log(error);
   }

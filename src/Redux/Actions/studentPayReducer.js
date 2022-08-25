@@ -21,10 +21,10 @@ export const studentPayAutosearchData =
           setadmissionsid(response.data.data[0][0]);
           termsChange(response.data.data[0][1][1].studentData, "term1");
         });
-      // dispatch({
-      //   type: studentPayAutoSearchDataAction.STUDENT_PAY_AUTO_SEARCH_DATA_ACTION,
-      //   payload: response,
-      // });
+      dispatch({
+        type: studentPayAutoSearchDataAction.STUDENT_PAY_AUTO_SEARCH_DATA_ACTION,
+        payload: response,
+      });
     } catch (error) {
       console.log(error);
     }
