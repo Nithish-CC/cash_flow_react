@@ -11,6 +11,7 @@ export const ActionTypes = {
     GET_YEAR_OF_FEE: "GET_YEAR_OF_FEE",
     POST_YEAR_OF_FEE: "POST_YEAR_OF_FEE",
     DELETE_YEAR_OF_FEE: "DELETE_YEAR_OF_FEE",
+    SET_All_VALUES: "SET_All_VALUES",
 };
 export const Grademastertypes = {
     SET_GRADE_TYPES: " SET_GRADE_TYPES",

@@ -12,6 +12,7 @@ export const gettinggradesection = (year, master) => async (dispatch) => {
       data.index = index + 1;
     }, dispatch({ type: ActionTypes.SET_GRADE, payload: response.data.data }));
     dispatch(settinggradeaction(response.data.data, year, master));
+    dispatch(setfiltergradesection());
   } catch (err) {
     alert(err, "ihyvyvguvutvtuvtu");
   }
@@ -34,6 +35,7 @@ export const deletinggradesection = (gradeid) => async (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      dispatch(setfiltergradesection());
       dispatch(gettinggradesection());
     } else if (deleted.data.data.isDeletable === false) {
       toast.warning(`Data Exist in Year of Fee Master`, {
@@ -46,7 +48,7 @@ export const deletinggradesection = (gradeid) => async (dispatch) => {
         progress: undefined,
       });
     }
-
+    dispatch(setfiltergradesection());
     dispatch(gettinggradesection());
   } catch (err) {
     alert(err, "1");
@@ -68,6 +70,8 @@ export const postinggradeactions = (sendData, setDuplication) => async (dispatch
             draggable: true,
             progress: undefined,
           });
+          dispatch(setfiltergradesection());
+          dispatch(gettinggradesection());
         } else if (res.data.data.IsExsist === true) {
           toast.warning(`Data Already Added`, {
             position: "top-right",
@@ -79,6 +83,8 @@ export const postinggradeactions = (sendData, setDuplication) => async (dispatch
             progress: undefined,
           });
         }
+        dispatch(setfiltergradesection());
+        dispatch(gettinggradesection());
         setDuplication(false);
       })
       .catch((err) => {
@@ -109,4 +115,12 @@ export const settinggradeaction = (grade, year, master) => async (dispatch) => {
   } catch (err) {
     alert(err);
   }
+};
+export const setfiltergradesection = () => async (dispatch) => {
+  getAccessToken();
+  const allgrades = await axios.get(`${baseUrl}gradeSection/settingapicollection`);
+  dispatch({
+    type: ActionTypes.SET_All_VALUES,
+    payload: allgrades.data.data,
+  });
 };

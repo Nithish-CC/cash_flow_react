@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch, useSelector } from "react-redux";
-import { deletinggradesection, gettinggradesection, postinggradeactions } from "../../redux/actions/Gradeactions";
+import { deletinggradesection, postinggradeactions, setfiltergradesection } from "../../redux/actions/Gradeactions";
 import { fecthYears } from "../../redux/actions/yearsActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 
@@ -22,7 +22,7 @@ const Grade = () => {
   const grade = useSelector((state: any) => state.allgradesections.grades);
   const master = useSelector((state: any) => state.setgrademastersections.gradetypes);
   const year = useSelector((state: any) => state.allYears.years.data);
-  const finalresult = useSelector((state: any) => state.allgradesections.year_grade_section);
+  const finalvalues = useSelector((state: any) => state.allgradesections.all_data_section);
 
   const [academic_year_data, setAcademic_year_data] = useState("");
   useEffect(() => {
@@ -69,8 +69,11 @@ const Grade = () => {
   ];
   const col: any = [
     {
-      dataField: "index",
-      text: "No.",
+      dataField: "Index",
+      text: "S.No.",
+      formatter: (cell: any, row: any, Index: any, formatExtraData: any) => {
+        return <>{Index + 1}</>;
+      },
       sort: true,
     },
     {
@@ -91,7 +94,7 @@ const Grade = () => {
     {
       dataField: "Action",
       text: "Action",
-      formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+      formatter: (cell: any, row: any, Index: any, formatExtraData: any) => {
         return (
           <Button
             variant="danger"
@@ -112,7 +115,7 @@ const Grade = () => {
     },
   ];
   useEffect(() => {
-    dispatch(gettinggradesection(year, master));
+    dispatch(setfiltergradesection());
   }, [year, master]);
   useEffect(() => {
     dispatch(settinggradesection());
@@ -168,7 +171,6 @@ const Grade = () => {
         }, 700);
       });
       setStatusGradeAdd(false);
-      dispatch(gettinggradesection());
       setClickedGrade([]);
       setAcademic_year_data(year[0].year_id);
       setAcademic_section("");
@@ -188,21 +190,11 @@ const Grade = () => {
     }
     setClickedGrade(newArr);
   };
-  const datatoFilterNull: any =
-    grade &&
-    grade?.length &&
-    grade.sort().map((data: any) => {
-      let keys = Object.keys(data);
-      keys.map((key: any) => {
-        data[key] = data[key] == null ? "" : data[key];
-      });
-      return data;
-    });
 
   const dataSearchBar: any =
-    datatoFilterNull &&
-    datatoFilterNull?.length &&
-    datatoFilterNull.sort().filter((data: any) => {
+    finalvalues &&
+    finalvalues?.length &&
+    finalvalues.sort().filter((data: any) => {
       return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
     });
   return (
