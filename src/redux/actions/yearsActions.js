@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
-import { ActionTypes } from "../constants/action-types";
+import { ActionTypes } from "../Constants/action-types";
 
 export const fecthYears = () => async (dispatch) => {
   try {
@@ -58,30 +58,32 @@ export const addYear = (acdYear) => async (dispatch) => {
 export const deleteYear = (year, index) => async (dispatch) => {
   try {
     getAccessToken();
-    const response = await axios.delete(`${baseUrl}year`, { data: { year_id: year } }).then((res) => {
-      if (res.data.data.isDeletable) {
-        toast.success("Year Deleted Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        dispatch(fecthYears());
-      } else if (res.data.data.isDeletable === false) {
-        toast.warning("Year Existing in Grade&Section", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    });
+    const response = await axios
+      .delete(`${baseUrl}year`, { data: { year_id: year } })
+      .then((res) => {
+        if (res.data.data.isDeletable) {
+          toast.success("Year Deleted Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          dispatch(fecthYears());
+        } else if (res.data.data.isDeletable === false) {
+          toast.warning("Year Existing in Grade&Section", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   } catch (err) {
     alert("Error");
   }

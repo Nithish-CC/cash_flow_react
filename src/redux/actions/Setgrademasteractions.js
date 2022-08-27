@@ -4,12 +4,12 @@ import { baseUrl } from "../..";
 import { Grademastertypes } from "../constants/action-types";
 
 export const settinggradesection = () => async (dispatch) => {
-  getAccessToken();
+    getAccessToken();
 
-  const grades = await axios.get(`${baseUrl}grademaster`);
+    const grades = await axios.get(`${baseUrl}grademaster`);
 
-  dispatch({
-    type: Grademastertypes.SET_GRADE_TYPES,
-    payload: grades.data.data,
-  });
+    dispatch({
+        type: Grademastertypes.SET_GRADE_TYPES,
+        payload: grades.data.data,
+    });
 };

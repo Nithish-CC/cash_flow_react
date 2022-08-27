@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button, Row, Col, Spinner, Form } from "react-bootstrap";
-import { baseUrl } from "../../index";
-import { getAccessToken } from "../../config/getAccessToken";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { Table, Button, Col, Spinner, Form } from "react-bootstrap";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  academicFeesDiscountTypeData,
+  academicFeesSchoolDetailsData,
+  academicFeesSetAcademicYearData,
+  academicFeesSetFeeMasterIdData,
+  academicFeesStudentDiscountData,
+  academicfeesStudentDiscountData2,
+  academicYearStudentYearData,
+} from "../../Redux/Actions/academicYearActions";
 
 const Academicfees = (props: any) => {
-  //table status edit
   const urlParams: any = useParams();
   const id = urlParams.id;
 
-  console.log(props.studentDetails.status, "++iss");
-
-  const [updateTableStatus, setUpdateTableStatus] = useState(false);
   const [academicYear, setAcademicYear] = useState<any>([]);
   const [academic, setAcademic] = useState<any>();
   const [total, setTotal] = useState<any>({
@@ -27,80 +30,88 @@ const Academicfees = (props: any) => {
   const [studentdiscount, setstudentdiscount] = useState<any>([]);
   const [spinnerLoad, setSpinnerLoad] = useState<any>(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
-  const [studentdis, setStudentDis] = useState<any>([]);
   const [mergedata, setmergedata] = useState<any[]>([]);
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
-  const [studentdisco, setStudentDisc] = useState<any>([]);
-  const [Yearidd, setYearidd] = useState<any>([]);
   const [editingdiscount, setEditingYearOfFee] = useState<any>({});
-  const [discounttype, setDiscounttype] = useState<any>({});
-  const [discou, setdiscou] = useState<any>([]);
   const [discounttt, setdiscounttt] = useState<any>([]);
   const [discountallrecord, setDiscountallrecord] = useState<any>([]);
   const [updateYearOfFee, setUpdateYearOfFee] = useState<any>([]);
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
-  // console.log(admission_id);
   const [termsmaster, setTermsmaster] = useState<any>("Term1");
   const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
   const [finalterms, setFinalterms] = useState<any>([]);
-  
-  const mobileNoPattern = /[`@,~,.<>;':"\/\[\]\|{}()-=_+]/;
 
- 
+  const dispatch = useDispatch<any>();
 
-const handlespechar = (values:any, char:any) => {
-  let text = "123456789!@#$%fgfgdgdfgdfg";
-let pattern = /[^0-9]/g;
-let result = char.toString().match(pattern);
-console.log(result );
+  const studentYearData = useSelector(
+    (state: any) => state.studentDetailsGet.academicFees_studentYear?.data?.data
+  );
 
- 
-  if(result && result.length>=1){
-    toast.warning("Enter only Number", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
-  else  {
-    getAccessToken();
-    axios
-      .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
-        discount_amount: updateYearOfFee,
-        dis_feetype_id: updateDiscountFeeType,
-      })
-      .then((res: any) => {
-        toast.success("Discount amount is saved successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setEditingYearOfFee({});
-        getapi();
-      })
-      .catch((e: any) => {
-        console.log(e);
+  useEffect(() => {
+    if (studentYearData && studentYearData?.length) {
+      setAcademic(studentYearData);
+      setAcademicYear(studentYearData[0].year_id);
+    }
+  }, [studentYearData]);
+
+  const studentDiscountData = useSelector(
+    (state: any) =>
+      state.studentDetailsGet.academicFees_studentDiscount?.data?.data
+  );
+  console.log(studentDiscountData);
+
+  useEffect(() => {
+    if (studentDiscountData && studentDiscountData?.length) {
+      setstudentdiscount(studentDiscountData);
+      setSpinnerLoad(false);
+    } else if (studentDiscountData && studentDiscountData?.length === 0) {
+      setstudentdiscount(studentDiscountData);
+    }
+  }, [studentDiscountData]);
+  const discountType = useSelector(
+    (state: any) => state.studentDetailsGet.academicFees_DiscountType
+  );
+  console.log(discountType);
+
+  const feeId = useSelector(
+    (state: any) => state.studentDetailsGet.feesDetails_SetFeeMasterId
+  );
+
+  const handlespechar = (values: any, char: any) => {
+    let pattern = /[^0-9]/g;
+    let result = char.toString().match(pattern);
+
+    if (result && result.length >= 1) {
+      toast.warning("Enter only Number", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
-  }
- 
-};
+    } else {
+      dispatch(
+        academicFeesStudentDiscountData(
+          updateYearOfFee,
+          updateDiscountFeeType,
+          values,
+          setEditingYearOfFee,
+          getapi
+        )
+      );
+    }
+  };
   useEffect(() => {
     if (student_id && student_id.toString().length) yearacademic();
   }, [student_id]);
-  
+
   useEffect(() => {
-    if(termsmaster !== ''){
-      getapi() 
+    if (termsmaster !== "") {
+      getapi();
     }
-  }, [academicYear,termsmaster]);
+  }, [academicYear, termsmaster]);
 
   useEffect(() => {
     feemaster();
@@ -115,52 +126,22 @@ console.log(result );
       : setMerdattwpus([]);
   }, [studentdiscount]);
 
-
   useEffect(() => {
     fetchData();
   }, [Merdattwpus]);
 
-	useEffect(() => {
-   
-	}, [ ]);
-
   const yearacademic = () => {
-    getAccessToken();
-    console.log(student_id);
-    axios
-      .post(`${baseUrl}studentyear`, {
-        student_admissions_id: Number(id),
-        student_id: student_id,
-      })
-      .then((res: any) => {
-        setAcademic(res.data.data);
-        setAcademicYear(res.data.data[0].year_id);
-      })
-      .catch((e: any) => {});
+    dispatch(academicYearStudentYearData(id, student_id));
+    dispatch(academicFeesSetAcademicYearData(id, student_id));
   };
 
   const feemaster = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}feeMaster`).then((res: any) => {
-      setfeemasterid(res.data.data);
-    });
+    dispatch(academicFeesSetFeeMasterIdData());
   };
   const getapi = () => {
     setSpinnerLoad(true);
-    getAccessToken();
-    axios
-      .post(`${baseUrl}studentdiscount`, {
-        student_admissions_id: Number(id),
-        year_id: Number(academicYear),
-        term_name:termsmaster
-      })
-      .then((res: any) => {
-        setstudentdiscount(res.data.data);
-        setSpinnerLoad(false);
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
+    dispatch(academicfeesStudentDiscountData2(id, academicYear, termsmaster));
+    setSpinnerLoad(false);
   };
   function studentyear(gradedata: any) {
     var matchedyearid: any =
@@ -176,22 +157,22 @@ console.log(result );
   }
 
   const discountname = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}discountfee`).then((res: any) => {
-      setDiscounttype(res.data.data);
-      setUpdateDiscountFeeType(res.data.data[1].dis_feetype_id);
-    });
+    dispatch(academicFeesDiscountTypeData());
   };
 
-  const updateDiscount = (values: any) => {
-    
-  };
+  useEffect(() => {
+    if (discountType && discountType.length && discountType[1]) {
+      setUpdateDiscountFeeType(discountType[1].dis_feetype_id);
+    }
+  }, [discountname]);
+
+  const updateDiscount = (values: any) => {};
 
   function setdiscountt(gdata: any) {
     var matcheddiscou: any =
-      discounttype &&
-      discounttype.length &&
-      discounttype.filter(
+      discountType &&
+      discountType.length &&
+      discountType.filter(
         (data: any) => data.dis_feetype_id === gdata.dis_feetype_id
       );
     let margedat = { ...matcheddiscou[0], ...gdata };
@@ -212,9 +193,7 @@ console.log(result );
     let Total_discount = 0;
     let Total_balance = 0;
     discountallrecord.map((value: any) => {
-      console.log(value,"rewrfewrfwe");
-      
-      Total_initial_fees = Number(value.term_amount)+Total_initial_fees;
+      Total_initial_fees = Number(value.term_amount) + Total_initial_fees;
       Total_balance = Number(value.balance) + Total_balance;
       Total_discount = value.discount_amount + Total_discount;
     });
@@ -228,48 +207,40 @@ console.log(result );
   useEffect(() => {
     Total();
   }, [discountallrecord]);
+
   useEffect(() => {
-		getAccessToken();
-		axios
-			.get(`${baseUrl}school`)
-			.then((res: any) => {
-				console.log(res.data.data);
-				setGotSchoolDetails(res.data.data);
-				console.log(res.data.data);
-			})
-			.catch((e: any) => {
-				console.log(e);
-			});
-			
-	}, [])
-  
-useEffect (()=>{
-	ShowingTermsValue(gotSchoolDetails);
- 
-	console.log(gotSchoolDetails.max_count,"--08098098");
-  
-},[gotSchoolDetails])
+    dispatch(academicFeesSchoolDetailsData(setGotSchoolDetails));
+  }, []);
 
- 	const ShowingTermsValue= (termsss:any ) => {
-		  
- 	 
+  useEffect(() => {
+    ShowingTermsValue(gotSchoolDetails);
+  }, [gotSchoolDetails]);
 
-		 {termsss && termsss.length && termsss.map((terms:any)=>{
-			 console.log(terms);
-       
-			 let termscount = [] 
-			for (var i = 1; i <= terms.max_count; i++) {
-				
-				console.log( "Terms" + i,"----");
-
-				termscount.push("Term" + i)
-				
-		   }
-		  
-      setFinalterms(termscount);
-      
-     })}
+  const ShowingTermsValue = (termsss: any) => {
+    {
+      termsss &&
+        termsss.length &&
+        termsss.map((terms: any) => {
+          let termscount = [];
+          for (var i = 1; i <= terms.max_count; i++) {
+            termscount.push("Term" + i);
+          }
+          setFinalterms(termscount);
+        });
     }
+  };
+
+  feeId &&
+    feeId.length &&
+    feeId.map((value: any) => {
+      discountallrecord &&
+        discountallrecord.length &&
+        discountallrecord.map((feeTypeName: any) => {
+          if (feeTypeName.fee_master_id === value.fee_master_id)
+            feeTypeName.fee_type_name = value.fee_type_name;
+        });
+    });
+
   return (
     <div>
       <ToastContainer
@@ -287,52 +258,47 @@ useEffect (()=>{
         <div className="col-lg-11">
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-                  <h4 className="m-0 text-danger text-center">
-                    <a>
-                      <i className="far fa-clone"></i> Student Academic Fees
-                    </a>
-                  </h4>
-               
-            
+              <h4 className="m-0 text-danger text-center">
+                <a>
+                  <i className="far fa-clone"></i> Student Academic Fees
+                </a>
+              </h4>
 
-              <Col sm="2" style={{ float: "right",marginBottom: "1px"}}>
+              <Col sm="2" style={{ float: "right", marginBottom: "1px" }}>
                 <Form.Select
-															onChange={(e:any) =>{ 
-                                setTermsmaster(e.target.value);
-															}}>
-																		{finalterms && finalterms.length && finalterms.map((count:any)=>{
-																							return(
-																								<option value={count}>{count}</option>
-																							)
-																						})}
-																						</Form.Select>
-                </Col>
-            
-                
-                <Col sm="2" style={{ float: "right", marginRight: "10px" }}>
-                  <Form.Select
-                    onChange={(e: any) => setAcademicYear(e.target.value)}
-                  >
-                    {academic &&
-                      academic.length &&
-                      academic.map((value: any, i: any) => {
-                        return (
-                          <>
-                            <option value={value.year_id}>
-                              {value.academic_year}
-                            </option>
-                          </>
-                        );
-                      })}
-                  </Form.Select>
-                </Col>
-                
-          
+                  onChange={(e: any) => {
+                    setTermsmaster(e.target.value);
+                  }}
+                >
+                  {finalterms &&
+                    finalterms.length &&
+                    finalterms.map((count: any) => {
+                      return <option value={count}>{count}</option>;
+                    })}
+                </Form.Select>
+              </Col>
+
+              <Col sm="2" style={{ float: "right", marginRight: "10px" }}>
+                <Form.Select
+                  onChange={(e: any) => setAcademicYear(e.target.value)}
+                >
+                  {academic &&
+                    academic.length &&
+                    academic.map((value: any, i: any) => {
+                      return (
+                        <>
+                          <option value={value.year_id}>
+                            {value.academic_year}
+                          </option>
+                        </>
+                      );
+                    })}
+                </Form.Select>
+              </Col>
             </div>
             <div className="card-body">
               <div className="row">
                 <div className="col-sm-12">
-            
                   <Table
                     striped
                     bordered
@@ -342,50 +308,32 @@ useEffect (()=>{
                   >
                     <thead>
                       <tr role="row">
-                        <th  >Fee Type Name</th>
+                        <th>Fee Type Name</th>
                         <th style={{ textAlign: "center" }}>Actual Fees</th>
-                        <th  >Term Amount</th>
-                        <th >Balance</th>
-                        <th  >Discount</th>
-                        <th  >
-                          Fee Discount Type
-                        </th>
+                        <th>Term Amount</th>
+                        <th>Balance</th>
+                        <th>Discount</th>
+                        <th>Fee Discount Type</th>
                         {/* <th style={{ textAlign: "center" }}>Updated Fees</th> */}
-                        <th  >Action</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-  
-{spinnerLoad ? (
-                        <td
-                          colSpan={4}
-                        
-                        >
-                          <Spinner animation="border" variant="danger"/>
+                      {spinnerLoad ? (
+                        <td colSpan={4}>
+                          <Spinner animation="border" variant="danger" />
                         </td>
-                      ) : (
-                        discountallrecord &&
-                        discountallrecord.length ?
+                      ) : discountallrecord && discountallrecord.length ? (
                         discountallrecord.map((values: any, index: any) => {
                           return (
                             <tr style={{ textAlign: "center" }}>
-                              <td >
-                                {values.fee_type_name}
-                              </td>
-                              <td  >
-                                {values.actual_fees}
-                              </td>
-                              <td  >
-                                {values.term_amount}
-                              </td>
-                              <td >
-                                {values.balance}
-                              </td>
+                              <td>{values.fee_type_name}</td>
+                              <td>{values.actual_fees}</td>
+                              <td>{values.term_amount}</td>
+                              <td>{values.balance}</td>
                               {index !== editingdiscount.id ? (
                                 <td>
-                                  <div >
-                                    {values.discount_amount}
-                                  </div>
+                                  <div>{values.discount_amount}</div>
                                 </td>
                               ) : (
                                 <td>
@@ -393,13 +341,10 @@ useEffect (()=>{
                                     type="text"
                                     value={updateYearOfFee}
                                     onChange={(e: any) => {
-                                      
-                                      
                                       Number(values.balance) <
                                       Number(e.target.value)
                                         ? alert("Discount Greater the Balance")
                                         : setUpdateYearOfFee(e.target.value);
-                                     
                                     }}
                                   />
                                 </td>
@@ -411,14 +356,14 @@ useEffect (()=>{
                               ) : (
                                 <td>
                                   <Form.Select
-                                    value={updateDiscountFeeType}
+                                    value={discountType}
                                     onChange={(e) =>
                                       setUpdateDiscountFeeType(e.target.value)
                                     }
                                   >
-                                    {discounttype &&
-                                      discounttype.length &&
-                                      discounttype.map((value: any, i: any) => {
+                                    {discountType &&
+                                      discountType.length &&
+                                      discountType.map((value: any, i: any) => {
                                         return (
                                           <>
                                             {value.dis_feetype_name !==
@@ -441,8 +386,16 @@ useEffect (()=>{
                                     <Button
                                       variant="warning"
                                       onClick={() => {
+                                        dispatch(
+                                          academicFeesSetAcademicYearData(
+                                            id,
+                                            student_id,
+                                            setAcademic,
+                                            setAcademicYear
+                                          )
+                                        );
                                         updateDiscount(values);
-                                        handlespechar(values, updateYearOfFee)
+                                        handlespechar(values, updateYearOfFee);
                                       }}
                                     >
                                       Update
@@ -461,48 +414,58 @@ useEffect (()=>{
                                 </>
                               ) : (
                                 <>
-                                {props.studentDetails.status === "Active"?(<>
-                                  <td>
-                                    <Button
-                                      variant="primary"
-                                      onClick={() => {
-                                        setUpdateYearOfFee(
-                                          Number(values.discount_amount)
-                                        );
-                                        setEditingYearOfFee({
-                                          id: index,
-                                        });
-                                      }}
-                                    >
-                                      Edit
-                                    </Button>
-                                  </td>
-                                </>):(<>
-                                  <td>
-                                    <Button
-                                      variant="primary"
-                                      onClick={() => {
-                                        setUpdateYearOfFee(
-                                          Number(values.discount_amount)
-                                        );
-                                        setEditingYearOfFee({
-                                          id: index,
-                                        });
-                                      }}
-                                      disabled >
-                                      Edit
-                                    </Button>
-                                  </td>
-                                </>)}
-                                  
+                                  {props.studentDetails.status === "Active" ? (
+                                    <>
+                                      <td>
+                                        <Button
+                                          variant="primary"
+                                          onClick={() => {
+                                            setUpdateYearOfFee(
+                                              Number(values.discount_amount)
+                                            );
+                                            setEditingYearOfFee({
+                                              id: index,
+                                            });
+                                          }}
+                                        >
+                                          Edit
+                                        </Button>
+                                      </td>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <td>
+                                        <Button
+                                          variant="primary"
+                                          onClick={() => {
+                                            setUpdateYearOfFee(
+                                              Number(values.discount_amount)
+                                            );
+                                            setEditingYearOfFee({
+                                              id: index,
+                                            });
+                                          }}
+                                          disabled
+                                        >
+                                          Edit
+                                        </Button>
+                                      </td>
+                                    </>
+                                  )}
                                 </>
                               )}
                             </tr>
                           );
-                        }):(<><tr><td colSpan={7} style={{textAlign:"center"}}>No Term Fees</td></tr></>)
+                        })
+                      ) : (
+                        <>
+                          <tr>
+                            <td colSpan={7} style={{ textAlign: "center" }}>
+                              No Term Fees
+                            </td>
+                          </tr>
+                        </>
                       )}
- 
-                      
                     </tbody>
                     <tfoot>
                       <tr>

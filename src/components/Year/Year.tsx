@@ -165,17 +165,7 @@ const Year = () => {
 
     return (
         <div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="page-top">
                 <div id="wrapper">
                     <Sidebar data={"Academicyear"}></Sidebar>
@@ -193,11 +183,7 @@ const Year = () => {
                                                     </h4>
                                                     <div style={{ textAlign: "right" }}>
                                                         {!statusAcademicYearAdd ? (
-                                                            <Button
-                                                                type="submit"
-                                                                className="btn btn-primary btn-sm btn-save"
-                                                                onClick={() => setStatusAcademicYearAdd(true)}
-                                                            >
+                                                            <Button type="submit" className="btn btn-primary btn-sm btn-save" onClick={() => setStatusAcademicYearAdd(true)}>
                                                                 Add
                                                             </Button>
                                                         ) : (
@@ -213,11 +199,7 @@ const Year = () => {
                                                             <div id="dataTable_filter" className="dataTables_filter">
                                                                 <Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
                                                                     Search:
-                                                                    <Form.Control
-                                                                        type="search"
-                                                                        className="form-control form-control-sm"
-                                                                        onChange={(e) => setfilter(e.target.value)}
-                                                                    />
+                                                                    <Form.Control type="search" className="form-control form-control-sm" onChange={(e) => setfilter(e.target.value)} />
                                                                 </Form.Label>
                                                             </div>
                                                         </div>
@@ -291,12 +273,7 @@ const Year = () => {
                                                             <Col md="6">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                                     <Form.Label>To Academic Year</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        placeholder="Disabled input"
-                                                                        value={acdYear.toYear}
-                                                                        disabled
-                                                                    />
+                                                                    <Form.Control type="text" placeholder="Disabled input" value={acdYear.toYear} disabled />
                                                                 </Form.Group>
                                                             </Col>
                                                         </Row>
@@ -309,20 +286,13 @@ const Year = () => {
                                                                 justifyContent: "right",
                                                             }}
                                                         >
-                                                            <Button
-                                                                className="btn btn btn-secondary"
-                                                                onClick={() => setStatusAcademicYearAdd(false)}
-                                                            >
+                                                            <Button className="btn btn btn-secondary" onClick={() => setStatusAcademicYearAdd(false)}>
                                                                 Cancel
                                                             </Button>
                                                             &nbsp;
                                                             <Button
                                                                 type="submit"
-                                                                className={
-                                                                    duplication
-                                                                        ? "disabled btn btn-danger btn-save"
-                                                                        : "btn btn-danger btn-save"
-                                                                }
+                                                                className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
                                                                 onClick={(e: any) => {
                                                                     setDuplication(true);
                                                                     handleSubmit(e);

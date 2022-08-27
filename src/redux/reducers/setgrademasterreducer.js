@@ -1,13 +1,13 @@
 import { Grademastertypes } from "../constants/action-types";
 
 const initialState = {
-  gradetypes: [],
+    gradetypes: [],
 };
 export const setgradeReducer = (state = initialState, { type, payload }) => {
-  switch (type) {
-    case Grademastertypes.SET_GRADE_TYPES:
-      return { ...state, gradetypes: payload };
-    default:
-      return state;
-  }
+    switch (type) {
+        case Grademastertypes.SET_GRADE_TYPES:
+            return { ...state, gradetypes: payload };
+        default:
+            return state;
+    }
 };
