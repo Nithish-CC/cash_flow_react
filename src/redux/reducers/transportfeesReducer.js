@@ -1,4 +1,5 @@
 import { TransportTypes } from "../constants/action-types";
+
 const intialState = {
     transportfees: [],
     transportfeeval: [],
@@ -17,9 +18,7 @@ export const transportfeesReducer = (state = intialState, { type, payload }) => 
         case TransportTypes.DELETE_TRANSPORT_FEES: {
             return {
                 ...state,
-                transportfeeval: state.transportfeeval
-                    .slice(0, payload)
-                    .concat(state.transportfeeval.slice(payload + 1, state.transportfeeval.length)),
+                transportfeeval: state.transportfeeval.slice(0, payload).concat(state.transportfeeval.slice(payload + 1, state.transportfeeval.length)),
             };
         }
         case TransportTypes.LIST_TRANSPORT_FEES:

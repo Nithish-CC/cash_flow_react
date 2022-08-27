@@ -35,7 +35,6 @@ const Year = () => {
             history.push(location.pathname);
         }, 100);
     }, []);
-    console.log(year, "122");
 
     const paginate = [
         {
@@ -105,9 +104,9 @@ const Year = () => {
         setShow(true);
     };
     const datatoFilterNull: any =
-        year &&
-        year.length &&
-        year.sort().map((data: any) => {
+        year.data &&
+        year.data.length &&
+        year.data.sort().map((data: any) => {
             let keys = Object.keys(data);
             keys.map((key: any) => {
                 data[key] = data[key] == null ? "" : data[key];
@@ -116,10 +115,12 @@ const Year = () => {
         });
     const dataSearch: any =
         datatoFilterNull &&
-        datatoFilterNull.length &&
+        datatoFilterNull?.length &&
         datatoFilterNull.sort().filter((data: any) => {
             return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
         });
+    console.log(dataSearch, " dataSearch ");
+    console.log(year.data, "year_data");
 
     const callTheYearUpdater = () => {
         console.log(new Date().getFullYear());
@@ -196,7 +197,7 @@ const Year = () => {
                                                 <div className="card-body">
                                                     <div className="table-responsive">
                                                         <div className="dataTables_wrapper dt-bootstrap4 no-footer">
-                                                            <div id="dataTable_filter" className="dataTables_filter">
+                                                            <div id="dataTable_filter" className="dataTables_wrapper dt-bootstrap4 no-footer">
                                                                 <Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
                                                                     Search:
                                                                     <Form.Control type="search" className="form-control form-control-sm" onChange={(e) => setfilter(e.target.value)} />
@@ -209,7 +210,7 @@ const Year = () => {
                                                             {year.data && year.data.length && (
                                                                 <BootstrapTable
                                                                     keyField="academic_year"
-                                                                    data={year.data}
+                                                                    data={dataSearch}
                                                                     columns={col}
                                                                     hover
                                                                     striped

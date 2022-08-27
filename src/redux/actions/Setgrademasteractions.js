@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
-import { baseUrl } from "../..";
+import { baseUrl } from "../../index";
 import { Grademastertypes } from "../constants/action-types";
 
 export const settinggradesection = () => async (dispatch) => {

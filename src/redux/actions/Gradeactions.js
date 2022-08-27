@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
-import { baseUrl } from "../..";
+import { baseUrl } from "../../index";
 import { toast } from "react-toastify";
 import { ActionTypes } from "../constants/action-types";
 
@@ -14,7 +14,7 @@ export const gettinggradesection = (year, master) => async (dispatch) => {
         dispatch(settinggradeaction(response.data.data, year, master));
         dispatch(setfiltergradesection());
     } catch (err) {
-        alert(err, "ihyvyvguvutvtuvtu");
+        alert(err);
     }
 };
 export const deletinggradesection = (gradeid) => async (dispatch) => {
@@ -51,7 +51,7 @@ export const deletinggradesection = (gradeid) => async (dispatch) => {
         dispatch(setfiltergradesection());
         dispatch(gettinggradesection());
     } catch (err) {
-        alert(err, "1");
+        alert(err);
     }
 };
 export const postinggradeactions = (sendData, setDuplication) => async (dispatch) => {
