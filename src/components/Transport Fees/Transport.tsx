@@ -8,13 +8,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    addTransportFees,
-    deleteTransportFees,
-    fecthTransportFees,
-    listTransportFees,
-    setactiontransportfees,
-} from "../../redux/actions/transportActions";
+import { addTransportFees, deleteTransportFees, fecthTransportFees, listTransportFees, setactiontransportfees } from "../../redux/actions/transportActions";
 import { settinggradesection } from "../../redux/actions/Setgrademasteractions";
 import { fecthYears } from "../../redux/actions/yearsActions";
 import { gettinggradesection, settinggradeaction } from "../../redux/actions/Gradeactions";
@@ -256,9 +250,7 @@ const Transport = () => {
                                     <Form.Control
                                         type="number"
                                         key={i}
-                                        value={
-                                            termFeessaveAdd[rowindex].term_fees[i] ? termFeessaveAdd[rowindex].term_fees[i].term_amount : ""
-                                        }
+                                        value={termFeessaveAdd[rowindex].term_fees[i] ? termFeessaveAdd[rowindex].term_fees[i].term_amount : ""}
                                         onChange={(e) => {
                                             handleTermAmount({
                                                 rowindex: rowindex,
@@ -386,17 +378,7 @@ const Transport = () => {
 
     return (
         <div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="page-top">
                 <div id="wrapper">
                     <Sidebar data={"Stu_fees"}></Sidebar>
@@ -426,14 +408,8 @@ const Transport = () => {
                                                                                 setTermsmasterValue("");
 
                                                                                 dispatch(fecthTransportFees());
-                                                                                transportfee &&
-                                                                                    transportfee.length &&
-                                                                                    setFeeTypeName(transportfee[0].fee_master_id);
-                                                                                filterSectionByYearAdd &&
-                                                                                    filterSectionByYearAdd.length &&
-                                                                                    setSearchGradeId(
-                                                                                        filterSectionByYearAdd[0].grade_master_id
-                                                                                    );
+                                                                                transportfee && transportfee.length && setFeeTypeName(transportfee[0].fee_master_id);
+                                                                                filterSectionByYearAdd && filterSectionByYearAdd.length && setSearchGradeId(filterSectionByYearAdd[0].grade_master_id);
                                                                             }}
                                                                         >
                                                                             Add
@@ -442,9 +418,7 @@ const Transport = () => {
                                                                         <Button
                                                                             onClick={() => {
                                                                                 setStatusFeeDetailsAdd(false);
-                                                                                dispatch(
-                                                                                    listTransportFees(frontSearchYear, frontSearchGrade)
-                                                                                );
+                                                                                dispatch(listTransportFees(frontSearchYear, frontSearchGrade));
                                                                             }}
                                                                         >
                                                                             Back
@@ -481,36 +455,20 @@ const Transport = () => {
                                                                                         value={frontSearchYear}
                                                                                         onChange={(e: any) => {
                                                                                             setFrontSearchYear(Number(e.target.value));
-                                                                                            handleGradeFilter(
-                                                                                                gradeSectionList,
-                                                                                                e.target.value
-                                                                                            );
-                                                                                            dispatch(
-                                                                                                settinggradeaction(
-                                                                                                    year_grade_section,
-                                                                                                    year,
-                                                                                                    grade
-                                                                                                )
-                                                                                            );
+                                                                                            handleGradeFilter(gradeSectionList, e.target.value);
+                                                                                            dispatch(settinggradeaction(year_grade_section, year, grade));
                                                                                         }}
                                                                                     >
                                                                                         {year &&
                                                                                             year.length &&
                                                                                             year.map((values: any, index: any) => {
-                                                                                                return (
-                                                                                                    <option value={values.year_id}>
-                                                                                                        {values.academic_year}
-                                                                                                    </option>
-                                                                                                );
+                                                                                                return <option value={values.year_id}>{values.academic_year}</option>;
                                                                                             })}
                                                                                     </Form.Select>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
-                                                                                <div
-                                                                                    className="form-group"
-                                                                                    style={{ width: "28%", marginRight: "20" }}
-                                                                                >
+                                                                                <div className="form-group" style={{ width: "28%", marginRight: "20" }}>
                                                                                     <Form.Select
                                                                                         value={frontSearchGrade}
                                                                                         onChange={(e: any) => {
@@ -519,17 +477,9 @@ const Transport = () => {
                                                                                     >
                                                                                         {filterGradeByYear &&
                                                                                             filterGradeByYear.length &&
-                                                                                            filterGradeByYear.map(
-                                                                                                (values: any, index: any) => {
-                                                                                                    return (
-                                                                                                        <option
-                                                                                                            value={values.grade_master_id}
-                                                                                                        >
-                                                                                                            {values.grade_master}
-                                                                                                        </option>
-                                                                                                    );
-                                                                                                }
-                                                                                            )}
+                                                                                            filterGradeByYear.map((values: any, index: any) => {
+                                                                                                return <option value={values.grade_master_id}>{values.grade_master}</option>;
+                                                                                            })}
                                                                                     </Form.Select>
                                                                                 </div>
                                                                             </td>
@@ -537,7 +487,7 @@ const Transport = () => {
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <Table bordered responsive>
+                                                            <div className="table-responsive">
                                                                 <BootstrapTable
                                                                     keyField="academic_year"
                                                                     data={transportfeeval}
@@ -547,8 +497,8 @@ const Transport = () => {
                                                                     pagination={paginationFactory({
                                                                         sizePerPageList: paginate,
                                                                     })}
-                                                                />
-                                                            </Table>
+                                                                ></BootstrapTable>
+                                                            </div>
                                                             <div style={{ marginLeft: "20%" }}>
                                                                 <Modal show={show} onHide={SuddenhandleClose}>
                                                                     <Modal.Header closeButton>
@@ -557,8 +507,7 @@ const Transport = () => {
                                                                         </Modal.Title>
                                                                     </Modal.Header>
                                                                     <Modal.Body>
-                                                                        Are You Sure You What To Delete <b>{datatoDelete.fee_type_name}</b>{" "}
-                                                                        ?
+                                                                        Are You Sure You What To Delete <b>{datatoDelete.fee_type_name}</b> ?
                                                                     </Modal.Body>
                                                                     <Modal.Footer>
                                                                         <Button variant="secondary" onClick={SuddenhandleClose}>
@@ -598,11 +547,7 @@ const Transport = () => {
                                                                         {year &&
                                                                             year.length &&
                                                                             year.map((values: any, index: any) => {
-                                                                                return (
-                                                                                    <option value={values.year_id}>
-                                                                                        {values.academic_year}
-                                                                                    </option>
-                                                                                );
+                                                                                return <option value={values.year_id}>{values.academic_year}</option>;
                                                                             })}
                                                                     </Form.Select>
                                                                 </Col>
@@ -660,8 +605,7 @@ const Transport = () => {
                                                                                         value={termFeessaveAdd[rowindex].fee_master_id}
                                                                                         onChange={(e: any) => {
                                                                                             let newFormValues = [...termFeessaveAdd];
-                                                                                            newFormValues[rowindex]["fee_master_id"] =
-                                                                                                Number(e.target.value);
+                                                                                            newFormValues[rowindex]["fee_master_id"] = Number(e.target.value);
                                                                                             setTermFeesSaveAdd(newFormValues);
                                                                                         }}
                                                                                     >
@@ -671,10 +615,7 @@ const Transport = () => {
                                                                                             transportfee.map((values: any, index: any) => {
                                                                                                 return (
                                                                                                     <>
-                                                                                                        <option
-                                                                                                            value={values.fee_master_id}
-                                                                                                            label={values.fee_type_name}
-                                                                                                        >
+                                                                                                        <option value={values.fee_master_id} label={values.fee_type_name}>
                                                                                                             {values.fee_type_name}
                                                                                                         </option>
                                                                                                     </>
@@ -688,15 +629,9 @@ const Transport = () => {
                                                                                         value={termFeessaveAdd[rowindex].optional_fees}
                                                                                         onChange={(e: any) => {
                                                                                             let newFormValues = [...termFeessaveAdd];
-                                                                                            newFormValues[rowindex]["optional_fees"] =
-                                                                                                e.target.checked;
+                                                                                            newFormValues[rowindex]["optional_fees"] = e.target.checked;
                                                                                             setTermFeesSaveAdd(newFormValues);
-                                                                                            ShowingTextBox(
-                                                                                                termFeessaveAdd[rowindex]?.optional_fees
-                                                                                                    ? "1"
-                                                                                                    : JSON.parse(school).term_count,
-                                                                                                rowindex
-                                                                                            );
+                                                                                            ShowingTextBox(termFeessaveAdd[rowindex]?.optional_fees ? "1" : JSON.parse(school).term_count, rowindex);
                                                                                         }}
                                                                                         id="custom-switch"
                                                                                         style={{ position: "relative" }}
@@ -708,9 +643,7 @@ const Transport = () => {
                                                                                         value={termFeessaveAdd[rowindex].fee_amount}
                                                                                         onChange={(e: any) => {
                                                                                             let newFormValues = [...termFeessaveAdd];
-                                                                                            newFormValues[rowindex]["fee_amount"] = Number(
-                                                                                                e.target.value
-                                                                                            );
+                                                                                            newFormValues[rowindex]["fee_amount"] = Number(e.target.value);
                                                                                             setTermFeesSaveAdd(newFormValues);
                                                                                         }}
                                                                                     />
@@ -720,32 +653,21 @@ const Transport = () => {
                                                                                         {termFeessaveAdd[rowindex].optional_fees ? (
                                                                                             <Form.Select
                                                                                                 name="term_count"
-                                                                                                value={
-                                                                                                    termFeessaveAdd[rowindex]?.term_fees
-                                                                                                        ?.length
-                                                                                                }
+                                                                                                value={termFeessaveAdd[rowindex]?.term_fees?.length}
                                                                                                 onChange={(e: any) => {
-                                                                                                    ShowingTextBox(
-                                                                                                        e.target.value,
-                                                                                                        rowindex
-                                                                                                    );
+                                                                                                    ShowingTextBox(e.target.value, rowindex);
                                                                                                 }}
                                                                                             >
                                                                                                 {finalTerms?.map((option: any) => {
                                                                                                     return (
                                                                                                         <>
-                                                                                                            <option value={option}>
-                                                                                                                Term {option}
-                                                                                                            </option>
+                                                                                                            <option value={option}>Term {option}</option>
                                                                                                         </>
                                                                                                     );
                                                                                                 })}
                                                                                             </Form.Select>
                                                                                         ) : (
-                                                                                            <Form.Control
-                                                                                                value={JSON.parse(school).term_count}
-                                                                                                disabled
-                                                                                            ></Form.Control>
+                                                                                            <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>
                                                                                         )}
                                                                                     </td>
                                                                                 }
